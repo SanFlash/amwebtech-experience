@@ -149,7 +149,7 @@ export default function Home() {
           <div className="intro-copy reveal">
             <p className="eyebrow">AM WEBTECH / THE COMPANY</p>
             <h2>From a focused QA team to a <span>global testing partner.</span></h2>
-            <p>Founded in 2016, AM Webtech has grown into a software testing partner serving startups, SaaS companies and enterprises across international markets. Its current positioning combines dedicated QA delivery, modern automation, API, mobile, performance, security, AI and LLM testing. citeturn1search4turn0search0</p>
+            <p>Founded in 2016, AM Webtech has grown into a software testing partner serving startups, SaaS companies and enterprises across international markets. Its current positioning combines dedicated QA delivery, modern automation, API, mobile, performance, security, AI and LLM testing. </p>
           </div>
           <div className="intro-metrics reveal">
             <div><strong>15+</strong><span>Years of QA experience</span></div>
@@ -160,7 +160,7 @@ export default function Home() {
         </section>
 
         <section id="services" className="section dark-section">
-          <div className="section-top reveal"><p className="eyebrow">CAPABILITIES / 12 DISCIPLINES</p><h2>One QA partner.<br/><span>Every quality layer.</span></h2><p>Comprehensive testing across functional, non-functional, data, cloud, performance, security, mobile and emerging AI quality needs. citeturn0search6turn1search2</p></div>
+          <div className="section-top reveal"><p className="eyebrow">CAPABILITIES / 12 DISCIPLINES</p><h2>One QA partner.<br/><span>Every quality layer.</span></h2><p>Comprehensive testing across functional, non-functional, data, cloud, performance, security, mobile and emerging AI quality needs. </p></div>
           <div className="service-grid">{services.map(([num,title,text,tools,href]) =>
             <article className="service-card reveal" key={num}>
               <div className="card-top"><span className="card-num">{num}</span><ArrowRight size={20}/></div>
@@ -174,7 +174,7 @@ export default function Home() {
           <div className="split-copy reveal">
             <p className="eyebrow">AUTOMATION / AI / DEVOPS</p>
             <h2>Quality engineered for <span>faster releases.</span></h2>
-            <p>AM Webtech's automation approach covers assessment and tool selection, framework design, script development and versioning, and CI/CD integration with platforms such as Jenkins, GitHub Actions and Azure Pipelines. citeturn0search7</p>
+            <p>AM Webtech's automation approach covers assessment and tool selection, framework design, script development and versioning, and CI/CD integration with platforms such as Jenkins, GitHub Actions and Azure Pipelines. </p>
             <div className="check-list">
               {["Reusable automation frameworks","Web, mobile and API automation","Regression suites","CI/CD quality gates","AI-assisted testing approaches","Actionable reporting"].map(x=><div key={x}><CheckCircle2 size={18}/>{x}</div>)}
             </div>
@@ -193,7 +193,7 @@ export default function Home() {
         </section>
 
         <section id="cases" className="section cases-section">
-          <div className="section-top reveal"><p className="eyebrow">PROVEN QA / REAL RESULTS</p><h2>Real QA challenges.<br/><span>Measurable results.</span></h2><p>Selected current case-study themes published by AM Webtech, presented as outcome-focused stories. citeturn1search8turn1search4</p></div>
+          <div className="section-top reveal"><p className="eyebrow">PROVEN QA / REAL RESULTS</p><h2>Real QA challenges.<br/><span>Measurable results.</span></h2><p>Selected current case-study themes published by AM Webtech, presented as outcome-focused stories. </p></div>
           <div className="case-grid">{caseStudies.map((c,i)=>
             <article className="case-card" key={c.title}>
               <div className="case-index">0{i+1}</div><p className="eyebrow">{c.label}</p><h3>{c.title}</h3><p>{c.text}</p>
@@ -211,7 +211,7 @@ export default function Home() {
         </section>
 
         <section className="section global-section">
-          <div className="global-copy reveal"><p className="eyebrow">GLOBAL QA EXPERTISE</p><h2>One delivery model.<br/><span>Multiple time zones.</span></h2><p>AM Webtech supports businesses across the USA, UK, Canada, Europe, APAC and other international markets with scalable QA services and flexible engagement models. citeturn1search2</p>
+          <div className="global-copy reveal"><p className="eyebrow">GLOBAL QA EXPERTISE</p><h2>One delivery model.<br/><span>Multiple time zones.</span></h2><p>AM Webtech supports businesses across the USA, UK, Canada, Europe, APAC and other international markets with scalable QA services and flexible engagement models. </p>
             <div className="global-points"><span><Globe2 size={17}/> USA</span><span>UK</span><span>Canada</span><span>Europe</span><span>APAC</span></div>
           </div>
           <div className="world-panel reveal"><div className="world-grid"/><div className="world-dot d1"/><div className="world-dot d2"/><div className="world-dot d3"/><div className="world-label">GLOBAL QA DELIVERY</div></div>
@@ -223,17 +223,17 @@ export default function Home() {
         </section>
 
         <section id="approach" className="section process-section">
-          <div className="section-top reveal"><p className="eyebrow">HOW WE WORK</p><h2>From uncertainty to <span>release confidence.</span></h2><p>A structured QA lifecycle that starts with requirements and ends with validated, production-ready software. citeturn1search2</p></div>
+          <div className="section-top reveal"><p className="eyebrow">HOW WE WORK</p><h2>From uncertainty to <span>release confidence.</span></h2><p>A structured QA lifecycle that starts with requirements and ends with validated, production-ready software. </p></div>
           <div className="process-line">{process.map(x=><div className="process-step reveal" key={x[0]}><span>{x[0]}</span><h3>{x[1]}</h3><p>{x[2]}</p></div>)}</div>
         </section>
 
         <section className="section team-section">
-          <div className="section-top reveal"><p className="eyebrow">LEADERSHIP</p><h2>People behind the <span>quality mission.</span></h2><p>Publicly listed AM Webtech leadership and delivery roles. citeturn1search0</p></div>
+          <div className="section-top reveal"><p className="eyebrow">LEADERSHIP</p><h2>People behind the <span>quality mission.</span></h2><p>Publicly listed AM Webtech leadership and delivery roles. </p></div>
           <div className="leader-grid">{leaders.map(([name,role])=><div className="leader reveal" key={name}><div className="avatar">{name.split(" ").map(x=>x[0]).join("").slice(0,2)}</div><strong>{name}</strong><span>{role}</span></div>)}</div>
         </section>
 
         <section className="section client-section">
-          <div className="section-top reveal"><p className="eyebrow">CLIENT ECOSYSTEM</p><h2>Brands and products <span>we have supported.</span></h2><p>Client names below are drawn from AM Webtech's public portfolio. citeturn1search3</p></div>
+          <div className="section-top reveal"><p className="eyebrow">CLIENT ECOSYSTEM</p><h2>Brands and products <span>we have supported.</span></h2><p>Client names below are drawn from AM Webtech's public portfolio. </p></div>
           <div className="client-wall reveal">{clients.map(x=><span key={x}>{x}</span>)}</div>
         </section>
 
