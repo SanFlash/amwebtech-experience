@@ -239,73 +239,66 @@ export default function Home() {
 
         <section id="company" className="section linkedin-section">
           <div className="section-top reveal">
-            <p className="eyebrow"><span className="linkedin-dot">in</span> COMPANY EVENTS / LINKEDIN</p>
-            <h2>The people, milestones and <span>ideas behind the brand.</span></h2>
-            <p>Built from AM Webtech's public LinkedIn activity: Foundation Day celebrations, employee recognition, industry engagement, hiring, International Testers Day and quality-engineering thought leadership.</p>
+            <p className="eyebrow"><span className="linkedin-dot">in</span> COMPANY EVENTS / ACHIEVEMENTS</p>
+            <h2>People, milestones and <span>real company moments.</span></h2>
+            <p>Company stories are presented as visual highlights rather than embedded social posts. The content is based on AM Webtech's public LinkedIn activity and paired with visual assets from the company's public brand and website imagery.</p>
           </div>
 
-          <div className="linkedin-feature-grid reveal">
-            <article className="social-feature social-feature-large">
-              <div className="social-image foundation-art">
-                <div className="social-image-grid"/>
-                <div className="foundation-badge">16</div>
-                <div className="social-image-copy"><span>AM WEBTECH</span><strong>YEARS OF<br/>QUALITY</strong><small>FOUNDATION DAY</small></div>
+          <div className="event-feature-grid reveal">
+            <article className="event-feature">
+              <div className="event-photo">
+                <img src="https://media.licdn.com/dms/image/v2/D4D3DAQGJMq-NzROPIg/image-scale_191_1128/B4DZin4BTwGQAc-/0/1755163139693/amwebtech_cover?e=2147483647&t=oUWlisobtTpPdYA2qUvtnYz_jSwinDkGgkklBVn30aE&v=beta" alt="AM Webtech LinkedIn company cover" loading="lazy"/>
+                <span className="photo-label">AM WEBTECH / COMPANY</span>
               </div>
-              <div className="social-feature-body">
-                <span className="social-tag">MILESTONE / FOUNDATION DAY</span>
-                <h3>16 years of milestones, memories and the people behind them.</h3>
-                <p>The celebration featured outdoor activities, poolside fun, cake cutting, an Awards & Recognition Ceremony, team conversations and lunch — with the company reflecting on 16 years of growth and continuous quality.</p>
-                <a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">See company updates <ArrowRight size={15}/></a>
+              <div className="event-body">
+                <span className="social-tag red-tag">01 / FOUNDATION DAY</span>
+                <h3>16 years of milestones, memories and the people behind the journey.</h3>
+                <p>AM Webtech's public company updates describe a 16th Foundation Day featuring outdoor activities, poolside fun, cake cutting, awards, conversations and a team lunch — celebrating the people and culture behind the quality journey.</p>
+                <a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">View source activity <ArrowRight size={15}/></a>
               </div>
             </article>
 
-            <article className="social-feature">
-              <div className="social-image awards-art">
-                <div className="award-ring">★</div>
-                <div className="award-list"><span>STAR PERFORMER</span><span>RISING STAR</span><span>EXTRA MILE</span><span>TEAM SPIRIT</span></div>
+            <article className="event-feature">
+              <div className="event-photo">
+                <img src="https://amwebtech.com/wp-content/uploads/2025/02/creative-coworkers-working-in-office-C7XHAQF.jpg" alt="AM Webtech team working together" loading="lazy"/>
+                <span className="photo-label">TEAM / QUALITY CULTURE</span>
               </div>
-              <div className="social-feature-body">
-                <span className="social-tag">ACHIEVEMENTS / PEOPLE</span>
-                <h3>Employee recognition becomes part of the company story.</h3>
-                <p>Public Foundation Day updates recognized Star Performer, Rising Star, Extra Mile, Accountability, Team Spirit, Client Appreciation, Dedication, Mentorship and Service Recognition awards.</p>
-                <a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">View the recognition post <ArrowRight size={15}/></a>
+              <div className="event-body">
+                <span className="social-tag">02 / PEOPLE & RECOGNITION</span>
+                <h3>Recognition is part of the quality culture.</h3>
+                <p>Foundation Day updates highlighted Star Performer, Rising Star, Extra Mile, Accountability, Team Spirit, Client Appreciation, Dedication, Journey to Excellence, Mentorship, Service Recognition and Team awards.</p>
+                <a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">Explore company updates <ArrowRight size={15}/></a>
               </div>
-            </article>
-          </div>
-
-          <div className="linkedin-event-grid reveal">
-            <article className="linkedin-event">
-              <div className="event-number">01</div><span className="social-tag">INDUSTRY ENGAGEMENT</span>
-              <h3>Analytical Tools Workshop — Indore</h3>
-              <p>Mustakim S. shared a recent event where he was invited as a judge at Shri Vaishnav Institute of Management & Science, highlighting practical skills, experimentation and continuous learning.</p>
-              <a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">Explore the event update <ArrowRight size={15}/></a>
-            </article>
-            <article className="linkedin-event">
-              <div className="event-number">02</div><span className="social-tag">QUALITY CULTURE</span>
-              <h3>International Testers Day</h3>
-              <p>AM Webtech publicly celebrated testers for finding bugs early, protecting user experience and validating performance across platforms.</p>
-              <a href="https://www.linkedin.com/posts/amwebtech_internationaltestersday-thankyoutesters-activity-7238895009301725185-FyJP" target="_blank" rel="noreferrer">Open LinkedIn post <ArrowRight size={15}/></a>
-            </article>
-            <article className="linkedin-event">
-              <div className="event-number">03</div><span className="social-tag">QUALITY LEADERSHIP</span>
-              <h3>Discipline Over Speed</h3>
-              <p>A company thought-leadership post emphasizes clear strategy, precise coverage and disciplined automation instead of chasing speed without intent.</p>
-              <a href="https://www.linkedin.com/posts/amwebtech_amwebtech-qualityengineering-softwaretesting-activity-7417512517930954752-51rZ" target="_blank" rel="noreferrer">Read the post <ArrowRight size={15}/></a>
-            </article>
-            <article className="linkedin-event">
-              <div className="event-number">04</div><span className="social-tag">GROWTH / HIRING</span>
-              <h3>Growing the Indore QA team</h3>
-              <p>Recent public hiring activity includes BDE, Manual QA and Automation QA roles, including Playwright TypeScript requirements for automation positions.</p>
-              <a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">See current company activity <ArrowRight size={15}/></a>
             </article>
           </div>
 
-          <div className="linkedin-embed-wall reveal">
-            <div className="embed-heading"><span>LIVE PUBLIC POSTS</span><small>LinkedIn activity • public embeds</small></div>
-            <div className="embed-grid">
-              <iframe title="AM Webtech LinkedIn quality achievement post" src="https://www.linkedin.com/embed/feed/update/urn:li:activity:7442131486650281984" height="520" width="100%" frameBorder="0" allowFullScreen />
-              <iframe title="AM Webtech International Testers Day LinkedIn post" src="https://www.linkedin.com/embed/feed/update/urn:li:activity:7238895009301725185" height="520" width="100%" frameBorder="0" allowFullScreen />
-            </div>
+          <div className="event-masonry reveal">
+            <article className="event-tile event-tile-tall">
+              <div className="tile-photo"><img src="https://amwebtech.com/wp-content/uploads/elementor/thumbs/creative-coworkers-working-in-office-3-r0zazd9su0xk0btoskj627i4el8qw0o7epae7ow9pk.jpg" alt="AM Webtech collaborative workplace" loading="lazy"/></div>
+              <div className="tile-body"><span className="social-tag">03 / INDUSTRY ENGAGEMENT</span><h3>Workshop on Analytical Tools</h3><p>A recent public update highlighted an invitation to judge the finale of the Workshop on Analytical Tools at Shri Vaishnav Institute of Management & Science, Indore — reinforcing practical skills, experimentation and continuous learning.</p><a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">Read company activity <ArrowRight size={15}/></a></div>
+            </article>
+
+            <article className="event-tile">
+              <div className="tile-photo"><img src="https://amwebtech.com/wp-content/uploads/2025/02/emplifi.png" alt="AM Webtech portfolio visual" loading="lazy"/></div>
+              <div className="tile-body"><span className="social-tag red-tag">04 / QUALITY</span><h3>International Testers Day</h3><p>AM Webtech used the occasion to recognize testers for finding bugs early, protecting user experience and validating reliable performance.</p><a href="https://www.linkedin.com/posts/amwebtech_internationaltestersday-thankyoutesters-activity-7238895009301725185-FyJP" target="_blank" rel="noreferrer">View source post <ArrowRight size="15"/></a></div>
+            </article>
+
+            <article className="event-tile">
+              <div className="tile-photo"><img src="https://amwebtech.com/wp-content/uploads/2025/02/buildbox.png" alt="AM Webtech case study visual" loading="lazy"/></div>
+              <div className="tile-body"><span className="social-tag">05 / GROWTH</span><h3>Building the next team</h3><p>Public company activity shows ongoing recruitment across sales and QA, reflecting continued growth and investment in people.</p><a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">See company activity <ArrowRight size="15"/></a></div>
+            </article>
+
+            <article className="event-tile">
+              <div className="tile-photo"><img src="https://amwebtech.com/wp-content/uploads/2025/03/ximble.png" alt="AM Webtech workforce platform case study visual" loading="lazy"/></div>
+              <div className="tile-body"><span className="social-tag red-tag">06 / QUALITY MINDSET</span><h3>Discipline over speed</h3><p>AM Webtech's public quality messaging emphasizes strategy, precise coverage and disciplined automation instead of speed without intent.</p><a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">Explore the company voice <ArrowRight size="15"/></a></div>
+            </article>
+          </div>
+
+          <div className="achievement-strip reveal">
+            <div><strong>16</strong><span>Years celebrated</span></div>
+            <div><strong>10.8K+</strong><span>LinkedIn community</span></div>
+            <div><strong>11</strong><span>Recognition categories highlighted</span></div>
+            <div><strong>QA</strong><span>Core company focus</span></div>
           </div>
         </section>
 
