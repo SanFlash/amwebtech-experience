@@ -246,6 +246,30 @@ export default function Home() {
           {[["15+","Years of QA experience"],["3,452+","Projects delivered"],["455+","Clients supported"],["24/7","Global QA support"]].map(([n,l])=><div className="stat reveal" key={l}><strong>{n}</strong><span>{l}</span></div>)}
         </div></section>
 
+
+        <section className="section pricing-section">
+          <div className="section-top reveal"><p className="eyebrow">QA ENGAGEMENT OPTIONS</p><h2>Choose the model that fits your <span>quality goals.</span></h2><p>AM Webtech publicly presents Essential, Professional and Enterprise QA service tiers, with the scope adapted to product requirements. The published service scope includes broken-asset checks, spelling review, UI/UX, functional and usability testing, performance testing, SEO audit and regression testing.</p></div>
+          <div className="pricing-grid reveal">
+            {[
+              ["ESSENTIAL","Core quality assurance","Broken assets • UI/UX • Functional & usability • Performance • SEO audit • Regression"],
+              ["PROFESSIONAL","Expert testing coverage","Core QA plus broader validation and reliability coverage for growing products"],
+              ["ENTERPRISE","Scalable QA solutions","Larger-scale testing, dedicated QA and flexible coverage for complex organizations"]
+            ].map(([name,title,features],i)=><article className="price-card" key={name}><span>0{i+1}</span><p className="eyebrow">{name}</p><h3>{title}</h3><p>{features}</p><a href="#contact">Request a personalized quote <ArrowRight size={15}/></a></article>)}
+          </div>
+        </section>
+
+        <section className="section insights-section">
+          <div className="section-top reveal"><p className="eyebrow">LATEST INSIGHTS</p><h2>Ideas for modern <span>quality engineering.</span></h2><p>Current AM Webtech publishing themes include dedicated QA teams, self-healing automation, LLM testing and automation strategies.</p></div>
+          <div className="insight-grid reveal">
+            {[
+              ["01","Dedicated QA Team","How to scale software testing without the cost of building a large in-house team."],
+              ["02","Self-Healing Test Automation","How self-healing approaches can reduce automation maintenance and improve ROI."],
+              ["03","Why LLM Testing Matters","Why AI products require dedicated validation for reliability, safety and response quality."],
+              ["04","Automation Testing Strategies","Approaches for improving ROI, coverage and time-to-market through automation."]
+            ].map(([n,t,d])=><a className="insight-card" key={n} href="https://amwebtech.com/blog/" target="_blank" rel="noreferrer"><span>{n}</span><div><h3>{t}</h3><p>{d}</p></div><ArrowRight size={18}/></a>)}
+          </div>
+        </section>
+
         <section id="company" className="section company-section">
           <div className="company-card reveal"><div><p className="eyebrow">ENGAGEMENT MODELS</p><h2>Start small.<br/><span>Scale with confidence.</span></h2></div><div className="engagement-list">{["Dedicated QA Engineer","Manual + Automation Team","Dedicated Automation Team","QA Lead + Engineers","QA Consulting","Managed QA Support"].map((x,i)=><div key={x}><span>0{i+1}</span>{x}<ArrowRight size={16}/></div>)}</div></div>
         </section>
