@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowDown, ArrowRight, Bot, CheckCircle2, Code2, Gauge, Globe2, Layers3,
   Menu, Play, ShieldCheck, Smartphone, Sparkles, X, Zap
