@@ -110,7 +110,16 @@ export default function Home() {
     <div ref={root} className="site">
       <header className="nav">
         <a className="brand" href="#top" aria-label="AM Webtech home">
-  <img className="brand-logo" src="/amwebtech-logo.png?v=2026" alt="AM Webtech" width={210} height={100} loading="eager" />
+  <span className="brand-fallback" aria-hidden="true">AM <b>WEBTECH</b></span>
+  <img
+    className="brand-logo"
+    src="/amwebtech-logo.png?v=2026"
+    alt="AM Webtech"
+    width={210}
+    height={100}
+    loading="eager"
+    decoding="async"
+  />
 </a>
         <nav className={menuOpen ? "nav-links open" : "nav-links"}>
           {["Services","Solutions","Cases","Labs","Company","Contact"].map((item) =>
