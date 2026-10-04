@@ -135,7 +135,7 @@ export default function Home() {
           <div className="hero-console">
             <div className="console-head"><span><i/> QA ENGINE ONLINE</span><span>GLOBAL</span></div>
             <div className="console-line"><b>01</b><span>QA experience</span><em>15+ YRS</em></div>
-            <div className="console-line"><b>02</b><span>Projects delivered</span><em>3,452+</em></div>
+            <div className="console-line"><b>02</b><span>Projects delivered</span><em>2,967+</em></div>
             <div className="console-line"><b>03</b><span>Global markets</span><em>READY</em></div>
             <div className="console-line"><b>04</b><span>Release confidence</span><em>HIGH</em></div>
           </div>
@@ -149,12 +149,12 @@ export default function Home() {
           <div className="intro-copy reveal">
             <p className="eyebrow">AM WEBTECH / THE COMPANY</p>
             <h2>From a focused QA team to a <span>global testing partner.</span></h2>
-            <p>Founded in 2016, AM Webtech has grown into a software testing partner serving startups, SaaS companies and enterprises across international markets. Its current positioning combines dedicated QA delivery, modern automation, API, mobile, performance, security, AI and LLM testing. </p>
+            <p>Founded in 2016, AM Webtech positions itself as a global Quality Engineering partner for SaaS and product-led teams. LinkedIn describes a QA-only focus serving SaaS, B2B and digital-product companies across North America, the UK, Europe and APAC, while the website highlights tailored QA around product and business goals. </p>
           </div>
           <div className="intro-metrics reveal">
             <div><strong>15+</strong><span>Years of QA experience</span></div>
             <div><strong>3,452+</strong><span>Projects delivered</span></div>
-            <div><strong>455+</strong><span>Clients supported</span></div>
+            <div><strong>393+</strong><span>Clients supported</span></div>
             <div><strong>24/7</strong><span>Global QA support</span></div>
           </div>
         </section>
@@ -243,7 +243,7 @@ export default function Home() {
         </section>
 
         <section className="section stats-section"><div className="stats-grid">
-          {[["15+","Years of QA experience"],["3,452+","Projects delivered"],["455+","Clients supported"],["24/7","Global QA support"]].map(([n,l])=><div className="stat reveal" key={l}><strong>{n}</strong><span>{l}</span></div>)}
+          {[["13+","Years shown on current website"],["2,967+","Projects completed"],["393+","Trusted clients"],["69+","Professional team"]].map(([n,l])=><div className="stat reveal" key={l}><strong>{n}</strong><span>{l}</span></div>)}
         </div></section>
 
 
