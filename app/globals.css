@@ -139,3 +139,10 @@ body{background:var(--navy);color:#fff}
 .footer{background:#04142f;color:#b7c7da;border-top-color:rgba(255,122,0,.35)}.footer-links a:hover{color:var(--orange)}
 @media(max-width:900px){.nav-links{background:linear-gradient(135deg,#061a3d,#0057b8);border-color:rgba(255,122,0,.45)}.nav-links a{color:#fff}.nav-links a:hover{color:var(--orange)}}
 @media(max-width:620px){.brand{width:172px;min-width:172px;height:54px;padding:6px 10px}.brand-logo{max-height:42px}}
+
+/* Final logo reliability guard */
+.brand{position:relative;isolation:isolate}
+.brand-fallback{position:absolute;inset:0;display:grid;place-items:center;color:#0057b8;font-weight:900;font-size:17px;letter-spacing:-.045em;z-index:0;white-space:nowrap}
+.brand-fallback b{color:#ff7a00;margin-left:4px}
+.brand-logo{position:relative;z-index:1;background:#fff}
+@media(max-width:620px){.brand-fallback{font-size:15px}}
