@@ -149,11 +149,11 @@ export default function Home() {
           <div className="intro-copy reveal">
             <p className="eyebrow">AM WEBTECH / THE COMPANY</p>
             <h2>From a focused QA team to a <span>global testing partner.</span></h2>
-            <p>Founded in 2016, AM Webtech positions itself as a global Quality Engineering partner for SaaS and product-led teams. LinkedIn describes a QA-only focus serving SaaS, B2B and digital-product companies across North America, the UK, Europe and APAC, while the website highlights tailored QA around product and business goals. </p>
+            <p>AM Webtech presents itself as a QA-only Quality Engineering partner for SaaS, B2B and digital-product teams across North America, the UK, Europe and APAC. Its public company profile emphasizes AI-powered automation, functional and regression QA, API testing, performance, security, accessibility, mobile testing, consulting and dedicated QA teams.</p>
           </div>
           <div className="intro-metrics reveal">
             <div><strong>15+</strong><span>Years of QA experience</span></div>
-            <div><strong>3,452+</strong><span>Projects delivered</span></div>
+            <div><strong>10.8K+</strong><span>LinkedIn followers</span></div>
             <div><strong>393+</strong><span>Clients supported</span></div>
             <div><strong>24/7</strong><span>Global QA support</span></div>
           </div>
@@ -237,15 +237,75 @@ export default function Home() {
           <div className="client-wall reveal">{clients.map(x=><span key={x}>{x}</span>)}</div>
         </section>
 
-        <section className="section linkedin-section">
-          <div className="section-top reveal"><p className="eyebrow"><span className="linkedin-dot">in</span> LINKEDIN / COMPANY VOICE</p><h2>Quality, people and <span>continuous learning.</span></h2><p>Recent public LinkedIn activity highlights AM Webtech's 16-year journey, employee recognition, hiring, industry learning and a strong emphasis on disciplined quality engineering.</p></div>
-          <div className="linkedin-grid reveal">
-            {[
-              ["16 YEARS","Foundation milestone","AM Webtech recently marked 16 years, reflecting on growth, lessons, clients, partners and the team behind the journey."],
-              ["PEOPLE","Employee recognition","Recent company updates celebrated Star Performer, Rising Star, Extra Mile, Accountability, Team Spirit and Client Appreciation awards."],
-              ["LEARNING","Industry engagement","A recent update highlighted judging a workshop on analytical tools and the importance of practical skills, experimentation and continuous learning."],
-              ["HIRING","Career opportunities","Public posts show ongoing hiring and a focus on bringing new talent into the growing organization."]
-            ].map(([tag,title,text])=><article className="linkedin-card" key={title}><span>{tag}</span><h3>{title}</h3><p>{text}</p><a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">View LinkedIn <ArrowRight size={15}/></a></article>)}
+        <section id="company" className="section linkedin-section">
+          <div className="section-top reveal">
+            <p className="eyebrow"><span className="linkedin-dot">in</span> COMPANY EVENTS / LINKEDIN</p>
+            <h2>The people, milestones and <span>ideas behind the brand.</span></h2>
+            <p>Built from AM Webtech's public LinkedIn activity: Foundation Day celebrations, employee recognition, industry engagement, hiring, International Testers Day and quality-engineering thought leadership.</p>
+          </div>
+
+          <div className="linkedin-feature-grid reveal">
+            <article className="social-feature social-feature-large">
+              <div className="social-image foundation-art">
+                <div className="social-image-grid"/>
+                <div className="foundation-badge">16</div>
+                <div className="social-image-copy"><span>AM WEBTECH</span><strong>YEARS OF<br/>QUALITY</strong><small>FOUNDATION DAY</small></div>
+              </div>
+              <div className="social-feature-body">
+                <span className="social-tag">MILESTONE / FOUNDATION DAY</span>
+                <h3>16 years of milestones, memories and the people behind them.</h3>
+                <p>The celebration featured outdoor activities, poolside fun, cake cutting, an Awards & Recognition Ceremony, team conversations and lunch — with the company reflecting on 16 years of growth and continuous quality.</p>
+                <a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">See company updates <ArrowRight size={15}/></a>
+              </div>
+            </article>
+
+            <article className="social-feature">
+              <div className="social-image awards-art">
+                <div className="award-ring">★</div>
+                <div className="award-list"><span>STAR PERFORMER</span><span>RISING STAR</span><span>EXTRA MILE</span><span>TEAM SPIRIT</span></div>
+              </div>
+              <div className="social-feature-body">
+                <span className="social-tag">ACHIEVEMENTS / PEOPLE</span>
+                <h3>Employee recognition becomes part of the company story.</h3>
+                <p>Public Foundation Day updates recognized Star Performer, Rising Star, Extra Mile, Accountability, Team Spirit, Client Appreciation, Dedication, Mentorship and Service Recognition awards.</p>
+                <a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">View the recognition post <ArrowRight size={15}/></a>
+              </div>
+            </article>
+          </div>
+
+          <div className="linkedin-event-grid reveal">
+            <article className="linkedin-event">
+              <div className="event-number">01</div><span className="social-tag">INDUSTRY ENGAGEMENT</span>
+              <h3>Analytical Tools Workshop — Indore</h3>
+              <p>Mustakim S. shared a recent event where he was invited as a judge at Shri Vaishnav Institute of Management & Science, highlighting practical skills, experimentation and continuous learning.</p>
+              <a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">Explore the event update <ArrowRight size={15}/></a>
+            </article>
+            <article className="linkedin-event">
+              <div className="event-number">02</div><span className="social-tag">QUALITY CULTURE</span>
+              <h3>International Testers Day</h3>
+              <p>AM Webtech publicly celebrated testers for finding bugs early, protecting user experience and validating performance across platforms.</p>
+              <a href="https://www.linkedin.com/posts/amwebtech_internationaltestersday-thankyoutesters-activity-7238895009301725185-FyJP" target="_blank" rel="noreferrer">Open LinkedIn post <ArrowRight size={15}/></a>
+            </article>
+            <article className="linkedin-event">
+              <div className="event-number">03</div><span className="social-tag">QUALITY LEADERSHIP</span>
+              <h3>Discipline Over Speed</h3>
+              <p>A company thought-leadership post emphasizes clear strategy, precise coverage and disciplined automation instead of chasing speed without intent.</p>
+              <a href="https://www.linkedin.com/posts/amwebtech_amwebtech-qualityengineering-softwaretesting-activity-7417512517930954752-51rZ" target="_blank" rel="noreferrer">Read the post <ArrowRight size={15}/></a>
+            </article>
+            <article className="linkedin-event">
+              <div className="event-number">04</div><span className="social-tag">GROWTH / HIRING</span>
+              <h3>Growing the Indore QA team</h3>
+              <p>Recent public hiring activity includes BDE, Manual QA and Automation QA roles, including Playwright TypeScript requirements for automation positions.</p>
+              <a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">See current company activity <ArrowRight size={15}/></a>
+            </article>
+          </div>
+
+          <div className="linkedin-embed-wall reveal">
+            <div className="embed-heading"><span>LIVE PUBLIC POSTS</span><small>LinkedIn activity • public embeds</small></div>
+            <div className="embed-grid">
+              <iframe title="AM Webtech LinkedIn quality achievement post" src="https://www.linkedin.com/embed/feed/update/urn:li:activity:7442131486650281984" height="520" width="100%" frameBorder="0" allowFullScreen />
+              <iframe title="AM Webtech International Testers Day LinkedIn post" src="https://www.linkedin.com/embed/feed/update/urn:li:activity:7238895009301725185" height="520" width="100%" frameBorder="0" allowFullScreen />
+            </div>
           </div>
         </section>
 
@@ -282,7 +342,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="company" className="section company-section">
+        <section id="engagement" className="section company-section">
           <div className="company-card reveal"><div><p className="eyebrow">ENGAGEMENT MODELS</p><h2>Start small.<br/><span>Scale with confidence.</span></h2></div><div className="engagement-list">{["Dedicated QA Engineer","Manual + Automation Team","Dedicated Automation Team","QA Lead + Engineers","QA Consulting","Managed QA Support"].map((x,i)=><div key={x}><span>0{i+1}</span>{x}<ArrowRight size={16}/></div>)}</div></div>
         </section>
 
