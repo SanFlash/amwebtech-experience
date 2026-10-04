@@ -110,12 +110,7 @@ export default function Home() {
     <div ref={root} className="site">
       <header className="nav">
         <a className="brand" href="#top" aria-label="AM Webtech home">
-  <img className="brand-logo" src="/amwebtech-logo.png?v=2026" alt="AM Webtech" width={210} height={100} loading="eager" fetchPriority="high"
-    onError={(event) => {
-      event.currentTarget.style.display = "none";
-      event.currentTarget.nextElementSibling?.classList.add("logo-fallback-visible");
-    }} />
-  <span className="logo-fallback" aria-hidden="true">AM<span>WEBTECH</span></span>
+  <img className="brand-logo" src="/amwebtech-logo.png?v=2026" alt="AM Webtech" width={210} height={100} loading="eager" />
 </a>
         <nav className={menuOpen ? "nav-links open" : "nav-links"}>
           {["Services","Solutions","Cases","Labs","Company","Contact"].map((item) =>
