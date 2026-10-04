@@ -119,8 +119,3 @@ export default function Home() {
     </div>
   );
 }
-
-function useState(initial: boolean): [boolean, (v: boolean) => void] {
-  const ref = useRef(initial);
-  return [ref.current, (v: boolean) => { ref.current = v; document.documentElement.dataset.menu = v ? "open" : "closed"; }];
-}
