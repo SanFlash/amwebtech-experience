@@ -237,6 +237,18 @@ export default function Home() {
           <div className="client-wall reveal">{clients.map(x=><span key={x}>{x}</span>)}</div>
         </section>
 
+        <section className="section linkedin-section">
+          <div className="section-top reveal"><p className="eyebrow"><span className="linkedin-dot">in</span> LINKEDIN / COMPANY VOICE</p><h2>Quality, people and <span>continuous learning.</span></h2><p>Recent public LinkedIn activity highlights AM Webtech's 16-year journey, employee recognition, hiring, industry learning and a strong emphasis on disciplined quality engineering.</p></div>
+          <div className="linkedin-grid reveal">
+            {[
+              ["16 YEARS","Foundation milestone","AM Webtech recently marked 16 years, reflecting on growth, lessons, clients, partners and the team behind the journey."],
+              ["PEOPLE","Employee recognition","Recent company updates celebrated Star Performer, Rising Star, Extra Mile, Accountability, Team Spirit and Client Appreciation awards."],
+              ["LEARNING","Industry engagement","A recent update highlighted judging a workshop on analytical tools and the importance of practical skills, experimentation and continuous learning."],
+              ["HIRING","Career opportunities","Public posts show ongoing hiring and a focus on bringing new talent into the growing organization."]
+            ].map(([tag,title,text])=><article className="linkedin-card" key={title}><span>{tag}</span><h3>{title}</h3><p>{text}</p><a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">View LinkedIn <ArrowRight size={15}/></a></article>)}
+          </div>
+        </section>
+
         <section className="section testimonial-section">
           <div className="section-top reveal"><p className="eyebrow"><Quote size={15}/> CLIENT VOICE</p><h2>What clients say about <span>working with AM Webtech.</span></h2></div>
           <div className="testimonial-grid">{testimonials.map(([name,role,quote])=><article className="testimonial reveal" key={name}><Quote size={20}/><p>{quote}</p><strong>{name}</strong><span>{role}</span></article>)}</div>
