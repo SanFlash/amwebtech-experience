@@ -30,3 +30,8 @@ Hero / QA console, capabilities, QA growth engine, interactive labs, delivery mo
 
 ## Deployment
 This is a Next.js project prepared for Vercel. The main branch is the deployment source for the connected Vercel project.
+
+
+### Brand system
+- Orange + blue visual system is applied across navigation, sections, cards, CTAs, metrics, illustrations, and responsive states.
+- The AM Webtech logo is served from `public/amwebtech-logo.png` and used in the header and site icon.
