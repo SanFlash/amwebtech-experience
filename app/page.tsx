@@ -109,7 +109,7 @@ export default function Home() {
   return (
     <div ref={root} className="site">
       <header className="nav">
-        <a className="brand" href="#top"><span className="brand-mark">AM</span><span>WEBTECH</span></a>
+        <a className="brand" href="#top" aria-label="AM Webtech home"><img className="brand-logo" src="/amwebtech-logo.png" alt="AM Webtech" /></a>
         <nav className={menuOpen ? "nav-links open" : "nav-links"}>
           {["Services","Solutions","Cases","Labs","Company","Contact"].map((item) =>
             <a key={item} href={"#"+item.toLowerCase()} onClick={() => setMenuOpen(false)}>{item}</a>
