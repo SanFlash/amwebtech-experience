@@ -255,7 +255,7 @@ export default function Home() {
                 <div className="post-meta"><span>FOUNDATION DAY</span><span>16 YEARS</span></div>
                 <h3>16 years of milestones. Countless memories along the way.</h3>
                 <p>Outdoor activities, poolside fun, cake cutting, the Awards & Recognition Ceremony, conversations and lunch — a company celebration centered on culture, teamwork and relationships.</p>
-                <a href="https://www.linkedin.com/posts/amwebtech_16years-of-amwebtech-foundationday-testingredefined-activity-7417512517930954752-51rZ" target="_blank" rel="noreferrer">Open original LinkedIn post <ArrowUpRight size={16}/></a>
+                <a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">Open AM Webtech LinkedIn updates <ArrowUpRight size={16}/></a>
               </div>
             </article>
 
@@ -322,6 +322,18 @@ export default function Home() {
                 <h3>Software QA that clients can feel.</h3>
                 <p>AM Webtech shared client feedback praising experienced testing professionals, useful bug sheets, screenshots, recordings and clear defect documentation.</p>
                 <a href="https://www.linkedin.com/posts/amwebtech_startup-startupsuccess-startups-activity-7155884888951336961-NQBL" target="_blank" rel="noreferrer">Open original LinkedIn post <ArrowUpRight size={16}/></a>
+              </div>
+            </article>
+            <article className="linkedin-post">
+              <div className="post-visual workshop-visual">
+                <span className="post-platform">INDUSTRY / LEARNING</span>
+                <strong>SKILL</strong><small>BEYOND<br/>TEXTBOOKS</small>
+              </div>
+              <div className="post-content">
+                <div className="post-meta"><span>WORKSHOP ON ANALYTICAL TOOLS</span><span>RECENT</span></div>
+                <h3>Bridging academia and industry.</h3>
+                <p>AM Webtech's recent LinkedIn activity highlighted Mustakim S. serving as a judge at the finale of the Workshop on Analytical Tools at Shri Vaishnav Institute of Management & Science, Indore.</p>
+                <a href="https://www.linkedin.com/company/amwebtech/" target="_blank" rel="noreferrer">Open AM Webtech LinkedIn updates <ArrowUpRight size={16}/></a>
               </div>
             </article>
           </div>
