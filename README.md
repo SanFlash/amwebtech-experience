@@ -29,4 +29,4 @@ Hero / QA console, capabilities, QA growth engine, interactive labs, delivery mo
 - The gallery includes Foundation Day, employee recognition, International Testers Day, quality-engineering posts, client feedback and the analytical-tools workshop highlight.
 
 ## Deployment
-This is a Next.js project prepared for Vercel. When the GitHub repository is connected to Vercel, pushes to `main` can trigger production deployments automatically.
+This is a Next.js project prepared for Vercel. The main branch is the deployment source for the connected Vercel project.
