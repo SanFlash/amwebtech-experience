@@ -254,8 +254,31 @@ function drawWorld(
   npcList:NPC[],
   now:number
 ){
-  const scale=Math.min((width-36)/1536,(height-36)/900);
-  const origin={x:(width-1536*scale)/2,y:(height-900*scale)/2+10};
+  // Desktop keeps the complete floor-plan view. On phones the floor plan becomes
+  // a zoomed, player-centered viewport so the office is actually readable/touchable
+  // instead of shrinking the 1536x900 map into a tiny strip.
+  const mobile = width <= 800;
+  const scale = mobile
+    ? Math.min(width / 560, height / 760)
+    : Math.min((width - 36) / 1536, (height - 36) / 900);
+
+  let origin;
+  if (mobile) {
+    const viewW = width / scale;
+    const viewH = height / scale;
+    const cameraX = clamp(player.x, viewW / 2, 1536 - viewW / 2);
+    const cameraY = clamp(player.y, viewH / 2, 900 - viewH / 2);
+    origin = {
+      x: width / 2 - cameraX * scale,
+      y: height / 2 - cameraY * scale + 8
+    };
+  } else {
+    origin = {
+      x: (width - 1536 * scale) / 2,
+      y: (height - 900 * scale) / 2 + 10
+    };
+  }
+
   const iso=(p:Vec,z=0)=>({
     x:origin.x+p.x*scale,
     y:origin.y+p.y*scale-z*scale
