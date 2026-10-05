@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { createElement, useEffect, useRef, useState } from "react";
 import {
   Activity, ArrowDown, ArrowRight, ArrowUpRight, BarChart3, Bot, CheckCircle2, Code2,
   Gauge, Globe2, Layers3, Menu, Play, Quote, Search, ShieldCheck,
@@ -78,6 +78,26 @@ const process = [
   ["06","Scale & Improve","Scale resources and continuously improve coverage, automation and quality."],
 ];
 
+function SplineScene({ url, className = "" }: { url: string; className?: string }) {
+  useEffect(() => {
+    if (!document.querySelector('script[data-spline-viewer="true"]')) {
+      const script = document.createElement("script");
+      script.type = "module";
+      script.src = "https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js";
+      script.dataset.splineViewer = "true";
+      document.head.appendChild(script);
+    }
+  }, []);
+
+  return createElement("spline-viewer", {
+    url,
+    class: className,
+    background: "transparent",
+    "events-target": "global",
+    loading: "eager",
+  });
+}
+
 export default function Home() {
   const root = useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -148,6 +168,10 @@ export default function Home() {
             </div>
             <div className="scroll-cue"><ArrowDown size={16}/> Scroll to explore</div>
           </div>
+          <div className="hero-3d reveal" aria-label="Interactive 3D quality engineering visualization">
+            <SplineScene url="https://prod.spline.design/UWoeqiir20o49Dah/scene.splinecode" className="spline-scene" />
+            <div className="hero-3d-label"><span>3D / QUALITY ENGINE</span><b>AI · AUTOMATION · RELEASE</b></div>
+          </div>
           <div className="hero-console">
             <div className="console-head"><span><i/> QA ENGINE ONLINE</span><span>GLOBAL</span></div>
             <div className="console-line"><b>01</b><span>QA experience</span><em>15+ YRS</em></div>
@@ -197,6 +221,9 @@ export default function Home() {
           </div>
           <div className="visual-panel reveal parallax">
             <div className="visual-grid"/>
+            <div className="visual-3d" aria-label="Interactive 3D automation visualization">
+              <SplineScene url="https://prod.spline.design/U9O6K7fXziMEU7Wu/scene.splinecode" className="spline-scene" />
+            </div>
             <div className="floating-card card-a"><Zap size={18}/><b>Automation</b><strong>Scale</strong></div>
             <div className="floating-card card-b"><ShieldCheck size={18}/><b>Quality</b><strong>Confidence</strong></div>
             <div className="radar"><div/><div/><div/><div/><div className="radar-core">QA</div></div>
@@ -220,7 +247,11 @@ export default function Home() {
         </section>
 
         <section id="labs" className="section lab-section">
-          <div className="lab-visual reveal parallax"><div className="scan-line"/><div className="lab-hud"><span>AM / LABS</span><span>CONTINUOUS QUALITY</span></div><div className="lab-big">QA<br/><i>LABS</i></div><div className="lab-orbit"/></div>
+          <div className="lab-visual reveal parallax">
+            <div className="lab-3d" aria-label="Interactive 3D QA labs visualization">
+              <SplineScene url="https://prod.spline.design/FVZWbQH2B6ndj9UU/scene.splinecode" className="spline-scene" />
+            </div>
+            <div className="scan-line"/><div className="lab-hud"><span>AM / LABS</span><span>CONTINUOUS QUALITY</span></div><div className="lab-big">QA<br/><i>LABS</i></div><div className="lab-orbit"/></div>
           <div className="lab-copy reveal"><p className="eyebrow">THE QA LABS</p><h2>Test every layer of the <span>digital experience.</span></h2><p>Bring focused validation to AI/LLM behaviour, APIs, mobile experiences, performance, application security, accessibility and usability.</p>
             <div className="lab-items">{["AI / LLM LAB","AUTOMATION LAB","API LAB","MOBILE LAB","PERFORMANCE LAB","SECURITY LAB","ACCESSIBILITY LAB","USABILITY LAB"].map((x,i)=><a key={x} href="#contact"><span>0{i+1}</span>{x}<ArrowRight size={16}/></a>)}</div>
           </div>
