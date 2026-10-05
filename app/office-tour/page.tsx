@@ -190,7 +190,7 @@ export default function OfficeTourPage(){
       const d=distance(p,n);
       if(d<90 && d<min){nearest=n;min=d;}
     });
-    if(nearest) setActiveNpc({...nearest});
+    if(nearest) setActiveNpc(nearest);
   };
 
   return (
