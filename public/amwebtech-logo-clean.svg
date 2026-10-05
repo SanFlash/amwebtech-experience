@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 420" role="img" aria-labelledby="title desc">
+<title id="title">AM Webtech</title>
+<desc id="desc">AM Webtech — Quality Beyond Boundaries</desc>
+<g>
+  <path d="M24 342 166 70 308 342h-88l-54-104-54 104z" fill="#063B91"/>
+  <path d="m110 342 142-272 142 272h-88l-54-104-54 104z" fill="#FF7A00"/>
+</g>
+<text x="382" y="238" font-family="Arial,Helvetica,sans-serif" font-size="176" font-weight="800" letter-spacing="-10" fill="#063B91">AM Webtech</text>
+<text x="386" y="326" font-family="Arial,Helvetica,sans-serif" font-size="42" font-weight="700" fill="#FF7A00">Quality Beyond Boundaries</text>
+</svg>
