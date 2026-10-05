@@ -83,24 +83,32 @@ const process = [
   ["06","Scale & Improve","Scale resources and continuously improve coverage, automation and quality."],
 ];
 
-function SplineScene({ url, className = "" }: { url: string; className?: string }) {
-  useEffect(() => {
-    if (!document.querySelector('script[data-spline-viewer="true"]')) {
-      const script = document.createElement("script");
-      script.type = "module";
-      script.src = "https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js";
-      script.dataset.splineViewer = "true";
-      document.head.appendChild(script);
-    }
-  }, []);
+function QAVisual3D({ variant }: { variant: "hero" | "automation" | "labs" }) {
+  const data = {
+    hero: { label: "RELEASE QUALITY", sub: "TEST • VERIFY • SHIP", icon: ShieldCheck },
+    automation: { label: "AUTOMATION ENGINE", sub: "RUN • ASSERT • REPORT", icon: Workflow },
+    labs: { label: "QA TEST LAB", sub: "WEB • API • MOBILE • AI", icon: TestTube2 },
+  }[variant];
+  const Icon = data.icon;
 
-  return createElement("spline-viewer", {
-    url,
-    class: className,
-    background: "transparent",
-    "events-target": "global",
-    loading: "eager",
-  });
+  return (
+    <div className={`qa-3d qa-3d-${variant}`} aria-label={`${data.label} 3D quality assurance graphic`}>
+      <div className="qa-3d-grid" />
+      <div className="qa-3d-ring ring-one" />
+      <div className="qa-3d-ring ring-two" />
+      <div className="qa-3d-ring ring-three" />
+      <div className="qa-3d-core">
+        <div className="qa-3d-core-icon"><Icon size={34} strokeWidth={1.5}/></div>
+        <strong>QA</strong>
+        <span>QUALITY GATE</span>
+      </div>
+      <div className="qa-3d-node node-one"><CheckCircle2 size={16}/><span>PASS</span></div>
+      <div className="qa-3d-node node-two"><Bug size={16}/><span>DEFECT</span></div>
+      <div className="qa-3d-node node-three"><Activity size={16}/><span>TEST</span></div>
+      <div className="qa-3d-node node-four"><MonitorCheck size={16}/><span>READY</span></div>
+      <div className="qa-3d-label"><span>{data.label}</span><b>{data.sub}</b></div>
+    </div>
+  );
 }
 
 export default function Home() {
@@ -174,7 +182,7 @@ export default function Home() {
             <div className="scroll-cue"><ArrowDown size={16}/> Scroll to explore</div>
           </div>
           <div className="hero-3d reveal" aria-label="Interactive 3D quality engineering visualization">
-            <SplineScene url="https://prod.spline.design/UWoeqiir20o49Dah/scene.splinecode" className="spline-scene" />
+            <QAVisual3D variant="hero" />
             <div className="hero-3d-label"><span>3D / QUALITY ENGINE</span><b>AI · AUTOMATION · RELEASE</b></div>
           </div>
           <div className="hero-console">
@@ -231,7 +239,7 @@ export default function Home() {
           <div className="visual-panel reveal parallax">
             <div className="visual-grid"/>
             <div className="visual-3d" aria-label="Interactive 3D automation visualization">
-              <SplineScene url="https://prod.spline.design/9951u9cumiw2EhJ8/scene.splinecode" className="spline-scene" />
+              <QAVisual3D variant="automation" />
             </div>
             <div className="floating-card card-a"><Bot size={18}/><b>AI / Automation</b><strong>Execute</strong></div>
             <div className="floating-card card-b"><ShieldCheck size={18}/><b>Quality Gate</b><strong>Pass</strong></div>
@@ -258,7 +266,7 @@ export default function Home() {
         <section id="labs" className="section lab-section">
           <div className="lab-visual reveal parallax">
             <div className="lab-3d" aria-label="Interactive 3D QA labs visualization">
-              <SplineScene url="https://prod.spline.design/FVZWbQH2B6ndj9UU/scene.splinecode" className="spline-scene" />
+              <QAVisual3D variant="labs" />
             </div>
             <div className="scan-line"/><div className="lab-hud"><span>AM / LABS</span><span>CONTINUOUS QUALITY</span></div><div className="lab-big">QA<br/><i>LABS</i></div><div className="lab-orbit"/></div>
           <div className="lab-copy reveal"><p className="eyebrow">THE QA LABS</p><h2>Test every layer of the <span>digital experience.</span></h2><p>Bring focused validation to AI/LLM behaviour, APIs, mobile experiences, performance, application security, accessibility and usability.</p>
