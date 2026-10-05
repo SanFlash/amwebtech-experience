@@ -33,30 +33,42 @@ type NPC = {
 };
 
 const rooms: Room[] = [
-  { id:"automation", name:"Automation Team", subtitle:"8 seats", x:470, y:70, w:260, h:180, floor:"#f0d3a3", accent:"#0057b8" },
-  { id:"hr", name:"HR", subtitle:"2 seats", x:750, y:70, w:120, h:180, floor:"#ead0a2", accent:"#ff7a00" },
-  { id:"srhr", name:"Sr HR", subtitle:"2 seats", x:890, y:70, w:120, h:180, floor:"#ead0a2", accent:"#ff7a00" },
-  { id:"manager", name:"Manager", subtitle:"2 seats", x:1030, y:70, w:125, h:180, floor:"#ead0a2", accent:"#ff7a00" },
-  { id:"sales", name:"Sales Team", subtitle:"4 seats", x:1175, y:70, w:205, h:180, floor:"#ead0a2", accent:"#0057b8" },
-  { id:"director", name:"Director", subtitle:"3 seats", x:1400, y:70, w:145, h:180, floor:"#ead0a2", accent:"#ff7a00" },
-  { id:"male", name:"Male Washroom", subtitle:"Facilities", x:85, y:285, w:210, h:115, floor:"#dce5e9", accent:"#6b7b86" },
-  { id:"female", name:"Female Washroom", subtitle:"Facilities", x:85, y:415, w:210, h:115, floor:"#dce5e9", accent:"#6b7b86" },
-  { id:"kitchen", name:"Kitchen", subtitle:"2 seats", x:85, y:545, w:210, h:145, floor:"#e8d6b5", accent:"#ff7a00" },
-  { id:"meeting", name:"Meeting Room", subtitle:"6 seats", x:85, y:705, w:310, h:190, floor:"#d9cfbe", accent:"#0057b8" },
-  { id:"qa", name:"QA Team — Open Floor", subtitle:"24 seats", x:650, y:340, w:760, h:500, floor:"#dfc89f", accent:"#0057b8" },
+  { id:"automation", name:"Automation Team", subtitle:"8 seats", x:115, y:50, w:365, h:190, floor:"#d9b27b", accent:"#0057b8" },
+  { id:"hr", name:"HR", subtitle:"2 seats", x:490, y:50, w:135, h:190, floor:"#dfbc89", accent:"#ff7a00" },
+  { id:"srhr", name:"Sr HR", subtitle:"2 seats", x:635, y:50, w:135, h:190, floor:"#dfbc89", accent:"#ff7a00" },
+  { id:"manager", name:"Manager", subtitle:"2 seats", x:780, y:50, w:145, h:190, floor:"#dfbc89", accent:"#ff7a00" },
+  { id:"sales", name:"Sales Team", subtitle:"4 seats", x:935, y:50, w:230, h:190, floor:"#dfbc89", accent:"#0057b8" },
+  { id:"director", name:"Director", subtitle:"3 seats", x:1175, y:50, w:245, h:190, floor:"#dfbc89", accent:"#ff7a00" },
+  { id:"male", name:"Male Washroom", subtitle:"Facilities", x:75, y:260, w:325, h:120, floor:"#cbd7dc", accent:"#6d7f89" },
+  { id:"female", name:"Female Washroom", subtitle:"Facilities", x:75, y:385, w:325, h:120, floor:"#cbd7dc", accent:"#6d7f89" },
+  { id:"kitchen", name:"Kitchen", subtitle:"2 seats", x:75, y:510, w:325, h:155, floor:"#d9c19c", accent:"#ff7a00" },
+  { id:"meeting", name:"Meeting Room", subtitle:"6 seats", x:75, y:670, w:390, h:210, floor:"#cfc4b1", accent:"#0057b8" },
+  { id:"qa", name:"QA Team — Open Floor", subtitle:"24 seats", x:505, y:315, w:910, h:525, floor:"#d6bd91", accent:"#0057b8" },
 ];
 
 const npcs: NPC[] = [
-  { name:"Pavan Parihar", title:"Director of QA & Client Relationship", room:"qa", x:790, y:455, color:"#0057b8", speed:.7, home:{x:790,y:455} },
-  { name:"Uday Singh Chouhan", title:"Director of Quality Engineering & Excellence", room:"qa", x:1000, y:560, color:"#ff7a00", speed:.62, home:{x:1000,y:560} },
-  { name:"Rashika Subramanian", title:"Project Manager QA", room:"manager", x:1085, y:160, color:"#7b61ff", speed:.5, home:{x:1085,y:160} },
-  { name:"Mustakim Shaikh", title:"Business Development Manager", room:"sales", x:1250, y:155, color:"#00a37a", speed:.55, home:{x:1250,y:155} },
-  { name:"Gulrez Khan", title:"Co-Founder", room:"director", x:1445, y:150, color:"#d14b7d", speed:.42, home:{x:1445,y:150} },
-  { name:"Shadab Shaikh", title:"Co-Founder", room:"director", x:1490, y:205, color:"#1b8fbd", speed:.38, home:{x:1490,y:205} },
-  { name:"Hitesh Solanki", title:"Co-Founder", room:"automation", x:570, y:150, color:"#9b6b24", speed:.48, home:{x:570,y:150} },
-  { name:"QA Engineer", title:"Automation Specialist", room:"automation", x:650, y:180, color:"#2f7d5a", speed:.72, home:{x:650,y:180} },
-  { name:"QA Engineer", title:"Manual Testing", room:"qa", x:1170, y:690, color:"#3d6db5", speed:.66, home:{x:1170,y:690} },
-  { name:"QA Engineer", title:"API & Integration Testing", room:"qa", x:920, y:740, color:"#8c5a31", speed:.58, home:{x:920,y:740} },
+  { name:"", title:"Automation QA", room:"automation", x:175, y:165, color:"#0057b8", speed:0, home:{x:175,y:165} },
+  { name:"", title:"Automation QA", room:"automation", x:245, y:165, color:"#ff7a00", speed:0, home:{x:245,y:165} },
+  { name:"", title:"Automation QA", room:"automation", x:315, y:165, color:"#2f7d5a", speed:0, home:{x:315,y:165} },
+  { name:"", title:"Automation QA", room:"automation", x:385, y:165, color:"#7b61ff", speed:0, home:{x:385,y:165} },
+  { name:"", title:"Automation QA", room:"automation", x:175, y:205, color:"#7b61ff", speed:0, home:{x:175,y:205} },
+  { name:"", title:"Automation QA", room:"automation", x:245, y:205, color:"#2f7d5a", speed:0, home:{x:245,y:205} },
+  { name:"", title:"Automation QA", room:"automation", x:315, y:205, color:"#0057b8", speed:0, home:{x:315,y:205} },
+  { name:"", title:"Automation QA", room:"automation", x:385, y:205, color:"#ff7a00", speed:0, home:{x:385,y:205} },
+  { name:"", title:"HR", room:"hr", x:545, y:150, color:"#7b61ff", speed:0, home:{x:545,y:150} },
+  { name:"", title:"HR", room:"hr", x:590, y:150, color:"#7b61ff", speed:0, home:{x:590,y:150} },
+  { name:"", title:"HR", room:"srhr", x:690, y:150, color:"#2f7d5a", speed:0, home:{x:690,y:150} },
+  { name:"", title:"HR", room:"srhr", x:735, y:150, color:"#2f7d5a", speed:0, home:{x:735,y:150} },
+  { name:"", title:"Project Manager", room:"manager", x:835, y:150, color:"#ff7a00", speed:0, home:{x:835,y:150} },
+  { name:"", title:"Project Manager", room:"manager", x:880, y:150, color:"#ff7a00", speed:0, home:{x:880,y:150} },
+  { name:"", title:"Business Development", room:"sales", x:985, y:145, color:"#0b8ca6", speed:0, home:{x:985,y:145} },
+  { name:"", title:"Business Development", room:"sales", x:1045, y:145, color:"#0b8ca6", speed:0, home:{x:1045,y:145} },
+  { name:"", title:"Business Development", room:"sales", x:985, y:205, color:"#0b8ca6", speed:0, home:{x:985,y:205} },
+  { name:"", title:"Business Development", room:"sales", x:1045, y:205, color:"#0b8ca6", speed:0, home:{x:1045,y:205} },
+  { name:"", title:"Leadership", room:"director", x:1235, y:145, color:"#d14b7d", speed:0, home:{x:1235,y:145} },
+  { name:"", title:"Leadership", room:"director", x:1290, y:145, color:"#d14b7d", speed:0, home:{x:1290,y:145} },
+  { name:"", title:"Leadership", room:"director", x:1345, y:145, color:"#d14b7d", speed:0, home:{x:1345,y:145} },
+  ...Array.from({length:24},(_,i)=>({ name:"", title:"QA Engineer", room:"qa", x:[690,930,1170][i%3], y:[410,465,520,575,630,685,740,795][Math.floor(i/3)], color:["#0057b8","#ff7a00","#2f7d5a","#7b61ff","#0b8ca6","#9b6b24"][i%6], speed:0, home:{x:[690,930,1170][i%3],y:[410,465,520,575,630,685,740,795][Math.floor(i/3)]} }))
 ];
 
 const walls = [
@@ -143,27 +155,9 @@ export default function OfficeTourPage(){
       const nextRoom=r?.id||"corridor";
       setActiveRoom(prev=>prev===nextRoom?prev:nextRoom);
 
-      npcRef.current.forEach(n=>{
-        const wanderTarget=n.target||{
-          x:n.home.x+(Math.sin(now/1800+n.x)*45),
-          y:n.home.y+(Math.cos(now/2200+n.y)*35)
-        };
-        n.target=wanderTarget;
-        const d=distance(n,wanderTarget);
-        if(d<3) n.target=undefined;
-        else {
-          n.x += ((wanderTarget.x-n.x)/Math.max(d,1))*n.speed*dt;
-          n.y += ((wanderTarget.y-n.y)/Math.max(d,1))*n.speed*dt;
-        }
-      });
-
-      const camTarget={x:p.x,y:p.y};
-      cameraRef.current.x += (camTarget.x-cameraRef.current.x)*.07;
-      cameraRef.current.y += (camTarget.y-cameraRef.current.y)*.07;
-
       const rect=canvas.getBoundingClientRect();
       ctx.clearRect(0,0,rect.width,rect.height);
-      drawWorld(ctx,rect.width,rect.height,cameraRef.current,p,npcRef.current,now);
+      drawWorld(ctx,rect.width,rect.height,{x:768,y:450},p,npcRef.current,now);
       frameRef.current=requestAnimationFrame(draw);
     };
     frameRef.current=requestAnimationFrame(draw);
@@ -245,14 +239,14 @@ export default function OfficeTourPage(){
 
         {activeNpc && <div className={styles.npcCard}>
           <button type="button" onClick={()=>setActiveNpc(null)}><X size={15}/></button>
-          <div className={styles.npcAvatar}>{initials(activeNpc.name)}</div>
+          <div className={styles.npcAvatar}><Users size={23}/></div>
           <p>AM WEBTECH / EMPLOYEE</p>
           <h2>{activeNpc.name}</h2>
           <span>{activeNpc.title}</span>
-          <small>Currently in {rooms.find(r=>r.id===activeNpc.room)?.name||"the office"}</small>
+          <small>{rooms.find(r=>r.id===activeNpc.room)?.name||"the office"} · Active workstation</small>
         </div>}
 
-        <div className={styles.tip}><MousePointer2 size={14}/> Walk near an NPC and press <b>E</b> to meet them.</div>
+        <div className={styles.tip}><MousePointer2 size={14}/> Every employee stays at a workstation. <b>E</b> inspects nearby work.</div>
       </section>
     </main>
   );
@@ -365,38 +359,14 @@ function drawDesk(ctx:CanvasRenderingContext2D,p:{x:number,y:number},scale:numbe
 }
 
 function drawNPC(ctx:CanvasRenderingContext2D,p:{x:number,y:number},scale:number,n:NPC,now:number){
-  const bob=Math.sin(now/330+n.x)*1.4*scale;
-  ctx.save();ctx.translate(p.x,p.y+bob);
-  ctx.fillStyle="rgba(0,0,0,.22)";ctx.beginPath();ctx.ellipse(0,11*scale,12*scale,6*scale,0,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle=n.color;roundRect(ctx,-8*scale,-2*scale,16*scale,20*scale,6*scale);ctx.fill();
-  ctx.fillStyle="#f1c7a8";ctx.beginPath();ctx.arc(0,-10*scale,7*scale,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle="#202631";ctx.beginPath();ctx.arc(0,-13*scale,7*scale,Math.PI,Math.PI*2);ctx.fill();
-  ctx.strokeStyle="#101828";ctx.lineWidth=2*scale;ctx.beginPath();ctx.moveTo(-5*scale,18*scale);ctx.lineTo(-7*scale,27*scale);ctx.moveTo(5*scale,18*scale);ctx.lineTo(7*scale,27*scale);ctx.stroke();
-
-  const labelY=-34*scale;
-  const labelW=Math.max(86,n.name.length*5.2)*scale;
-  ctx.fillStyle="rgba(6,26,61,.94)";roundRect(ctx,-labelW/2,labelY-22*scale,labelW,25*scale,6*scale);ctx.fill();
-  ctx.strokeStyle=n.color;ctx.lineWidth=Math.max(1,scale);ctx.stroke();
-  ctx.fillStyle="#fff";ctx.textAlign="center";ctx.font=`700 ${Math.max(7,8.5*scale)}px Manrope`;
-  ctx.fillText(n.name,-0,labelY-10*scale);
-  ctx.fillStyle="#b8c9dc";ctx.font=`500 ${Math.max(6,6.5*scale)}px Manrope`;
-  ctx.fillText(n.title.slice(0,28),0,labelY+1*scale);
+  const typing=Math.sin(now/125+p.x)*2;
+  ctx.save();ctx.translate(p.x,p.y);
+  ctx.fillStyle="rgba(0,0,0,.24)";ctx.beginPath();ctx.ellipse(0,9*scale,9*scale,5*scale,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#18202a";ctx.beginPath();ctx.ellipse(0,10*scale,7*scale,5*scale,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=n.color;roundRect(ctx,-7*scale,-8*scale,14*scale,17*scale,5*scale);ctx.fill();
+  ctx.fillStyle="#f1c6a6";ctx.beginPath();ctx.arc(0,-16*scale,6*scale,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#1d2530";ctx.beginPath();ctx.arc(0,-19*scale,6*scale,Math.PI,Math.PI*2);ctx.fill();
+  ctx.strokeStyle="#f1c6a6";ctx.lineWidth=Math.max(1,2*scale);ctx.beginPath();ctx.moveTo(-5*scale,-1*scale);ctx.lineTo(-10*scale,typing*scale);ctx.moveTo(5*scale,-1*scale);ctx.lineTo(10*scale,-typing*scale);ctx.stroke();
+  ctx.fillStyle="rgba(0,190,255,"+(.22+.18*Math.sin(now/240+p.x))+")";ctx.beginPath();ctx.arc(0,-28*scale,5*scale,0,Math.PI*2);ctx.fill();
   ctx.restore();
-}
-
-function drawPlayer(ctx:CanvasRenderingContext2D,p:{x:number,y:number},scale:number,now:number){
-  const bob=Math.sin(now/180)*1.8*scale;
-  ctx.save();ctx.translate(p.x,p.y+bob);
-  ctx.fillStyle="rgba(0,0,0,.3)";ctx.beginPath();ctx.ellipse(0,12*scale,14*scale,7*scale,0,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle="#ff7a00";roundRect(ctx,-9*scale,-2*scale,18*scale,22*scale,7*scale);ctx.fill();
-  ctx.fillStyle="#f2c7a8";ctx.beginPath();ctx.arc(0,-11*scale,8*scale,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle="#071a3d";ctx.beginPath();ctx.arc(0,-14*scale,8*scale,Math.PI,Math.PI*2);ctx.fill();
-  ctx.strokeStyle="#061a3d";ctx.lineWidth=3*scale;ctx.beginPath();ctx.moveTo(-5*scale,19*scale);ctx.lineTo(-7*scale,28*scale);ctx.moveTo(5*scale,19*scale);ctx.lineTo(7*scale,28*scale);ctx.stroke();
-  ctx.fillStyle="#fff";ctx.textAlign="center";ctx.font=`700 ${Math.max(7,8*scale)}px Manrope`;ctx.fillText("YOU",0,-28*scale);
-  ctx.restore();
-}
-
-function roundRect(ctx:CanvasRenderingContext2D,x:number,y:number,w:number,h:number,r:number){
-  const rr=Math.min(r,Math.abs(w)/2,Math.abs(h)/2);
-  ctx.beginPath();ctx.moveTo(x+rr,y);ctx.arcTo(x+w,y,x+w,y+h,rr);ctx.arcTo(x+w,y+h,x,y+h,rr);ctx.arcTo(x,y+h,x,y,rr);ctx.arcTo(x,y,x+w,y,rr);ctx.closePath();
 }
