@@ -520,3 +520,5 @@ body{background:var(--navy);color:#fff}
   .node-three{left:4%;bottom:18%}.node-four{right:3%;bottom:20%}
   .qa-3d-label{left:14px;bottom:14px}
 }
+
+.nav-actions{display:flex;align-items:center;gap:8px}.nav-tour{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,122,0,.48);padding:10px 12px;border-radius:999px;color:#fff;font:700 10px "DM Mono";letter-spacing:.03em}.nav-tour svg{color:var(--orange)}.nav-tour:hover{background:var(--orange);color:var(--navy)}@media(max-width:1100px){.nav-tour{display:none}}
