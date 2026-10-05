@@ -110,20 +110,22 @@ export default function Home() {
     <div ref={root} className="site">
       <header className="nav">
         <a className="brand" href="#top" aria-label="AM Webtech home">
-  <span className="brand-fallback" aria-hidden="true"><strong>AM</strong><b>WEBTECH</b></span>
-  <img
-    className="brand-logo"
-    src="/amwebtech-logo.png?v=20261004"
-    alt="AM Webtech"
-    width={210}
-    height={100}
-    loading="eager"
-    decoding="async"
-    onError={(event) => {
-      event.currentTarget.style.display = "none";
-    }}
-  />
-</a>
+          <span className="brand-fallback" aria-hidden="true"><strong>AM</strong><b>WEBTECH</b></span>
+          <img
+            className="brand-logo"
+            src="/amwebtech-logo.png?v=20261005"
+            alt="AM Webtech"
+            width={300}
+            height={100}
+            loading="eager"
+            decoding="async"
+            onError={(event) => {
+              event.currentTarget.style.display = "none";
+              const fallback = event.currentTarget.previousElementSibling as HTMLElement | null;
+              if (fallback) fallback.style.display = "flex";
+            }}
+          />
+        </a>
         <nav className={menuOpen ? "nav-links open" : "nav-links"}>
           {["Services","Solutions","Cases","Labs","Company","Contact"].map((item) =>
             <a key={item} href={"#"+item.toLowerCase()} onClick={() => setMenuOpen(false)}>{item}</a>
