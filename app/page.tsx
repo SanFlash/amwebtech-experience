@@ -3,7 +3,7 @@
 import { createElement, useEffect, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
-  Accessibility, Activity, AlertTriangle, ArrowDown, ArrowRight, ArrowUpRight, BarChart3,
+  Accessibility, Activity, AlertTriangle, ArrowDown, ArrowRight, ArrowUpRight, BarChart3, Building2,
   Bot, Boxes, Bug, CheckCircle2, ClipboardCheck, CloudCog, Code2, Database, Gauge,
   GitBranch, Globe2, Layers3, LockKeyhole, Menu, MonitorCheck, Play, Quote, Search,
   ScanSearch, ServerCog, ShieldCheck, Smartphone, Sparkles, TestTube2, Users, Workflow,
