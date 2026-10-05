@@ -2,9 +2,11 @@
 
 import { createElement, useEffect, useRef, useState } from "react";
 import {
-  Activity, ArrowDown, ArrowRight, ArrowUpRight, BarChart3, Bot, CheckCircle2, Code2,
-  Gauge, Globe2, Layers3, Menu, Play, Quote, Search, ShieldCheck,
-  Smartphone, Sparkles, Users, X, Zap
+  Accessibility, Activity, AlertTriangle, ArrowDown, ArrowRight, ArrowUpRight, BarChart3,
+  Bot, Boxes, Bug, CheckCircle2, ClipboardCheck, CloudCog, Code2, Database, Gauge,
+  GitBranch, Globe2, Layers3, LockKeyhole, Menu, MonitorCheck, Play, Quote, Search,
+  ScanSearch, ServerCog, ShieldCheck, Smartphone, Sparkles, TestTube2, Users, Workflow,
+  X, Zap
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -13,18 +15,18 @@ import Lenis from "lenis";
 gsap.registerPlugin(ScrollTrigger);
 
 const services = [
-  ["01","API Testing","REST, SOAP, GraphQL, contract, data integrity, load/stress, security and API automation.","Functional • Contract • Security","/services/api-testing/"],
-  ["02","Test Automation","Scalable web, mobile, API, performance and regression suites with maintainable frameworks.","Selenium • Playwright • Cypress • Appium","/services/test-automation/"],
-  ["03","Manual & Functional QA","Requirement-driven functional, regression, usability and exploratory testing for real user journeys.","Functional • Regression • Usability","/services/"],
-  ["04","Agile Testing","QA embedded into iterative delivery with continuous feedback, sprint validation and release readiness.","Agile • Scrum • CI/CD","/services/agile-testing/"],
-  ["05","Mobile Testing","End-to-end iOS, Android and hybrid testing across devices, OS versions, networks and real-device labs.","iOS • Android • Real Devices","/services/mobile-testing/"],
-  ["06","Performance Testing","Load, stress and resilience testing to expose bottlenecks before production users do.","JMeter • Load • Scale","/services/performance-testing/"],
-  ["07","Security Testing","Vulnerability assessment, penetration testing, SAST, DAST, API, cloud and mobile security validation.","SAST • DAST • API • Cloud","/services/security-testing/"],
-  ["08","AI & LLM Testing","Prompt, hallucination, safety, adversarial, response-quality, model-regression and AI-agent evaluation.","LLM • RAG • Agents • Safety","/services/"],
-  ["09","Accessibility & Usability","Inclusive digital experiences aligned with accessibility standards and practical usability goals.","WCAG • ADA • Section 508","/services/accessibility/"],
-  ["10","Cloud & Data Quality","Cloud application validation plus secure, accurate and compliant test-data strategies.","Cloud • Data • Compliance","/"],
-  ["11","Dedicated QA Teams","Dedicated QA engineers, automation specialists, QA leads and broader quality engineering teams.","Manual • Automation • QA Leadership","/dedicated-qa-team/"],
-  ["12","Managed QA & Consulting","Project QA, staff augmentation, automation modernization, CI/CD quality and long-term QA support.","Consulting • Managed QA","/company/"]
+  ["01","API Testing","REST, SOAP, GraphQL, contract, data integrity, load/stress, security and API automation.","Functional • Contract • Security","/services/api-testing/",Code2],
+  ["02","Test Automation","Scalable web, mobile, API, performance and regression suites with maintainable frameworks.","Selenium • Playwright • Cypress • Appium","/services/test-automation/",Workflow],
+  ["03","Manual & Functional QA","Requirement-driven functional, regression, usability and exploratory testing for real user journeys.","Functional • Regression • Usability","/services/",ClipboardCheck],
+  ["04","Agile Testing","QA embedded into iterative delivery with continuous feedback, sprint validation and release readiness.","Agile • Scrum • CI/CD","/services/agile-testing/",GitBranch],
+  ["05","Mobile Testing","End-to-end iOS, Android and hybrid testing across devices, OS versions, networks and real-device labs.","iOS • Android • Real Devices","/services/mobile-testing/",Smartphone],
+  ["06","Performance Testing","Load, stress and resilience testing to expose bottlenecks before production users do.","JMeter • Load • Scale","/services/performance-testing/",Gauge],
+  ["07","Security Testing","Vulnerability assessment, penetration testing, SAST, DAST, API, cloud and mobile security validation.","SAST • DAST • API • Cloud","/services/security-testing/",ShieldCheck],
+  ["08","AI & LLM Testing","Prompt, hallucination, safety, adversarial, response-quality, model-regression and AI-agent evaluation.","LLM • RAG • Agents • Safety","/services/",Bot],
+  ["09","Accessibility & Usability","Inclusive digital experiences aligned with accessibility standards and practical usability goals.","WCAG • ADA • Section 508","/services/accessibility/",Accessibility],
+  ["10","Cloud & Data Quality","Cloud application validation plus secure, accurate and compliant test-data strategies.","Cloud • Data • Compliance","/",CloudCog],
+  ["11","Dedicated QA Teams","Dedicated QA engineers, automation specialists, QA leads and broader quality engineering teams.","Manual • Automation • QA Leadership","/dedicated-qa-team/",Users],
+  ["12","Managed QA & Consulting","Project QA, staff augmentation, automation modernization, CI/CD quality and long-term QA support.","Consulting • Managed QA","/company/",ServerCog]
 ];
 
 const technologies = [
@@ -201,9 +203,13 @@ export default function Home() {
 
         <section id="services" className="section dark-section">
           <div className="section-top reveal"><p className="eyebrow">CAPABILITIES / 12 DISCIPLINES</p><h2>One QA partner.<br/><span>Every quality layer.</span></h2><p>Comprehensive testing across functional, non-functional, data, cloud, performance, security, mobile and emerging AI quality needs. </p></div>
-          <div className="service-grid">{services.map(([num,title,text,tools,href]) =>
+          <div className="service-grid">{services.map(([num,title,text,tools,href,Icon]) =>
             <article className="service-card reveal" key={num}>
-              <div className="card-top"><span className="card-num">{num}</span><ArrowRight size={20}/></div>
+              <div className="card-top">
+                <span className="card-num">{num}</span>
+                <span className="service-icon"><Icon size={21} strokeWidth={1.7}/></span>
+                <ArrowRight size={20}/>
+              </div>
               <h3>{title}</h3><p>{text}</p><small>{tools}</small>
               <a href={"https://amwebtech.com"+href} target="_blank" rel="noreferrer">View service <ArrowRight size={15}/></a>
             </article>
@@ -222,17 +228,17 @@ export default function Home() {
           <div className="visual-panel reveal parallax">
             <div className="visual-grid"/>
             <div className="visual-3d" aria-label="Interactive 3D automation visualization">
-              <SplineScene url="https://prod.spline.design/U9O6K7fXziMEU7Wu/scene.splinecode" className="spline-scene" />
+              <SplineScene url="https://prod.spline.design/9951u9cumiw2EhJ8/scene.splinecode" className="spline-scene" />
             </div>
-            <div className="floating-card card-a"><Zap size={18}/><b>Automation</b><strong>Scale</strong></div>
-            <div className="floating-card card-b"><ShieldCheck size={18}/><b>Quality</b><strong>Confidence</strong></div>
+            <div className="floating-card card-a"><Bot size={18}/><b>AI / Automation</b><strong>Execute</strong></div>
+            <div className="floating-card card-b"><ShieldCheck size={18}/><b>Quality Gate</b><strong>Pass</strong></div>
             <div className="radar"><div/><div/><div/><div/><div className="radar-core">QA</div></div>
           </div>
         </section>
 
         <section className="section capability-band">
           <div className="section-top reveal"><p className="eyebrow">MODERN TESTING STACK</p><h2>Tools that fit your <span>delivery ecosystem.</span></h2></div>
-          <div className="tech-wall reveal">{technologies.map((x,i)=><span key={x}><i>{String(i+1).padStart(2,"0")}</i>{x}</span>)}</div>
+          <div className="tech-wall reveal">{technologies.map((x,i)=><span key={x}><i>{String(i+1).padStart(2,"0")}</i><TestTube2 size={16}/>{x}</span>)}</div>
         </section>
 
         <section id="cases" className="section cases-section">
@@ -253,7 +259,10 @@ export default function Home() {
             </div>
             <div className="scan-line"/><div className="lab-hud"><span>AM / LABS</span><span>CONTINUOUS QUALITY</span></div><div className="lab-big">QA<br/><i>LABS</i></div><div className="lab-orbit"/></div>
           <div className="lab-copy reveal"><p className="eyebrow">THE QA LABS</p><h2>Test every layer of the <span>digital experience.</span></h2><p>Bring focused validation to AI/LLM behaviour, APIs, mobile experiences, performance, application security, accessibility and usability.</p>
-            <div className="lab-items">{["AI / LLM LAB","AUTOMATION LAB","API LAB","MOBILE LAB","PERFORMANCE LAB","SECURITY LAB","ACCESSIBILITY LAB","USABILITY LAB"].map((x,i)=><a key={x} href="#contact"><span>0{i+1}</span>{x}<ArrowRight size={16}/></a>)}</div>
+            <div className="lab-items">{[
+              ["AI / LLM LAB",Bot],["AUTOMATION LAB",Workflow],["API LAB",Code2],["MOBILE LAB",Smartphone],
+              ["PERFORMANCE LAB",Gauge],["SECURITY LAB",ShieldCheck],["ACCESSIBILITY LAB",Accessibility],["USABILITY LAB",Search]
+            ].map(([x,Icon],i)=><a key={x} href="#contact"><span>0{i+1}</span><Icon size={15}/>{x}<ArrowRight size={16}/></a>)}</div>
           </div>
         </section>
 
