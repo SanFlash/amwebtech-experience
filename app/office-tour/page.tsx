@@ -79,7 +79,7 @@ function addDesk(parent:THREE.Group,x:number,z:number,rotation=0,qa=false){
   box(parent,[.06,.18,.04],[x,.78,z-.03],"#4a5660",.4);
   const screen=box(parent,[.32,.20,.025],[x,.99,z-.075],"#0b67c1",.2);
   screen.rotation.y=rotation;
-  addChair(parent,x,z+d*.92,rotation);
+  addChair(parent,x,z+d*.92);
 }
 function addQABench(parent:THREE.Group,x:number,z:number){
   // Long vertical bench islands: 4 seats on each side, matching the reference.
