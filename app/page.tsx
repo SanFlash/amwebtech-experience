@@ -85,62 +85,78 @@ const process = [
 ];
 
 function QAVisual3D({ variant }: { variant: "hero" | "automation" | "labs" }) {
-  const data = {
-    hero: {
-      label: "QA AUTOMATION / RELEASE CONTROL",
-      sub: "CODE • TEST • VERIFY • SHIP",
-      image: "https://bridgeiqtechnologies.com/assets/service-qe-v4-DGhnUKcb.png",
-      alt: "QA engineer working with automation dashboards in a modern engineering office",
-      icon: MonitorCheck,
-      chips: ["96% COVERAGE", "CI / CD", "REGRESSION"],
-    },
-    automation: {
-      label: "AUTOMATION ENGINEERING",
-      sub: "FRAMEWORK • EXECUTION • QUALITY GATE",
-      image: "https://accelonit.com/img/content/software_testing_realistic.webp",
-      alt: "Software testing engineer reviewing a QA automation dashboard",
-      icon: Workflow,
-      chips: ["450 TEST RUNS", "94% PASS", "CI READY"],
-    },
-    labs: {
-      label: "MOBILE / DEVICE QA LAB",
-      sub: "REAL DEVICES • TEST RUNS • RELEASE SIGNALS",
-      image: "https://code95.com/app/uploads/2025/12/%D8%B9%D9%85%D9%84%20%D8%AA%D8%B7%D9%88%D9%8A%D8%B1%20%D8%A7%D9%84%D8%AA%D8%B7%D8%A8%D9%8A%D9%82%D8%A7%D8%AA%20%D8%A7%D9%84%D9%85%D9%88%D8%A8%D8%A7%D9%8A%D9%84.webp",
-      alt: "Mobile application testing workstation with multiple devices and test dashboard",
-      icon: Smartphone,
-      chips: ["DEVICE MATRIX", "TEST RUNNING", "MOBILE QA"],
-    },
+  const configs = {
+    hero: { label:"RELEASE CONTROL", title:"QUALITY ENGINE", sub:"CODE → TEST → VERIFY → SHIP", icon:MonitorCheck, chips:["96% COVERAGE","CI / CD","REGRESSION"] },
+    automation: { label:"AUTOMATION PIPELINE", title:"AUTO QA", sub:"FRAMEWORK → EXECUTION → QUALITY GATE", icon:Workflow, chips:["450 TESTS","94% PASS","CI READY"] },
+    labs: { label:"DEVICE MATRIX", title:"QA LAB", sub:"REAL DEVICES → SCENARIOS → RELEASE SIGNALS", icon:Smartphone, chips:["iOS","ANDROID","REAL DEVICES"] },
   }[variant];
-  const Icon = data.icon;
+  const Icon = configs.icon;
   return (
-    <div className={`qa-3d qa-3d-${variant} relevant-visual`} aria-label={data.label}>
-      <img className="media-image" src={data.image} alt={data.alt} loading="lazy" decoding="async" />
-      <div className="media-overlay" />
-      <div className="visual-grid" />
-      <div className="visual-line visual-line-one" />
-      <div className="visual-line visual-line-two" />
-      <div className="media-header"><span>AM / QUALITY ENGINEERING</span><b>LIVE VISUAL</b></div>
-      <div className="media-core">
-        <div className="media-core-icon"><Icon size={26} strokeWidth={1.6}/></div>
-        <strong>{variant === "labs" ? "QA LAB" : variant === "automation" ? "AUTO QA" : "QUALITY"}</strong>
-        <span>{data.sub}</span>
-      </div>
-      <div className="media-chips">{data.chips.map((chip, i) => <span key={chip} className={i === 1 ? "active" : ""}>{chip}</span>)}</div>
-      <div className="qa-3d-label"><span>{data.label}</span><b>{data.sub}</b></div>
+    <div className={`qa-visual-system qa-system-${variant}`} aria-label={configs.label}>
+      <div className="qa-system-grid"/>
+      <div className="qa-system-scan"/>
+      <div className="qa-system-head"><span><i/> AM / QUALITY ENGINEERING</span><b>{configs.label}</b></div>
+
+      {variant === "hero" && (
+        <div className="qa-release-console">
+          <div className="qa-browser-bar"><i/><i/><i/><span>release / production</span><b>LIVE</b></div>
+          <div className="qa-release-body">
+            <div className="qa-release-sidebar"><span className="active">RUN</span><span>SUITES</span><span>BUGS</span><span>REPORTS</span></div>
+            <div className="qa-release-main">
+              <div className="qa-release-title"><div><small>RELEASE CANDIDATE</small><strong>v2.8.4</strong></div><em>READY</em></div>
+              <div className="qa-progress"><span/><b>96%</b></div>
+              <div className="qa-test-list">
+                {["Smoke / 42 passed","Regression / 318 passed","API / 74 passed","Critical / 16 passed"].map((x,i)=>
+                  <div key={x}><span><CheckCircle2 size={13}/>{x}</span><b>{i === 1 ? "98%" : "PASS"}</b></div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {variant === "automation" && (
+        <div className="qa-pipeline"><div className="qa-pipeline-line"/>
+          {[
+            ["01","CODE",Code2,"Commit received"],["02","RUN",Play,"450 test cases"],
+            ["03","CHECK",ScanSearch,"Coverage 94%"],["04","GATE",ShieldCheck,"Release approved"]
+          ].map(([num,title,NodeIcon,detail])=>{
+            const PipelineIcon = NodeIcon as LucideIcon;
+            return <div className="qa-pipeline-node" key={num}><span>{num}</span><div className="qa-pipeline-icon"><PipelineIcon size={20}/></div><strong>{title}</strong><small>{detail}</small></div>;
+          })}
+        </div>
+      )}
+
+      {variant === "labs" && (
+        <div className="qa-device-lab">
+          <div className="qa-device-wall">
+            {[["iPhone","iOS 26"],["Pixel","Android"],["iPad","iPadOS"],["Galaxy","Android"]].map(([name,os],i)=>
+              <div className="qa-device" key={name}><div className="qa-device-screen"><span>{i % 2 ? "RUN" : "PASS"}</span><i/><i/><i/></div><strong>{name}</strong><small>{os}</small></div>
+            )}
+          </div>
+          <div className="qa-lab-console"><span><i/> DEVICE MATRIX ONLINE</span><b>4 / 4 PASS</b></div>
+        </div>
+      )}
+
+      <div className="qa-system-core"><div className="qa-core-icon"><Icon size={23}/></div><strong>{configs.title}</strong><span>{configs.sub}</span></div>
+      <div className="qa-system-chips">{configs.chips.map((chip,i)=><span className={i === 1 ? "active" : ""} key={chip}>{chip}</span>)}</div>
+      <div className="qa-system-corner">01 / 04<br/><b>OBSERVE → VALIDATE → SHIP</b></div>
     </div>
   );
 }
 
 function GlobalVisual() {
   return (
-    <div className="world-panel reveal global-media" aria-label="Global QA delivery visual">
-      <img className="media-image" src="https://aicertswpcdn.blob.core.windows.net/newsportal/2026/01/tech-team-uses-testing-agents.jpg" alt="QA engineering team reviewing software testing dashboards" loading="lazy" decoding="async" />
-      <div className="media-overlay" />
-      <div className="world-grid"/>
-      <div className="world-route route-one"/>
-      <div className="world-route route-two"/>
-      <div className="world-dot d1"/><div className="world-dot d2"/><div className="world-dot d3"/>
-      <div className="global-badge"><Globe2 size={16}/><span>GLOBAL QA DELIVERY</span><b>USA • UK • EU • APAC</b></div>
+    <div className="global-visual-system reveal" aria-label="Global QA delivery visualization">
+      <div className="global-grid"/>
+      <div className="global-map">
+        <div className="global-orbit orbit-a"/><div className="global-orbit orbit-b"/><div className="global-orbit orbit-c"/>
+        <div className="global-node node-us"><i/><span>USA</span></div><div className="global-node node-eu"><i/><span>EU</span></div>
+        <div className="global-node node-apac"><i/><span>APAC</span></div><div className="global-node node-uk"><i/><span>UK</span></div>
+        <div className="global-core"><Globe2 size={26}/><strong>QA / GLOBAL</strong><small>24 / 7 DELIVERY</small></div>
+      </div>
+      <div className="global-status"><div><span>ACTIVE REGIONS</span><b>04</b></div><div><span>QA CAPACITY</span><b>SCALABLE</b></div><div><span>DELIVERY MODE</span><b>FOLLOW THE SUN</b></div></div>
+      <div className="global-caption"><Globe2 size={14}/><span>USA • UK • CANADA • EUROPE • APAC</span></div>
     </div>
   );
 }
@@ -150,43 +166,58 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const lenis = new Lenis({ autoRaf: true, lerp: 0.085, smoothWheel: true });
-    lenis.on("scroll", ScrollTrigger.update);
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    const lenis = (!isTouch && !reduceMotion) ? new Lenis({ autoRaf: true, lerp: 0.085, smoothWheel: true }) : null;
+    if (lenis) lenis.on("scroll", ScrollTrigger.update);
+
     const ctx = gsap.context(() => {
-      gsap.from(".hero-kicker", { y:24, opacity:0, duration:.8, delay:.15 });
-      gsap.from(".hero-title span", { y:90, opacity:0, duration:1, stagger:.1, ease:"power4.out", delay:.2 });
-      gsap.from(".hero-copy", { y:25, opacity:0, duration:.8, delay:.65 });
-      gsap.from(".hero-actions", { y:25, opacity:0, duration:.8, delay:.8 });
+      if (reduceMotion) {
+        gsap.set(".reveal", { opacity: 1, y: 0 });
+        return;
+      }
+
+      gsap.from(".hero-kicker", { y:24, opacity:0, duration:.8, delay:.12 });
+      gsap.from(".hero-title span", { y:90, opacity:0, duration:1, stagger:.1, ease:"power4.out", delay:.18 });
+      gsap.from(".hero-copy", { y:25, opacity:0, duration:.8, delay:.6 });
+      gsap.from(".hero-actions", { y:25, opacity:0, duration:.8, delay:.75 });
+
       gsap.utils.toArray<HTMLElement>(".reveal").forEach((el) => gsap.from(el, {
-        y:60, opacity:0, duration:1, ease:"power3.out",
-        scrollTrigger:{ trigger:el, start:"top 86%" }
+        y:48, opacity:0, duration:.85, ease:"power3.out",
+        scrollTrigger:{ trigger:el, start:"top 88%", once:true }
       }));
-      gsap.utils.toArray<HTMLElement>(".parallax").forEach((el) => gsap.to(el, {
-        yPercent:-14, ease:"none", scrollTrigger:{ trigger:el, scrub:true }
-      }));
-      gsap.to(".orb", { y:-80, rotate:22, ease:"none", scrollTrigger:{ trigger:".hero", scrub:true } });
+
       gsap.utils.toArray<HTMLElement>(".case-card").forEach((el, i) => gsap.from(el, {
-        x: i % 2 ? 60 : -60, opacity:0, duration:1,
-        scrollTrigger:{ trigger:el, start:"top 88%" }
+        x: i % 2 ? 45 : -45, opacity:0, duration:.8, ease:"power3.out",
+        scrollTrigger:{ trigger:el, start:"top 88%", once:true }
       }));
-      gsap.utils.toArray<HTMLElement>(".media-image").forEach((el) => gsap.fromTo(el, { scale:1.16, yPercent:5 }, { scale:1, yPercent:-4, ease:"none",
-        scrollTrigger:{ trigger:el, start:"top bottom", end:"bottom top", scrub:1.1 }
-      }));
-      gsap.utils.toArray<HTMLElement>(".relevant-visual").forEach((el) => {
-        const core = el.querySelector(".media-core");
-        const chips = el.querySelectorAll(".media-chips span");
-        if (core) gsap.from(core, { scale:.72, rotateY:-18, opacity:0, duration:1.1, ease:"power3.out", scrollTrigger:{ trigger:el, start:"top 78%" }});
-        gsap.from(chips, { y:20, opacity:0, stagger:.08, duration:.55, ease:"power2.out", scrollTrigger:{ trigger:el, start:"top 74%" }});
+
+      const mm = gsap.matchMedia();
+      mm.add("(min-width: 901px)", () => {
+        gsap.to(".orb", { y:-80, rotate:22, ease:"none", scrollTrigger:{ trigger:".hero", scrub:1 } });
+        gsap.utils.toArray<HTMLElement>(".parallax").forEach((el) => gsap.to(el, { yPercent:-8, ease:"none", scrollTrigger:{ trigger:el, scrub:1 } }));
+        gsap.utils.toArray<HTMLElement>(".qa-system-scan").forEach((el) => gsap.to(el, {
+          xPercent:28, ease:"none", scrollTrigger:{ trigger:el.closest(".qa-visual-system"), start:"top bottom", end:"bottom top", scrub:1.2 }
+        }));
+        gsap.utils.toArray<HTMLElement>(".qa-pipeline-node").forEach((el, i) => gsap.from(el, {
+          y:35, opacity:0, scale:.92, duration:.65, delay:i*.08, ease:"back.out(1.6)",
+          scrollTrigger:{ trigger:el.closest(".qa-visual-system"), start:"top 76%", once:true }
+        }));
+        gsap.utils.toArray<HTMLElement>(".qa-device").forEach((el, i) => gsap.from(el, {
+          y:35, rotateY:i % 2 ? -8 : 8, opacity:0, duration:.7, delay:i*.07, ease:"power3.out",
+          scrollTrigger:{ trigger:el.closest(".qa-visual-system"), start:"top 76%", once:true }
+        }));
       });
-      gsap.utils.toArray<HTMLElement>(".visual-line").forEach((line, i) => gsap.to(line, {
-        xPercent:i ? -22 : 22, opacity:.55, ease:"none",
-        scrollTrigger:{ trigger:line.closest(".relevant-visual"), start:"top bottom", end:"bottom top", scrub:1.2 }
-      }));
-      gsap.utils.toArray<HTMLElement>(".global-media").forEach((el) => gsap.from(el, {
-        rotateX:8, y:55, opacity:0, duration:1.1, ease:"power3.out", scrollTrigger:{ trigger:el, start:"top 82%" }
-      }));
+      mm.add("(max-width: 900px)", () => {
+        gsap.utils.toArray<HTMLElement>(".qa-pipeline-node, .qa-device").forEach((el, i) => gsap.from(el, {
+          y:18, opacity:0, duration:.5, delay:i*.04, ease:"power2.out",
+          scrollTrigger:{ trigger:el.closest(".qa-visual-system"), start:"top 82%", once:true }
+        }));
+      });
+      return () => mm.revert();
     }, root);
-    return () => { ctx.revert(); lenis.destroy(); };
+
+    return () => { ctx.revert(); if (lenis) lenis.destroy(); };
   }, []);
 
   return (
