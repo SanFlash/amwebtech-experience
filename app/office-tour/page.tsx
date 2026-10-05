@@ -99,14 +99,27 @@ function addQABench(parent:THREE.Group,x:number,z:number){
 }
 
 function addWorker(parent:THREE.Group,w:Worker){
+  const walking=!!w.roam;
   const g=new THREE.Group();g.position.set(w.x,0,w.z);w.group=g;
-  const shadow=new THREE.Mesh(new THREE.CircleGeometry(.33,16),new THREE.MeshBasicMaterial({color:"#000",transparent:true,opacity:.18}));
+  const shadow=new THREE.Mesh(new THREE.CircleGeometry(.30,16),new THREE.MeshBasicMaterial({color:"#000",transparent:true,opacity:.16}));
   shadow.rotation.x=-Math.PI/2;shadow.position.y=.02;g.add(shadow);
-  const body=new THREE.Mesh(new THREE.CapsuleGeometry(.22,.48,5,10),makeMat(w.color,.7));body.position.y=.62;g.add(body);
-  const head=new THREE.Mesh(new THREE.SphereGeometry(.2,12,8),makeMat("#e9b994"));head.position.y=1.18;g.add(head);
-  const hair=new THREE.Mesh(new THREE.SphereGeometry(.205,12,8,0,Math.PI*2,0,Math.PI*.5),makeMat("#20252b"));hair.position.y=1.25;g.add(hair);
-  const armL=new THREE.Mesh(new THREE.CapsuleGeometry(.055,.3,4,6),makeMat("#e9b994"));armL.position.set(-.2,.68,.16);armL.rotation.x=-.8;g.add(armL);
-  const armR=armL.clone();armR.position.x=.2;g.add(armR);
+  if(walking){
+    const body=new THREE.Mesh(new THREE.CapsuleGeometry(.20,.48,5,10),makeMat(w.color,.7));body.position.y=.62;g.add(body);
+    const head=new THREE.Mesh(new THREE.SphereGeometry(.19,12,8),makeMat("#e9b994"));head.position.y=1.18;g.add(head);
+    const hair=new THREE.Mesh(new THREE.SphereGeometry(.195,12,8,0,Math.PI*2,0,Math.PI*.5),makeMat("#20252b"));hair.position.y=1.25;g.add(hair);
+    const armL=new THREE.Mesh(new THREE.CapsuleGeometry(.045,.30,4,6),makeMat("#e9b994"));armL.position.set(-.20,.68,.02);armL.rotation.x=-.35;g.add(armL);
+    const armR=armL.clone();armR.position.x=.20;g.add(armR);
+    const legL=new THREE.Mesh(new THREE.CapsuleGeometry(.06,.34,4,6),makeMat("#202b35"));legL.position.set(-.10,.25,.02);g.add(legL);
+    const legR=legL.clone();legR.position.x=.10;g.add(legR);
+  }else{
+    const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.20,.30,5,10),makeMat(w.color,.7));torso.position.y=.43;g.add(torso);
+    const head=new THREE.Mesh(new THREE.SphereGeometry(.18,12,8),makeMat("#e9b994"));head.position.y=.79;g.add(head);
+    const hair=new THREE.Mesh(new THREE.SphereGeometry(.185,12,8,0,Math.PI*2,0,Math.PI*.5),makeMat("#20252b"));hair.position.y=.86;g.add(hair);
+    const armL=new THREE.Mesh(new THREE.CapsuleGeometry(.045,.25,4,6),makeMat("#e9b994"));armL.position.set(-.18,.50,.16);armL.rotation.x=-1.05;g.add(armL);
+    const armR=armL.clone();armR.position.x=.18;g.add(armR);
+    const legL=new THREE.Mesh(new THREE.CapsuleGeometry(.055,.25,4,6),makeMat("#202b35"));legL.position.set(-.10,.23,.22);legL.rotation.x=-.15;g.add(legL);
+    const legR=legL.clone();legR.position.x=.10;g.add(legR);
+  }
   parent.add(g);
 }
 function addRoomShell(root:THREE.Group,r:Room){
@@ -174,6 +187,18 @@ function addChair(root:THREE.Group,x:number,z:number){
   box(root,[.55,.65,.1],[x,.68,z+.24],"#263540",.5);
   seat.castShadow=true;
 }
+function addVisitor(root:THREE.Group){
+  const g=new THREE.Group();g.name="visitor";
+  const shadow=new THREE.Mesh(new THREE.CircleGeometry(.34,16),new THREE.MeshBasicMaterial({color:"#000",transparent:true,opacity:.2}));
+  shadow.rotation.x=-Math.PI/2;shadow.position.y=.02;g.add(shadow);
+  const body=new THREE.Mesh(new THREE.CapsuleGeometry(.22,.50,5,10),makeMat("#25c77a",.65));body.position.y=.62;g.add(body);
+  const head=new THREE.Mesh(new THREE.SphereGeometry(.20,12,8),makeMat("#e9b994"));head.position.y=1.20;g.add(head);
+  const hair=new THREE.Mesh(new THREE.SphereGeometry(.205,12,8,0,Math.PI*2,0,Math.PI*.5),makeMat("#20252b"));hair.position.y=1.27;g.add(hair);
+  const armL=new THREE.Mesh(new THREE.CapsuleGeometry(.05,.30,4,6),makeMat("#e9b994"));armL.position.set(-.21,.68,.02);g.add(armL);
+  const armR=armL.clone();armR.position.x=.21;g.add(armR);
+  g.traverse(o=>{if(o instanceof THREE.Mesh)o.castShadow=true;});
+  root.add(g);return g;
+}
 function buildScene(scene:THREE.Scene){
   scene.background=new THREE.Color("#1d2934");
   scene.fog=new THREE.Fog("#1d2934",25,55);
@@ -184,7 +209,23 @@ function buildScene(scene:THREE.Scene){
   box(root,[31,.25,18],[0,-.15,0],"#cbd3d7",1);
   rooms.forEach(r=>addRoomShell(root,r));
   addRoomFurniture(root);
-  workerData.forEach((d,i)=>addWorker(root,{...d,phase:i*.55}));
+  workerData.forEach((d,i)=>{
+    const seat={...d,phase:i*.55};
+    if(d.room==="qa"){
+      const q=i-21;
+      const side=q%2===0?-0.98:0.98;
+      seat.x=d.x+side;
+      seat.z=d.z;
+      if(d.roam){
+        seat.roam={points:[[seat.x,seat.z],[seat.x,-2.55],[0,-3.15],[0,-5.15],[0,-3.15],[seat.x,-2.55],[seat.x,seat.z]],duration:d.roam.duration};
+      }
+    }else{
+      seat.z=d.z+.70;
+    }
+    addWorker(root,seat);
+  });
+  const visitor=addVisitor(root);
+  visitor.position.set(-2.1,0,8.1);
   // Entry doors and brand wall.
   box(root,[2.2,2.0,.18],[-2.1,1,8.0],"#f1f4f5",.5);
   const brand=makeLabel("AM WEBTECH","QUALITY ENGINEERING","#25c77a");brand.position.set(-2.1,1.4,7.45);brand.scale.set(1.25,.32,1);brand.rotation.x=-Math.PI/2;root.add(brand);
@@ -250,13 +291,24 @@ export default function OfficeTourPage(){
         }
         const armL=w.group.children[4] as THREE.Object3D|undefined;
         const armR=w.group.children[5] as THREE.Object3D|undefined;
-        if(armL)armL.rotation.x=-.8+Math.sin(now*.012+w.phase)*.15;
-        if(armR)armR.rotation.x=-.8-Math.sin(now*.012+w.phase)*.15;
+        if(w.roam){
+          if(armL)armL.rotation.x=-.35+Math.sin(now*.010+w.phase)*.12;
+          if(armR)armR.rotation.x=.35-Math.sin(now*.010+w.phase)*.12;
+        }else{
+          if(armL)armL.rotation.x=-1.05+Math.sin(now*.014+w.phase)*.10;
+          if(armR)armR.rotation.x=-1.05-Math.sin(now*.014+w.phase)*.10;
+        }
       });
+      const visitor=workerObjects?.getObjectByName("visitor");
+      if(visitor){
+        visitor.position.x=player.x;
+        visitor.position.z=player.z;
+        if(dx||dz)visitor.rotation.y=Math.atan2(dx,dz);
+      }
       const target=new THREE.Vector3(player.x,0,player.z);
-      const desired=new THREE.Vector3(player.x,17.5,player.z+18);
+      const desired=new THREE.Vector3(player.x,10.5,player.z+13);
       camera.position.lerp(desired,1-Math.pow(.001,dt));
-      camera.lookAt(target);
+      camera.lookAt(new THREE.Vector3(player.x,.55,player.z));
       renderer.render(scene,camera);
       raf=requestAnimationFrame(tick);
     };
