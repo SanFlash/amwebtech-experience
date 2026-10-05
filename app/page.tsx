@@ -49,10 +49,10 @@ const globalServices = [
 ];
 
 const caseStudies = [
-  { label:"AI / CONVERSATIONAL", title:"AI-Powered Conversational Platform", text:"Automation-first QA across web, mobile, messaging and voice channels.", metrics:["75% reduction in manual QA","60% improvement in test coverage","Faster release cycles"] },
-  { label:"NO-CODE / GAMING", title:"No-Code Game Development Platform", text:"End-to-end QA process and automation framework for a rapidly evolving game platform.", metrics:["90% reduction in manual testing","Faster bug detection","Improved release stability"] },
-  { label:"WORKFORCE / SAAS", title:"Workforce Management Platform", text:"Dedicated Agile QA across web and mobile applications with complex roles and frequent releases.", metrics:["Web + mobile QA","Cross-browser testing","Agile QA integration"] },
-  { label:"ENTERPRISE WORKFLOW", title:"Third-Party Workflow Automation", text:"Scalable Agile QA and automation across multiple client environments.", metrics:["65%+ reduction in bug ratio","Faster regression cycles","Consistent deployments"] }
+  { label:"AI / CONVERSATIONAL", title:"AI-Powered Conversational Platform", text:"Automation-first QA across web, mobile, messaging and voice channels.", metrics:["75% reduction in manual QA","60% improvement in test coverage","Faster release cycles"], image:"https://bridgeiqtechnologies.com/assets/service-qe-v4-DGhnUKcb.png" },
+  { label:"NO-CODE / GAMING", title:"No-Code Game Development Platform", text:"End-to-end QA process and automation framework for a rapidly evolving game platform.", metrics:["90% reduction in manual testing","Faster bug detection","Improved release stability"], image:"https://cdn.prod.website-files.com/66ad2be6a1fc504a2d6a22b2/69c2d87d9ae0240b87d03f74_ddce2ca631884e61aac2ece96456deca.png" },
+  { label:"WORKFORCE / SAAS", title:"Workforce Management Platform", text:"Dedicated Agile QA across web and mobile applications with complex roles and frequent releases.", metrics:["Web + mobile QA","Cross-browser testing","Agile QA integration"], image:"https://apinita.ru/images/solutions/2026/04/1/professiya-qa-chem-zanimaetsya-testirovshhik-v-it-i-pochemu-eto-vazhno.jpeg" },
+  { label:"ENTERPRISE WORKFLOW", title:"Third-Party Workflow Automation", text:"Scalable Agile QA and automation across multiple client environments.", metrics:["65%+ reduction in bug ratio","Faster regression cycles","Consistent deployments"], image:"https://www.testriq.com/_next/image?q=75&url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2F7hxinmig%2Fproduction%2F0997f365354f14918e3b8d4d855a74702424b988-1200x896.png%3Fw%3D1200%26q%3D90&w=3840" }
 ];
 
 const clients = [
@@ -86,28 +86,61 @@ const process = [
 
 function QAVisual3D({ variant }: { variant: "hero" | "automation" | "labs" }) {
   const data = {
-    hero: { label: "RELEASE QUALITY", sub: "TEST • VERIFY • SHIP", icon: ShieldCheck },
-    automation: { label: "AUTOMATION ENGINE", sub: "RUN • ASSERT • REPORT", icon: Workflow },
-    labs: { label: "QA TEST LAB", sub: "WEB • API • MOBILE • AI", icon: TestTube2 },
+    hero: {
+      label: "QA AUTOMATION / RELEASE CONTROL",
+      sub: "CODE • TEST • VERIFY • SHIP",
+      image: "https://bridgeiqtechnologies.com/assets/service-qe-v4-DGhnUKcb.png",
+      alt: "QA engineer working with automation dashboards in a modern engineering office",
+      icon: MonitorCheck,
+      chips: ["96% COVERAGE", "CI / CD", "REGRESSION"],
+    },
+    automation: {
+      label: "AUTOMATION ENGINEERING",
+      sub: "FRAMEWORK • EXECUTION • QUALITY GATE",
+      image: "https://accelonit.com/img/content/software_testing_realistic.webp",
+      alt: "Software testing engineer reviewing a QA automation dashboard",
+      icon: Workflow,
+      chips: ["450 TEST RUNS", "94% PASS", "CI READY"],
+    },
+    labs: {
+      label: "MOBILE / DEVICE QA LAB",
+      sub: "REAL DEVICES • TEST RUNS • RELEASE SIGNALS",
+      image: "https://code95.com/app/uploads/2025/12/%D8%B9%D9%85%D9%84%20%D8%AA%D8%B7%D9%88%D9%8A%D8%B1%20%D8%A7%D9%84%D8%AA%D8%B7%D8%A8%D9%8A%D9%82%D8%A7%D8%AA%20%D8%A7%D9%84%D9%85%D9%88%D8%A8%D8%A7%D9%8A%D9%84.webp",
+      alt: "Mobile application testing workstation with multiple devices and test dashboard",
+      icon: Smartphone,
+      chips: ["DEVICE MATRIX", "TEST RUNNING", "MOBILE QA"],
+    },
   }[variant];
   const Icon = data.icon;
-
   return (
-    <div className={`qa-3d qa-3d-${variant}`} aria-label={`${data.label} 3D quality assurance graphic`}>
-      <div className="qa-3d-grid" />
-      <div className="qa-3d-ring ring-one" />
-      <div className="qa-3d-ring ring-two" />
-      <div className="qa-3d-ring ring-three" />
-      <div className="qa-3d-core">
-        <div className="qa-3d-core-icon"><Icon size={34} strokeWidth={1.5}/></div>
-        <strong>QA</strong>
-        <span>QUALITY GATE</span>
+    <div className={`qa-3d qa-3d-${variant} relevant-visual`} aria-label={data.label}>
+      <img className="media-image" src={data.image} alt={data.alt} loading="lazy" decoding="async" />
+      <div className="media-overlay" />
+      <div className="visual-grid" />
+      <div className="visual-line visual-line-one" />
+      <div className="visual-line visual-line-two" />
+      <div className="media-header"><span>AM / QUALITY ENGINEERING</span><b>LIVE VISUAL</b></div>
+      <div className="media-core">
+        <div className="media-core-icon"><Icon size={26} strokeWidth={1.6}/></div>
+        <strong>{variant === "labs" ? "QA LAB" : variant === "automation" ? "AUTO QA" : "QUALITY"}</strong>
+        <span>{data.sub}</span>
       </div>
-      <div className="qa-3d-node node-one"><CheckCircle2 size={16}/><span>PASS</span></div>
-      <div className="qa-3d-node node-two"><Bug size={16}/><span>DEFECT</span></div>
-      <div className="qa-3d-node node-three"><Activity size={16}/><span>TEST</span></div>
-      <div className="qa-3d-node node-four"><MonitorCheck size={16}/><span>READY</span></div>
+      <div className="media-chips">{data.chips.map((chip, i) => <span key={chip} className={i === 1 ? "active" : ""}>{chip}</span>)}</div>
       <div className="qa-3d-label"><span>{data.label}</span><b>{data.sub}</b></div>
+    </div>
+  );
+}
+
+function GlobalVisual() {
+  return (
+    <div className="world-panel reveal global-media" aria-label="Global QA delivery visual">
+      <img className="media-image" src="https://aicertswpcdn.blob.core.windows.net/newsportal/2026/01/tech-team-uses-testing-agents.jpg" alt="QA engineering team reviewing software testing dashboards" loading="lazy" decoding="async" />
+      <div className="media-overlay" />
+      <div className="world-grid"/>
+      <div className="world-route route-one"/>
+      <div className="world-route route-two"/>
+      <div className="world-dot d1"/><div className="world-dot d2"/><div className="world-dot d3"/>
+      <div className="global-badge"><Globe2 size={16}/><span>GLOBAL QA DELIVERY</span><b>USA • UK • EU • APAC</b></div>
     </div>
   );
 }
@@ -135,6 +168,22 @@ export default function Home() {
       gsap.utils.toArray<HTMLElement>(".case-card").forEach((el, i) => gsap.from(el, {
         x: i % 2 ? 60 : -60, opacity:0, duration:1,
         scrollTrigger:{ trigger:el, start:"top 88%" }
+      }));
+      gsap.utils.toArray<HTMLElement>(".media-image").forEach((el) => gsap.fromTo(el, { scale:1.16, yPercent:5 }, { scale:1, yPercent:-4, ease:"none",
+        scrollTrigger:{ trigger:el, start:"top bottom", end:"bottom top", scrub:1.1 }
+      }));
+      gsap.utils.toArray<HTMLElement>(".relevant-visual").forEach((el) => {
+        const core = el.querySelector(".media-core");
+        const chips = el.querySelectorAll(".media-chips span");
+        if (core) gsap.from(core, { scale:.72, rotateY:-18, opacity:0, duration:1.1, ease:"power3.out", scrollTrigger:{ trigger:el, start:"top 78%" }});
+        gsap.from(chips, { y:20, opacity:0, stagger:.08, duration:.55, ease:"power2.out", scrollTrigger:{ trigger:el, start:"top 74%" }});
+      });
+      gsap.utils.toArray<HTMLElement>(".visual-line").forEach((line, i) => gsap.to(line, {
+        xPercent:i ? -22 : 22, opacity:.55, ease:"none",
+        scrollTrigger:{ trigger:line.closest(".relevant-visual"), start:"top bottom", end:"bottom top", scrub:1.2 }
+      }));
+      gsap.utils.toArray<HTMLElement>(".global-media").forEach((el) => gsap.from(el, {
+        rotateX:8, y:55, opacity:0, duration:1.1, ease:"power3.out", scrollTrigger:{ trigger:el, start:"top 82%" }
       }));
     }, root);
     return () => { ctx.revert(); lenis.destroy(); };
@@ -257,6 +306,7 @@ export default function Home() {
           <div className="section-top reveal"><p className="eyebrow">PROVEN QA / REAL RESULTS</p><h2>Real QA challenges.<br/><span>Measurable results.</span></h2><p>Selected current case-study themes published by AM Webtech, presented as outcome-focused stories. </p></div>
           <div className="case-grid">{caseStudies.map((c,i)=>
             <article className="case-card" key={c.title}>
+              <div className="case-media"><img className="media-image" src={c.image} alt={c.title} loading="lazy" decoding="async"/><div className="case-media-shade"/><span>CASE / QA DELIVERY</span></div>
               <div className="case-index">0{i+1}</div><p className="eyebrow">{c.label}</p><h3>{c.title}</h3><p>{c.text}</p>
               <div className="case-metrics">{c.metrics.map(m=><span key={m}><CheckCircle2 size={14}/>{m}</span>)}</div>
               <a href="https://amwebtech.com/portfolio/" target="_blank" rel="noreferrer">Open portfolio <ArrowRight size={15}/></a>
@@ -282,7 +332,7 @@ export default function Home() {
           <div className="global-copy reveal"><p className="eyebrow">GLOBAL QA EXPERTISE</p><h2>One delivery model.<br/><span>Multiple time zones.</span></h2><p>AM Webtech supports businesses across the USA, UK, Canada, Europe, APAC and other international markets with scalable QA services and flexible engagement models. </p>
             <div className="global-points"><span><Globe2 size={17}/> USA</span><span>UK</span><span>Canada</span><span>Europe</span><span>APAC</span></div>
           </div>
-          <div className="world-panel reveal"><div className="world-grid"/><div className="world-dot d1"/><div className="world-dot d2"/><div className="world-dot d3"/><div className="world-label">GLOBAL QA DELIVERY</div></div>
+          <GlobalVisual />
         </section>
 
         <section className="section industry-section">
