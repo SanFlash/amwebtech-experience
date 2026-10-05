@@ -96,7 +96,6 @@ export default function OfficeTourPage(){
   const frameRef = useRef<number | undefined>(undefined);
   const keysRef = useRef<Record<string,boolean>>({});
   const playerRef = useRef<Vec>({x:560,y:850});
-  const cameraRef = useRef<Vec>({x:760,y:480});
   const npcRef = useRef(npcs.map(n=>({...n})));
   const [activeRoom,setActiveRoom] = useState("entry");
   const [activeNpc,setActiveNpc] = useState<NPC|null>(null);
@@ -157,7 +156,7 @@ export default function OfficeTourPage(){
 
       const rect=canvas.getBoundingClientRect();
       ctx.clearRect(0,0,rect.width,rect.height);
-      drawWorld(ctx,rect.width,rect.height,{x:768,y:450},p,npcRef.current,now);
+      drawWorld(ctx,rect.width,rect.height,p,npcRef.current,now);
       frameRef.current=requestAnimationFrame(draw);
     };
     frameRef.current=requestAnimationFrame(draw);
@@ -240,9 +239,9 @@ export default function OfficeTourPage(){
         {activeNpc && <div className={styles.npcCard}>
           <button type="button" onClick={()=>setActiveNpc(null)}><X size={15}/></button>
           <div className={styles.npcAvatar}><Users size={23}/></div>
-          <p>AM WEBTECH / EMPLOYEE</p>
-          <h2>{activeNpc.name}</h2>
-          <span>{activeNpc.title}</span>
+          <p>AM WEBTECH / WORKSTATION</p>
+          <h2>{activeNpc.title}</h2>
+          <span>Seated • Working on PC</span>
           <small>{rooms.find(r=>r.id===activeNpc.room)?.name||"the office"} · Active workstation</small>
         </div>}
 
@@ -250,10 +249,6 @@ export default function OfficeTourPage(){
       </section>
     </main>
   );
-}
-
-function initials(name:string){
-  return name.split(" ").map(x=>x[0]).join("").slice(0,2).toUpperCase();
 }
 
 function drawWorld(
@@ -265,11 +260,11 @@ function drawWorld(
   npcList:NPC[],
   now:number
 ){
-  const scale=Math.min(width/1100,height/720);
-  const origin={x:width/2,y:height/2+40};
+  const scale=Math.min((width-36)/1536,(height-36)/900);
+  const origin={x:(width-1536*scale)/2,y:(height-900*scale)/2+10};
   const iso=(p:Vec,z=0)=>({
-    x:origin.x+(p.x-camera.x)*scale*.78-(p.y-camera.y)*scale*.38,
-    y:origin.y+(p.x-camera.x)*scale*.32+(p.y-camera.y)*scale*.20-z*scale
+    x:origin.x+p.x*scale,
+    y:origin.y+p.y*scale-z*scale
   });
 
   ctx.fillStyle="#071a3d";
@@ -291,15 +286,8 @@ function drawWorld(
 
   // Central QA desks.
   const qa=rooms.find(r=>r.id==="qa")!;
-  for(let row=0;row<4;row++){
-    for(let col=0;col<3;col++){
-      const x=qa.x+115+col*205, y=qa.y+95+row*92;
-      drawDesk(ctx,iso({x,y}),scale);
-    }
-  }
-
-  // Automation desks.
-  for(let i=0;i<4;i++) drawDesk(ctx,iso({x:515+i*55,y:150}),scale);
+  [690,930,1170].forEach(x=>[410,465,520,575,630,685,740,795].forEach(y=>drawDesk(ctx,iso({x,y}),scale)));
+  [175,245,315,385].forEach(x=>{drawDesk(ctx,iso({x,y:165}),scale);drawDesk(ctx,iso({x,y:205}),scale);});
 
   npcList.forEach(n=>drawNPC(ctx,iso({x:n.x,y:n.y}),scale,n,now));
   drawPlayer(ctx,iso(player),scale,now);
