@@ -32,9 +32,10 @@ const services: ServiceItem[] = [
   ["12","Managed QA & Consulting","Project QA, staff augmentation, automation modernization, CI/CD quality and long-term QA support.","Consulting • Managed QA","/company/",ServerCog]
 ];
 
-const technologies = [
-  "Selenium","Playwright","Cypress","Appium","Postman","Rest Assured","JMeter",
-  "Jira","Azure DevOps","GitHub Actions","Jenkins","AWS","Azure"
+const technologies: Array<[string, LucideIcon]> = [
+  ["Selenium",Workflow],["Playwright",MonitorCheck],["Cypress",CheckCircle2],["Appium",Smartphone],
+  ["Postman",Code2],["Rest Assured",ShieldCheck],["JMeter",Gauge],["Jira",ClipboardCheck],
+  ["Azure DevOps",CloudCog],["GitHub Actions",GitBranch],["Jenkins",Workflow],["AWS",CloudCog],["Azure",CloudCog]
 ];
 
 const industries = [
@@ -249,7 +250,7 @@ export default function Home() {
 
         <section className="section capability-band">
           <div className="section-top reveal"><p className="eyebrow">MODERN TESTING STACK</p><h2>Tools that fit your <span>delivery ecosystem.</span></h2></div>
-          <div className="tech-wall reveal">{technologies.map((x,i)=><span key={x}><i>{String(i+1).padStart(2,"0")}</i><TestTube2 size={16}/>{x}</span>)}</div>
+          <div className="tech-wall reveal">{technologies.map(([x,Icon],i)=><span key={x}><i>{String(i+1).padStart(2,"0")}</i><Icon size={16}/>{x}</span>)}</div>
         </section>
 
         <section id="cases" className="section cases-section">
@@ -291,7 +292,7 @@ export default function Home() {
 
         <section id="approach" className="section process-section">
           <div className="section-top reveal"><p className="eyebrow">HOW WE WORK</p><h2>From uncertainty to <span>release confidence.</span></h2><p>A structured QA lifecycle that starts with requirements and ends with validated, production-ready software. </p></div>
-          <div className="process-line">{process.map(x=><div className="process-step reveal" key={x[0]}><span>{x[0]}</span><h3>{x[1]}</h3><p>{x[2]}</p></div>)}</div>
+          <div className="process-line">{process.map(([num,title,description],i)=><div className="process-step reveal" key={num}><span>{num}</span><div className="process-icon"><CheckCircle2 size={16}/></div><h3>{title}</h3><p>{description}</p></div>)}</div>
         </section>
 
         <section className="section team-section">
