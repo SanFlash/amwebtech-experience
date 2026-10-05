@@ -226,3 +226,80 @@ body{background:var(--navy);color:#fff}
   .brand{width:170px !important;min-width:170px !important;flex-basis:170px !important;height:50px !important}
   .brand-logo{width:170px !important;max-width:170px !important;max-height:50px !important}
 }
+
+
+/* Interactive 3D experience layer */
+.hero-3d{
+  position:absolute;
+  z-index:1;
+  right:2.5%;
+  top:12%;
+  width:min(43vw,620px);
+  height:min(43vw,620px);
+  min-height:420px;
+  pointer-events:auto;
+  border:1px solid rgba(0,87,184,.20);
+  border-radius:28px;
+  background:radial-gradient(circle at 50% 45%,rgba(0,87,184,.13),transparent 64%);
+  overflow:hidden;
+  mask-image:linear-gradient(to bottom,black 0%,black 86%,transparent 100%);
+}
+.spline-scene{
+  display:block;
+  width:100%;
+  height:100%;
+  border:0;
+}
+.hero-3d-label{
+  position:absolute;
+  left:22px;
+  bottom:22px;
+  z-index:3;
+  display:grid;
+  gap:5px;
+  padding:11px 13px;
+  border:1px solid rgba(0,87,184,.28);
+  background:rgba(6,26,61,.78);
+  backdrop-filter:blur(12px);
+  color:#dbe7f7;
+  font:9px "DM Mono";
+  letter-spacing:.08em;
+}
+.hero-3d-label b{font-size:10px;color:var(--accent);font-weight:500}
+.visual-3d{
+  position:absolute;
+  inset:6% 5% 4%;
+  z-index:1;
+  opacity:.92;
+  pointer-events:auto;
+  border-radius:24px;
+  overflow:hidden;
+  background:radial-gradient(circle at center,rgba(0,87,184,.16),transparent 66%);
+}
+.visual-panel .visual-grid{z-index:0}
+.visual-panel .floating-card,.visual-panel .radar{z-index:3}
+.lab-3d{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  opacity:.88;
+  pointer-events:auto;
+  background:radial-gradient(circle at 50% 42%,rgba(0,87,184,.18),transparent 65%);
+}
+.lab-visual .lab-hud,.lab-visual .lab-big,.lab-visual .scan-line,.lab-visual .lab-orbit{z-index:2}
+.lab-visual .lab-big{z-index:2}
+@media(max-width:1100px){
+  .hero-3d{right:-6%;width:48vw;height:48vw;min-height:360px;opacity:.75}
+  .hero-console{z-index:4}
+}
+@media(max-width:900px){
+  .hero-3d{position:absolute;right:-12%;top:16%;width:58vw;height:58vw;min-height:300px;opacity:.38}
+  .hero-console{display:none}
+  .visual-3d{inset:10% 4% 8%;opacity:.72}
+}
+@media(max-width:620px){
+  .hero-3d{right:-20%;top:17%;width:78vw;height:78vw;min-height:250px;opacity:.28}
+  .hero-3d-label{left:14px;bottom:14px}
+  .visual-3d{inset:12% 2% 10%;opacity:.62}
+  .lab-3d{opacity:.55}
+}
