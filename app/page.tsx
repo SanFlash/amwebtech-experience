@@ -1,6 +1,7 @@
 "use client";
 
 import { createElement, useEffect, useRef, useState } from "react";
+import type { LucideIcon } from "lucide-react";
 import {
   Accessibility, Activity, AlertTriangle, ArrowDown, ArrowRight, ArrowUpRight, BarChart3,
   Bot, Boxes, Bug, CheckCircle2, ClipboardCheck, CloudCog, Code2, Database, Gauge,
@@ -14,7 +15,9 @@ import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const services = [
+type ServiceItem = [string, string, string, string, string, LucideIcon];
+
+const services: ServiceItem[] = [
   ["01","API Testing","REST, SOAP, GraphQL, contract, data integrity, load/stress, security and API automation.","Functional • Contract • Security","/services/api-testing/",Code2],
   ["02","Test Automation","Scalable web, mobile, API, performance and regression suites with maintainable frameworks.","Selenium • Playwright • Cypress • Appium","/services/test-automation/",Workflow],
   ["03","Manual & Functional QA","Requirement-driven functional, regression, usability and exploratory testing for real user journeys.","Functional • Regression • Usability","/services/",ClipboardCheck],
@@ -262,7 +265,7 @@ export default function Home() {
             <div className="lab-items">{[
               ["AI / LLM LAB",Bot],["AUTOMATION LAB",Workflow],["API LAB",Code2],["MOBILE LAB",Smartphone],
               ["PERFORMANCE LAB",Gauge],["SECURITY LAB",ShieldCheck],["ACCESSIBILITY LAB",Accessibility],["USABILITY LAB",Search]
-            ].map(([x,Icon],i)=><a key={x} href="#contact"><span>0{i+1}</span><Icon size={15}/>{x}<ArrowRight size={16}/></a>)}</div>
+            ].map(([x,Icon]: [string, LucideIcon],i)=><a key={x} href="#contact"><span>0{i+1}</span><Icon size={15}/>{x}<ArrowRight size={16}/></a>)}</div>
           </div>
         </section>
 
