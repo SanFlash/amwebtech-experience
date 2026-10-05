@@ -339,6 +339,28 @@ function drawDesk(ctx:CanvasRenderingContext2D,p:{x:number,y:number},scale:numbe
   ctx.restore();
 }
 
+function drawPlayer(ctx:CanvasRenderingContext2D,p:{x:number,y:number},scale:number,now:number){
+  const pulse=0.5+0.5*Math.sin(now/220);
+  ctx.save();
+  ctx.translate(p.x,p.y);
+  ctx.fillStyle="rgba(37,199,122,"+(0.16+0.10*pulse)+")";
+  ctx.beginPath();ctx.ellipse(0,8*scale,15*scale,8*scale,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#0b8f5b";
+  ctx.beginPath();ctx.ellipse(0,5*scale,8*scale,6*scale,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#25c77a";
+  roundRect(ctx,-7*scale,-10*scale,14*scale,18*scale,5*scale);ctx.fill();
+  ctx.fillStyle="#f1c6a6";
+  ctx.beginPath();ctx.arc(0,-18*scale,6*scale,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#172331";
+  ctx.beginPath();ctx.arc(0,-21*scale,6*scale,Math.PI,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#fff";
+  ctx.beginPath();ctx.arc(0,-29*scale,3*scale,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle="rgba(37,199,122,.8)";
+  ctx.lineWidth=Math.max(1,1.5*scale);
+  ctx.beginPath();ctx.arc(0,-2*scale,13*scale,0,Math.PI*2);ctx.stroke();
+  ctx.restore();
+}
+
 function drawNPC(ctx:CanvasRenderingContext2D,p:{x:number,y:number},scale:number,n:NPC,now:number){
   const typing=Math.sin(now/125+p.x)*2;
   ctx.save();ctx.translate(p.x,p.y);
