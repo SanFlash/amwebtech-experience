@@ -81,7 +81,7 @@ function roomAt(p:Vec){
 
 export default function OfficeTourPage(){
   const canvasRef = useRef<HTMLCanvasElement|null>(null);
-  const frameRef = useRef<number|undefined>();
+  const frameRef = useRef<number | undefined>(undefined);
   const keysRef = useRef<Record<string,boolean>>({});
   const playerRef = useRef<Vec>({x:560,y:850});
   const cameraRef = useRef<Vec>({x:760,y:480});
