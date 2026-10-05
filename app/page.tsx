@@ -262,10 +262,10 @@ export default function Home() {
             </div>
             <div className="scan-line"/><div className="lab-hud"><span>AM / LABS</span><span>CONTINUOUS QUALITY</span></div><div className="lab-big">QA<br/><i>LABS</i></div><div className="lab-orbit"/></div>
           <div className="lab-copy reveal"><p className="eyebrow">THE QA LABS</p><h2>Test every layer of the <span>digital experience.</span></h2><p>Bring focused validation to AI/LLM behaviour, APIs, mobile experiences, performance, application security, accessibility and usability.</p>
-            <div className="lab-items">{[
+            <div className="lab-items">{([
               ["AI / LLM LAB",Bot],["AUTOMATION LAB",Workflow],["API LAB",Code2],["MOBILE LAB",Smartphone],
               ["PERFORMANCE LAB",Gauge],["SECURITY LAB",ShieldCheck],["ACCESSIBILITY LAB",Accessibility],["USABILITY LAB",Search]
-            ].map(([x,Icon]: [string, LucideIcon],i)=><a key={x} href="#contact"><span>0{i+1}</span><Icon size={15}/>{x}<ArrowRight size={16}/></a>)}</div>
+            ] as Array<[string, LucideIcon]>).map(([x,Icon],i)=><a key={x} href="#contact"><span>0{i+1}</span><Icon size={15}/>{x}<ArrowRight size={16}/></a>)}</div>
           </div>
         </section>
 
