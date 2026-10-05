@@ -522,3 +522,705 @@ body{background:var(--navy);color:#fff}
 }
 
 .nav-actions{display:flex;align-items:center;gap:8px}.nav-tour{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,122,0,.48);padding:10px 12px;border-radius:999px;color:#fff;font:700 10px "DM Mono";letter-spacing:.03em}.nav-tour svg{color:var(--orange)}.nav-tour:hover{background:var(--orange);color:var(--navy)}@media(max-width:1100px){.nav-tour{display:none}}
+
+
+
+/* =========================================================
+   MOBILE-FIRST RESPONSIVE PASS
+   Keeps the desktop design intact and reflows every section
+   for phones, tablets and narrow landscape screens.
+   ========================================================= */
+
+html{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+  scroll-padding-top:76px;
+}
+body{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  overflow-x:hidden;
+}
+.site{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  overflow-x:clip;
+}
+img,svg,video,canvas{
+  max-width:100%;
+}
+button,a{
+  -webkit-tap-highlight-color:transparent;
+}
+.nav{
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+}
+.section{
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+}
+
+/* Tablet */
+@media (max-width:1100px){
+  .nav{
+    padding-left:22px;
+    padding-right:22px;
+  }
+  .nav-cta{
+    padding:10px 13px;
+    font-size:9px;
+  }
+  .hero-inner{
+    max-width:94%;
+  }
+  .hero-title{
+    font-size:clamp(64px,9vw,112px);
+  }
+  .section-top,
+  .split-section,
+  .intro-section,
+  .global-section,
+  .company-section,
+  .contact-inner{
+    padding-left:28px;
+    padding-right:28px;
+  }
+  .service-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .case-grid,
+  .pricing-grid,
+  .testimonial-grid,
+  .leader-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .industry-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+  .stats-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+/* Phones + small tablets */
+@media (max-width:900px){
+  .nav{
+    position:sticky;
+    top:0;
+    z-index:100;
+    height:68px;
+    min-height:68px;
+    padding:0 14px;
+    gap:10px;
+  }
+  .brand{
+    width:175px !important;
+    min-width:175px !important;
+    flex:0 0 175px !important;
+    height:52px !important;
+  }
+  .brand-logo{
+    width:175px !important;
+    max-width:175px !important;
+    max-height:52px !important;
+  }
+  .nav-links{
+    position:fixed;
+    top:68px;
+    left:10px;
+    right:10px;
+    width:auto;
+    max-height:calc(100dvh - 78px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    padding:10px;
+    display:none;
+    flex-direction:column;
+    align-items:stretch;
+    gap:3px;
+    border:1px solid rgba(255,122,0,.35);
+    border-radius:16px;
+    box-shadow:0 22px 60px rgba(0,0,0,.35);
+    z-index:101;
+  }
+  .nav-links.open{
+    display:flex;
+  }
+  .nav-links a{
+    min-height:46px;
+    display:flex;
+    align-items:center;
+    padding:11px 14px;
+    border-radius:10px;
+    font-size:11px;
+  }
+  .nav-actions{
+    margin-left:auto;
+  }
+  .nav-cta{
+    display:none !important;
+  }
+  .nav-tour{
+    display:none !important;
+  }
+  .menu-btn{
+    width:42px;
+    height:42px;
+    min-width:42px;
+    display:grid;
+    place-items:center;
+    border:1px solid rgba(255,122,0,.42);
+    border-radius:10px;
+    background:rgba(6,26,61,.82);
+    color:#fff;
+    cursor:pointer;
+  }
+
+  .hero{
+    min-height:auto !important;
+    padding-top:76px !important;
+    padding-bottom:74px !important;
+    overflow:hidden;
+  }
+  .hero-inner{
+    width:100%;
+    max-width:none;
+    padding:0 22px;
+    box-sizing:border-box;
+  }
+  .hero-title{
+    max-width:100%;
+    font-size:clamp(54px,14vw,88px);
+    line-height:.88;
+    word-break:normal;
+  }
+  .hero-copy{
+    max-width:620px;
+    font-size:14px;
+    line-height:1.7;
+  }
+  .hero-actions{
+    flex-wrap:wrap;
+    gap:9px;
+  }
+  .hero-actions a{
+    min-height:44px;
+  }
+  .hero-console{
+    display:none !important;
+  }
+  .hero-3d{
+    pointer-events:none;
+  }
+
+  .ticker{
+    overflow:hidden;
+  }
+  .ticker-track{
+    width:max-content;
+  }
+
+  .section-top,
+  .split-section,
+  .intro-section,
+  .global-section,
+  .company-section,
+  .contact-inner{
+    width:100%;
+    box-sizing:border-box;
+    padding-left:22px;
+    padding-right:22px;
+  }
+
+  .section-top{
+    gap:16px;
+  }
+  .section-top h2,
+  .split-copy h2,
+  .intro-copy h2,
+  .global-copy h2,
+  .company-section h2,
+  .contact-inner h2{
+    font-size:clamp(34px,8vw,58px);
+    line-height:.98;
+  }
+
+  .service-grid{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+  .service-card{
+    min-width:0;
+  }
+  .service-card .card-top{
+    min-height:38px;
+  }
+
+  .case-grid,
+  .pricing-grid,
+  .testimonial-grid,
+  .leader-grid{
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+  .case-card,
+  .price-card,
+  .testimonial,
+  .leader{
+    min-width:0;
+  }
+
+  .industry-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+  .stats-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .split-section,
+  .intro-section,
+  .global-section,
+  .company-section{
+    grid-template-columns:1fr !important;
+    gap:28px;
+  }
+  .visual-panel,
+  .lab-visual,
+  .awards-visual,
+  .client-visual,
+  .foundation-visual,
+  .consistency-visual,
+  .workshop-visual,
+  .precision-visual,
+  .testers-visual{
+    min-height:320px;
+    width:100%;
+  }
+
+  .visual-3d{
+    pointer-events:none;
+  }
+  .lab-3d{
+    pointer-events:none;
+  }
+
+  .tech-wall{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .process-section{
+    overflow:hidden;
+  }
+  .process-step{
+    min-width:0;
+  }
+  .process-line{
+    display:none;
+  }
+
+  .lab-items a{
+    min-height:52px;
+  }
+
+  .global-points{
+    grid-template-columns:1fr !important;
+  }
+
+  .linkedin-post-grid{
+    grid-template-columns:1fr !important;
+  }
+  .linkedin-post-feature{
+    grid-template-columns:1fr !important;
+  }
+
+  .contact-actions{
+    flex-wrap:wrap;
+  }
+  .contact-actions a{
+    min-height:44px;
+  }
+
+  .footer{
+    overflow:hidden;
+  }
+  .footer-links{
+    flex-wrap:wrap;
+    gap:10px 18px;
+  }
+}
+
+/* Small phones */
+@media (max-width:620px){
+  html{
+    scroll-padding-top:64px;
+  }
+  .nav{
+    height:62px;
+    min-height:62px;
+    padding:0 10px;
+  }
+  .brand{
+    width:154px !important;
+    min-width:154px !important;
+    flex-basis:154px !important;
+    height:46px !important;
+  }
+  .brand-logo{
+    width:154px !important;
+    max-width:154px !important;
+    max-height:46px !important;
+  }
+  .nav-links{
+    top:62px;
+    left:8px;
+    right:8px;
+    max-height:calc(100dvh - 70px);
+  }
+  .menu-btn{
+    width:40px;
+    height:40px;
+    min-width:40px;
+  }
+
+  .hero{
+    padding-top:58px !important;
+    padding-bottom:58px !important;
+  }
+  .hero-inner{
+    padding:0 17px;
+  }
+  .eyebrow{
+    font-size:8px;
+    letter-spacing:.11em;
+    line-height:1.5;
+  }
+  .hero-title{
+    font-size:clamp(48px,15.5vw,72px);
+    letter-spacing:-.055em;
+  }
+  .hero-copy{
+    font-size:13px;
+    line-height:1.65;
+  }
+  .hero-actions{
+    display:grid;
+    grid-template-columns:1fr;
+    width:100%;
+  }
+  .hero-actions a{
+    width:100%;
+    justify-content:center;
+    box-sizing:border-box;
+  }
+  .hero-3d{
+    right:-28%;
+    top:19%;
+    width:88vw;
+    height:88vw;
+    min-height:0;
+    opacity:.18;
+  }
+  .hero-3d-label{
+    left:10px;
+    bottom:10px;
+    font-size:8px;
+    padding:8px 9px;
+  }
+
+  .section{
+    overflow:hidden;
+  }
+  .section-top,
+  .split-section,
+  .intro-section,
+  .global-section,
+  .company-section,
+  .contact-inner{
+    padding-left:17px;
+    padding-right:17px;
+  }
+  .section-top{
+    padding-top:54px;
+    padding-bottom:22px;
+  }
+  .section-top h2,
+  .split-copy h2,
+  .intro-copy h2,
+  .global-copy h2,
+  .company-section h2,
+  .contact-inner h2{
+    font-size:clamp(32px,9vw,48px);
+  }
+  .section-top p,
+  .split-copy p,
+  .intro-copy p,
+  .global-copy p,
+  .contact-inner>p{
+    font-size:13px;
+    line-height:1.7;
+  }
+
+  .service-grid,
+  .case-grid,
+  .pricing-grid,
+  .testimonial-grid,
+  .leader-grid{
+    padding-left:17px;
+    padding-right:17px;
+  }
+  .service-card{
+    padding:17px;
+    border-radius:14px;
+  }
+  .service-card h3{
+    font-size:17px;
+  }
+  .service-card p{
+    font-size:12px;
+    line-height:1.6;
+  }
+
+  .industry-grid{
+    grid-template-columns:1fr;
+    padding:0 17px;
+  }
+  .industry-grid>*{
+    min-height:44px;
+  }
+
+  .stats-grid{
+    grid-template-columns:1fr 1fr;
+    padding:0 17px;
+  }
+  .stat{
+    min-width:0;
+    padding:14px 10px;
+  }
+  .stat strong{
+    font-size:28px;
+  }
+  .stat span{
+    font-size:8px;
+  }
+
+  .tech-wall{
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+    padding:0 17px;
+  }
+  .tech-wall span{
+    min-width:0;
+    min-height:46px;
+    padding:10px 8px;
+    font-size:9px;
+  }
+
+  .visual-panel,
+  .lab-visual,
+  .awards-visual,
+  .client-visual,
+  .foundation-visual,
+  .consistency-visual,
+  .workshop-visual,
+  .precision-visual,
+  .testers-visual{
+    min-height:260px;
+    border-radius:16px;
+  }
+  .visual-3d{
+    inset:8% 0 5%;
+  }
+  .lab-3d{
+    inset:0;
+  }
+
+  .floating-card{
+    transform:scale(.78);
+    transform-origin:center;
+  }
+
+  .process-section{
+    padding-left:17px;
+    padding-right:17px;
+  }
+  .process-step{
+    padding:16px 0;
+  }
+  .process-step h3{
+    font-size:17px;
+  }
+  .process-step p{
+    font-size:12px;
+    line-height:1.6;
+  }
+
+  .lab-items a{
+    grid-template-columns:28px 16px minmax(0,1fr) auto;
+    padding:10px 8px;
+    gap:0 7px;
+  }
+  .lab-items a span{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .price-card{
+    padding:18px;
+  }
+  .price-card h3{
+    font-size:19px;
+  }
+
+  .case-card{
+    padding:18px;
+  }
+  .case-card h3{
+    font-size:21px;
+  }
+  .case-metrics{
+    grid-template-columns:1fr !important;
+  }
+
+  .testimonial{
+    padding:18px;
+  }
+
+  .contact-actions{
+    display:grid;
+    grid-template-columns:1fr;
+    width:100%;
+  }
+  .contact-actions a{
+    width:100%;
+    justify-content:center;
+    box-sizing:border-box;
+  }
+  .contact-meta{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+  }
+
+  .footer{
+    padding-left:17px;
+    padding-right:17px;
+  }
+  .footer-links{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px 14px;
+  }
+  .footer-links a{
+    font-size:10px;
+  }
+
+  /* Keep custom QA graphics contained instead of overflowing the viewport. */
+  .qa-3d{
+    min-width:0;
+    max-width:100%;
+  }
+  .qa-3d-ring{
+    transform:scale(.58) rotateX(68deg);
+  }
+  .qa-3d-core{
+    width:116px;
+    height:116px;
+    margin:-58px;
+  }
+  .qa-3d-core-icon{
+    width:44px;
+    height:44px;
+  }
+  .qa-3d-core strong{
+    font-size:17px;
+  }
+  .qa-3d-node{
+    padding:7px 8px;
+    font-size:7px;
+    transform:scale(.72);
+  }
+  .qa-3d-label{
+    left:9px;
+    bottom:9px;
+    padding:8px 9px;
+  }
+}
+
+/* Very narrow devices */
+@media (max-width:380px){
+  .brand{
+    width:138px !important;
+    min-width:138px !important;
+    flex-basis:138px !important;
+  }
+  .brand-logo{
+    width:138px !important;
+    max-width:138px !important;
+  }
+  .hero-title{
+    font-size:46px;
+  }
+  .stats-grid{
+    grid-template-columns:1fr;
+  }
+  .tech-wall{
+    grid-template-columns:1fr;
+  }
+}
+
+/* Landscape phones */
+@media (orientation:landscape) and (max-height:560px) and (max-width:900px){
+  .nav{
+    height:54px;
+    min-height:54px;
+  }
+  .nav-links{
+    top:54px;
+    max-height:calc(100dvh - 62px);
+  }
+  .hero{
+    padding-top:42px !important;
+    padding-bottom:42px !important;
+  }
+  .hero-title{
+    font-size:clamp(44px,9vw,70px);
+  }
+  .hero-copy{
+    max-width:650px;
+  }
+  .hero-3d{
+    width:48vw;
+    height:48vw;
+    top:8%;
+    right:-8%;
+  }
+}
+
+/* Prevent animation/scroll libraries from creating mobile-width overflow. */
+@media (max-width:900px){
+  [data-scroll-container],
+  .parallax,
+  .reveal{
+    max-width:100%;
+  }
+  .case-grid,
+  .service-grid,
+  .pricing-grid,
+  .testimonial-grid,
+  .leader-grid,
+  .industry-grid,
+  .stats-grid,
+  .tech-wall,
+  .linkedin-post-grid{
+    width:100%;
+    box-sizing:border-box;
+  }
+}
