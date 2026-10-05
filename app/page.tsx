@@ -85,11 +85,13 @@ const process = [
 ];
 
 function QAVisual3D({ variant }: { variant: "hero" | "automation" | "labs" }) {
-  const configs = {
+  const configs: Record<"hero" | "automation" | "labs", {
+    label: string; title: string; sub: string; icon: LucideIcon; chips: string[];
+  }> = {
     hero: { label:"RELEASE CONTROL", title:"QUALITY ENGINE", sub:"CODE → TEST → VERIFY → SHIP", icon:MonitorCheck, chips:["96% COVERAGE","CI / CD","REGRESSION"] },
     automation: { label:"AUTOMATION PIPELINE", title:"AUTO QA", sub:"FRAMEWORK → EXECUTION → QUALITY GATE", icon:Workflow, chips:["450 TESTS","94% PASS","CI READY"] },
     labs: { label:"DEVICE MATRIX", title:"QA LAB", sub:"REAL DEVICES → SCENARIOS → RELEASE SIGNALS", icon:Smartphone, chips:["iOS","ANDROID","REAL DEVICES"] },
-  }[variant];
+  };
   const Icon = configs.icon;
   return (
     <div className={`qa-visual-system qa-system-${variant}`} aria-label={configs.label}>
@@ -120,10 +122,9 @@ function QAVisual3D({ variant }: { variant: "hero" | "automation" | "labs" }) {
           {[
             ["01","CODE",Code2,"Commit received"],["02","RUN",Play,"450 test cases"],
             ["03","CHECK",ScanSearch,"Coverage 94%"],["04","GATE",ShieldCheck,"Release approved"]
-          ].map(([num,title,NodeIcon,detail])=>{
-            const PipelineIcon = NodeIcon as LucideIcon;
-            return <div className="qa-pipeline-node" key={num}><span>{num}</span><div className="qa-pipeline-icon"><PipelineIcon size={20}/></div><strong>{title}</strong><small>{detail}</small></div>;
-          })}
+          ].map(([num,title,PipelineIcon,detail])=>
+            <div className="qa-pipeline-node" key={num}><span>{num}</span><div className="qa-pipeline-icon"><PipelineIcon size={20}/></div><strong>{title}</strong><small>{detail}</small></div>
+          )}
         </div>
       )}
 
