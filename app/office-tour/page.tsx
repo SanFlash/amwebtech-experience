@@ -101,7 +101,10 @@ function addRoomShell(root:THREE.Group,r:Room){
 }
 function makeLabel(title:string,sub:string,color:string){
   const c=document.createElement("canvas");c.width=512;c.height=128;const x=c.getContext("2d")!;
-  x.fillStyle="rgba(7,16,28,.94)";x.roundRect(8,8,496,112,18,18);x.fill();
+  x.fillStyle="rgba(7,16,28,.94)";
+  x.beginPath();
+  x.roundRect(8,8,496,112,18);
+  x.fill();
   x.strokeStyle=color;x.lineWidth=5;x.stroke();
   x.fillStyle="#fff";x.font="800 27px Arial";x.textAlign="center";x.fillText(title.toUpperCase(),256,55);
   x.fillStyle="#c6d5e2";x.font="500 19px Arial";x.fillText(sub,256,88);
