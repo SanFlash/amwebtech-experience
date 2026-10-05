@@ -16,6 +16,7 @@ type Room = {
 type Worker = {
   title:string; room:string; x:number; z:number; color:string;
   group?:THREE.Group; phase:number;
+  roam?:{points:[number,number][];duration:number};
 };
 
 const rooms:Room[]=[
@@ -40,7 +41,16 @@ const workerData=[
   ...([[-.5,-6.0],[.5,-4.7]].map(([x,z])=>({title:"Project Manager",room:"manager",x,z,color:"#ff7a00"}))),
   ...([[3.0,-6.0],[4.4,-6.0],[3.0,-4.7],[4.4,-4.7]].map(([x,z])=>({title:"Business Development",room:"sales",x,z,color:"#0b8ca6"}))),
   ...([[7.0,-6.0],[8.4,-6.0],[7.7,-4.7]].map(([x,z])=>({title:"Leadership",room:"director",x,z,color:"#d14b7d"}))),
-  ...Array.from({length:24},(_,i)=>({title:"QA Engineer",room:"qa",x:[1.4,4.6,7.8][i%3],z:[-1.0,.25,1.5,2.75,4.0,5.25,6.5,7.75][Math.floor(i/3)],color:["#0057b8","#ff7a00","#2f7d5a","#7b61ff","#0b8ca6","#9b6b24"][i%6]}))
+  ...Array.from({length:24},(_,i)=>{
+    const x=[1.4,4.6,7.8][i%3];
+    const z=[-1.0,.25,1.5,2.75,4.0,5.25,6.5,7.75][Math.floor(i/3)];
+    const roaming=[1,8,15,22].includes(i);
+    return {
+      title:"QA Engineer",room:"qa",x,z,
+      color:["#0057b8","#ff7a00","#2f7d5a","#7b61ff","#0b8ca6","#9b6b24"][i%6],
+      ...(roaming?{roam:{points:[[x,z],[x,-2.55],[0,-3.15],[0,-5.15],[0,-3.15],[x,-2.55],[x,z]],duration:18+i*.35}}:{})
+    };
+  })
 ];
 
 function roomById(id:string){return rooms.find(r=>r.id===id);}
@@ -58,22 +68,33 @@ function addPlant(parent:THREE.Group,x:number,z:number,scale=1){
   }
 }
 function addDesk(parent:THREE.Group,x:number,z:number,rotation=0,qa=false){
-  const w=qa?1.9:1.35,d=.75,h=.8;
+  const w=qa?1.35:1.35,d=.75,h=.8;
   const top=box(parent,[w,.13,d],[x,h,z],"#b9783e",.5);top.rotation.y=rotation;
   box(parent,[.08,.65,.08],[x-w*.38,.43,z-d*.36],"#654126");
   box(parent,[.08,.65,.08],[x+w*.38,.43,z-d*.36],"#654126");
   box(parent,[.08,.65,.08],[x-w*.38,.43,z+d*.36],"#654126");
   box(parent,[.08,.65,.08],[x+w*.38,.43,z+d*.36],"#654126");
   const mon=box(parent,[.44,.38,.08],[x,.98,z-.03],"#17232e",.25);
-  mon.position.x=x;mon.rotation.y=rotation;
+  mon.rotation.y=rotation;
   box(parent,[.06,.18,.04],[x,.78,z-.03],"#4a5660",.4);
   const screen=box(parent,[.32,.20,.025],[x,.99,z-.075],"#0b67c1",.2);
   screen.rotation.y=rotation;
-  const chair=new THREE.Mesh(new THREE.BoxGeometry(.48,.08,.48),makeMat("#17212a",.5));
-  chair.position.set(x,.18,z+d*.9);parent.add(chair);
-  const back=new THREE.Mesh(new THREE.BoxGeometry(.48,.55,.09),makeMat("#263540",.5));
-  back.position.set(x,.48,z+d*1.1);parent.add(back);
+  addChair(parent,x,z+d*.92,rotation);
 }
+function addQABench(parent:THREE.Group,x:number,z:number){
+  const length=6.8,depth=1.18,height=.8;
+  const table=box(parent,[length,.13,depth],[x,height,z],"#b9783e",.5);
+  table.castShadow=true;
+  [-2.55,-.85,.85,2.55].forEach(offset=>{
+    box(parent,[.44,.38,.08],[x+offset,.98,z],"#17232e",.25);
+    box(parent,[.32,.20,.025],[x+offset,.99,z-.075],"#0b67c1",.2);
+    box(parent,[.04,.18,.04],[x+offset,.78,z],"#4a5660",.4);
+    addChair(parent,x+offset,z-.98,0);
+    addChair(parent,x+offset,z+.98,Math.PI);
+  });
+  box(parent,[length,.14,.12],[x,1.05,z],"#5d6a72",.45);
+}
+
 function addWorker(parent:THREE.Group,w:Worker){
   const g=new THREE.Group();g.position.set(w.x,0,w.z);w.group=g;
   const shadow=new THREE.Mesh(new THREE.CircleGeometry(.33,16),new THREE.MeshBasicMaterial({color:"#000",transparent:true,opacity:.18}));
@@ -90,11 +111,29 @@ function addRoomShell(root:THREE.Group,r:Room){
   floor.receiveShadow=true;
   const wallH=1.65,wall=.16;
   const glass=r.id==="qa";
-  const wm=new THREE.MeshStandardMaterial({color:glass?"#a8c5c9":"#eef1f2",transparent:glass,opacity:glass?.42:1,roughness:.5,metalness:.08});
-  [[r.w,wall,r.d/2],[r.w,wall,-r.d/2]].forEach(([w,h,z])=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,wall),wm);m.position.set(r.x,.83,r.z+z);root.add(m);});
-  [[wall,wallH,r.d],[wall,wallH,r.d]].forEach(()=>{});
-  const sideMat=new THREE.MeshStandardMaterial({color:glass?"#90adb2":"#d8dee1",transparent:glass,opacity:glass?.38:1,roughness:.52});
-  [-1,1].forEach(s=>{const m=new THREE.Mesh(new THREE.BoxGeometry(wall,wallH,r.d),sideMat);m.position.set(r.x+s*r.w/2,.83,r.z);root.add(m);});
+  if(glass){
+    const glassMat=new THREE.MeshPhysicalMaterial({color:"#9ebfc4",transparent:true,opacity:.32,roughness:.18,metalness:.08});
+    const lowH=.78;
+    [[r.w,wall,r.d/2],[r.w,wall,-r.d/2]].forEach(([w,h,z])=>{
+      const m=new THREE.Mesh(new THREE.BoxGeometry(w,lowH,wall),glassMat);
+      m.position.set(r.x,.39,r.z+z);root.add(m);
+    });
+    [-1,1].forEach(s=>{
+      const m=new THREE.Mesh(new THREE.BoxGeometry(wall,lowH,r.d),glassMat);
+      m.position.set(r.x+s*r.w/2,.39,r.z);root.add(m);
+    });
+    return;
+  }
+  const wm=new THREE.MeshStandardMaterial({color:"#eef1f2",roughness:.5,metalness:.08});
+  [[r.w,wall,r.d/2],[r.w,wall,-r.d/2]].forEach(([w,h,z])=>{
+    const m=new THREE.Mesh(new THREE.BoxGeometry(w,wallH,wall),wm);
+    m.position.set(r.x,.83,r.z+z);root.add(m);
+  });
+  const sideMat=new THREE.MeshStandardMaterial({color:"#d8dee1",roughness:.52});
+  [-1,1].forEach(s=>{
+    const m=new THREE.Mesh(new THREE.BoxGeometry(wall,wallH,r.d),sideMat);
+    m.position.set(r.x+s*r.w/2,.83,r.z);root.add(m);
+  });
   const label=makeLabel(r.name,r.subtitle,r.accent);
   label.position.set(r.x,.08,r.z-r.d*.05);
   label.rotation.x=-Math.PI/2;root.add(label);
@@ -115,7 +154,8 @@ function makeLabel(title:string,sub:string,color:string){
 function addRoomFurniture(root:THREE.Group){
   [ -12.2,-10.7,-9.2,-7.7].forEach(x=>{addDesk(root,x,-6.0);addDesk(root,x,-4.7);});
   [[-6.4,-6],[-5.4,-4.7],[-3.5,-6],[-2.5,-4.7],[-.5,-6],[.5,-4.7],[3,-6],[4.4,-6],[3,-4.7],[4.4,-4.7],[7,-6],[8.4,-6],[7.7,-4.7]].forEach(([x,z])=>addDesk(root,x,z));
-  [1.4,4.6,7.8].forEach(x=>[ -1,.25,1.5,2.75,4,5.25,6.5,7.75].forEach(z=>addDesk(root,x,z,0,true)));
+  // QA open floor: three long shared bench islands, four seats per side.
+  [1.4,4.6,7.8].forEach(x=>addQABench(root,x,3.35));
   // Kitchen
   box(root,[4.8,.9,.38],[-9.9,.55,-.95],"#795331");box(root,[2.0,.72,1.1],[-9.9,.45,.1],"#c98c4c");
   // Meeting room
@@ -185,7 +225,31 @@ export default function OfficeTourPage(){
       if(dx||dz){const len=Math.hypot(dx,dz);dx/=len;dz/=len;player.x=THREE.MathUtils.clamp(player.x+dx*4.0*dt,-14.2,14.2);player.z=THREE.MathUtils.clamp(player.z+dz*4.0*dt,-8.25,8.25);setStarted(true);}
       const r=rooms.find(q=>player.x>=q.x-q.w/2&&player.x<=q.x+q.w/2&&player.z>=q.z-q.d/2&&player.z<=q.z+q.d/2);
       if(r)setActiveRoom(prev=>prev===r.id?prev:r.id);
-      workersRef.current.forEach((w,i)=>{if(!w.group)return;w.group.position.y=.02+Math.sin(now*.004+w.phase)*.012;w.group.rotation.y=Math.sin(now*.002+w.phase)*.035;const arm=w.group.children[5] as THREE.Object3D|undefined;if(arm)arm.rotation.x=-.8+Math.sin(now*.012+w.phase)*.15;});
+      workersRef.current.forEach((w)=>{
+        if(!w.group)return;
+        if(w.roam){
+          const points=w.roam.points;
+          const t=((now/1000+w.phase)%w.roam.duration)/w.roam.duration;
+          const scaled=t*(points.length-1);
+          const seg=Math.min(points.length-2,Math.floor(scaled));
+          const local=scaled-seg;
+          const a=points[seg],b=points[seg+1];
+          const eased=local*local*(3-2*local);
+          const nx=THREE.MathUtils.lerp(a[0],b[0],eased);
+          const nz=THREE.MathUtils.lerp(a[1],b[1],eased);
+          const dx=nx-w.group.position.x,dz=nz-w.group.position.z;
+          w.group.position.x=nx;w.group.position.z=nz;
+          if(Math.abs(dx)+Math.abs(dz)>.001)w.group.rotation.y=Math.atan2(dx,dz);
+          w.group.position.y=.02;
+        }else{
+          w.group.position.y=.02+Math.sin(now*.004+w.phase)*.012;
+          w.group.rotation.y=Math.sin(now*.002+w.phase)*.035;
+        }
+        const armL=w.group.children[4] as THREE.Object3D|undefined;
+        const armR=w.group.children[5] as THREE.Object3D|undefined;
+        if(armL)armL.rotation.x=-.8+Math.sin(now*.012+w.phase)*.15;
+        if(armR)armR.rotation.x=-.8-Math.sin(now*.012+w.phase)*.15;
+      });
       const target=new THREE.Vector3(player.x,0,player.z);
       const desired=new THREE.Vector3(player.x,17.5,player.z+18);
       camera.position.lerp(desired,1-Math.pow(.001,dt));
@@ -212,7 +276,7 @@ export default function OfficeTourPage(){
         <div className={styles.introIcon}><Building2 size={28}/></div>
         <p className={styles.kicker}>AM WEBTECH / QUALITY ENGINEERING</p>
         <h1>Walk through the <span>real office layout.</span></h1>
-        <p>True perspective 3D scene based on the supplied floor-plan: seated employees, desks, monitors, glass partitions, reception, meeting room, kitchen and QA floor.</p>
+        <p>True perspective 3D scene matched to the supplied office reference: shared QA bench islands, glass partitions, seated employees, manager updates, reception, meeting room and kitchen.</p>
         <button type="button" className={styles.start} onClick={()=>setStarted(true)}><Zap size={17}/> Start 3D walkthrough</button>
         <div className={styles.controls}><b>WASD / ARROWS</b><span>Move through the office</span><b>E</b><span>Inspect nearby workstation</span><b>M</b><span>Open floor map</span></div>
       </div>}
