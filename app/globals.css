@@ -185,3 +185,64 @@ body{background:var(--navy);color:#fff}
     height:100%;
   }
 }
+
+
+/* Final logo sizing — preserve the complete transparent AM Webtech lockup */
+.brand{
+  width:350px !important;
+  min-width:350px !important;
+  height:86px !important;
+  padding:0 !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  overflow:visible !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+.brand-logo{
+  width:350px !important;
+  height:86px !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:contain !important;
+  object-position:left center !important;
+  display:block !important;
+  transform:none !important;
+  background:transparent !important;
+}
+@media(max-width:1200px){
+  .brand{
+    width:300px !important;
+    min-width:300px !important;
+    height:76px !important;
+  }
+  .brand-logo{
+    width:300px !important;
+    height:76px !important;
+  }
+}
+@media(max-width:900px){
+  .brand{
+    width:260px !important;
+    min-width:260px !important;
+    height:68px !important;
+  }
+  .brand-logo{
+    width:260px !important;
+    height:68px !important;
+  }
+}
+@media(max-width:620px){
+  .brand{
+    width:225px !important;
+    min-width:225px !important;
+    height:58px !important;
+  }
+  .brand-logo{
+    width:225px !important;
+    height:58px !important;
+  }
+}
