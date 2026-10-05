@@ -3,8 +3,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
-  ArrowLeft, ArrowUpRight, Building2, ChevronDown, ChevronLeft, ChevronRight, ChevronUp,
-  DoorOpen, MapPin, Maximize2, MousePointer2, Users, X, Zap
+  ArrowLeft, Building2, ChevronDown, ChevronLeft, ChevronRight, ChevronUp,
+  MapPin, MousePointer2, Users, X, Zap
 } from "lucide-react";
 import styles from "./office-tour.module.css";
 
@@ -71,12 +71,7 @@ const npcs: NPC[] = [
   ...Array.from({length:24},(_,i)=>({ name:"", title:"QA Engineer", room:"qa", x:[690,930,1170][i%3], y:[410,465,520,575,630,685,740,795][Math.floor(i/3)], color:["#0057b8","#ff7a00","#2f7d5a","#7b61ff","#0b8ca6","#9b6b24"][i%6], speed:0, home:{x:[690,930,1170][i%3],y:[410,465,520,575,630,685,740,795][Math.floor(i/3)]} }))
 ];
 
-const walls = [
-  [60,40,1470,40],[60,40,60,920],[60,920,1470,920],[1470,40,1470,920],
-  [450,40,450,260],[730,40,730,260],[870,40,870,260],[1010,40,1010,260],[1155,40,1155,260],[1390,40,1390,260],
-  [60,265,420,265],[420,265,420,920],[60,540,420,540],[60,700,420,700],
-  [630,300,1470,300],[630,300,630,920],[1470,300,1470,920],
-];
+
 
 const clamp = (v:number,min:number,max:number) => Math.max(min,Math.min(max,v));
 const distance = (a:Vec,b:Vec) => Math.hypot(a.x-b.x,a.y-b.y);
