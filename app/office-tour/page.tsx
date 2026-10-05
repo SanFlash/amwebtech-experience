@@ -255,7 +255,6 @@ function drawWorld(
   ctx:CanvasRenderingContext2D,
   width:number,
   height:number,
-  camera:Vec,
   player:Vec,
   npcList:NPC[],
   now:number
@@ -271,7 +270,6 @@ function drawWorld(
   ctx.fillRect(0,0,width,height);
 
   // Soft floor glow / depth plane.
-  const floor=iso({x:60,y:40});
   ctx.save();
   const grad=ctx.createRadialGradient(origin.x,origin.y,10,origin.x,origin.y,width*.55);
   grad.addColorStop(0,"rgba(0,87,184,.22)");
