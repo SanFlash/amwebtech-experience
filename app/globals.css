@@ -1524,3 +1524,317 @@ button,a{
   .global-media .world-route{opacity:.5}
   .lab-visual .lab-orbit{width:210px;height:210px;right:-2%;top:25%}
 }
+
+/* =========================================================
+   RESPONSIVE VISUAL SYSTEM v2
+   Product-style QA graphics: no stock-photo hero artwork.
+   Fluid layout + container-aware components + GSAP-safe motion.
+   ========================================================= */
+html{scroll-behavior:auto;overflow-x:clip}
+*,*::before,*::after{box-sizing:border-box}
+body{overflow-x:clip}
+img,svg,video,canvas{max-width:100%}
+a,button{touch-action:manipulation}
+.site{width:100%;min-width:0;overflow-x:clip}
+.section,.hero,.ticker,.footer{width:100%;min-width:0}
+.section>*{min-width:0}
+h1,h2,h3,p,span,a,small,strong{overflow-wrap:anywhere}
+:where(.section-top,.intro-copy,.split-copy,.global-copy,.company-card,.contact-inner){min-width:0}
+:where(.service-grid,.case-grid,.pricing-grid,.testimonial-grid,.leader-grid,.industry-grid,.tech-wall,.linkedin-post-grid,.insight-grid,.stats-grid,.client-wall){min-width:0}
+.eyebrow{max-width:100%}
+
+/* Fluid type and spacing — scales between phone, tablet and large desktop. */
+.hero-title{font-size:clamp(3.4rem,8vw,8.8rem)}
+.section-top h2,.split-copy h2,.intro-copy h2,.global-copy h2,.company-section h2,.contact-inner h2{
+  font-size:clamp(2rem,4.6vw,5rem);
+}
+.section{padding-top:clamp(4rem,8vw,8rem);padding-bottom:clamp(4rem,8vw,8rem)}
+.section-top{padding-left:clamp(1rem,4vw,4.5rem);padding-right:clamp(1rem,4vw,4.5rem)}
+.button{min-height:44px}
+
+/* Container-aware cards prevent brittle viewport-only breakpoints. */
+.service-grid,.case-grid,.pricing-grid,.testimonial-grid,.leader-grid,.insight-grid,.tech-wall{
+  container-type:inline-size;
+}
+@container (max-width: 760px){
+  .service-card h3,.case-card h3,.price-card h3,.leader strong,.testimonial strong{font-size:1rem}
+}
+@container (max-width: 560px){
+  .service-card,.case-card,.price-card,.testimonial,.leader{padding:clamp(.85rem,4cqi,1.25rem)}
+}
+
+/* ---------- New QA visual language ---------- */
+.qa-visual-system{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  border:1px solid rgba(91,155,220,.25);
+  border-radius:inherit;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(0,112,214,.24),transparent 32%),
+    linear-gradient(135deg,#061631 0%,#092750 55%,#061a3d 100%);
+  color:#e9f3ff;
+  isolation:isolate;
+  perspective:1100px;
+}
+.visual-panel>.qa-visual-system,
+.hero-3d>.qa-visual-system,
+.lab-3d>.qa-visual-system{
+  width:100%;
+  height:100%;
+}
+.qa-system-grid{
+  position:absolute;
+  inset:-30%;
+  background-image:
+    linear-gradient(rgba(130,180,230,.08) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(130,180,230,.08) 1px,transparent 1px);
+  background-size:36px 36px;
+  transform:perspective(800px) rotateX(62deg) translateY(15%);
+  transform-origin:center;
+  opacity:.75;
+}
+.qa-system-scan{
+  position:absolute;
+  left:-30%;
+  top:15%;
+  width:160%;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#ff7a00 28%,#fff 50%,#00a9ff 72%,transparent);
+  box-shadow:0 0 20px rgba(255,122,0,.4);
+  opacity:.65;
+  z-index:3;
+}
+.qa-system-head{
+  position:absolute;
+  z-index:10;
+  left:clamp(12px,2vw,24px);
+  right:clamp(12px,2vw,24px);
+  top:clamp(12px,2vw,22px);
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center;
+  font:clamp(7px,.6vw,10px)/1.2 "DM Mono",monospace;
+  letter-spacing:.11em;
+  color:#b9cbe0;
+}
+.qa-system-head span{display:flex;align-items:center;gap:7px;min-width:0}
+.qa-system-head i{width:6px;height:6px;border-radius:50%;background:#32d583;box-shadow:0 0 12px #32d583}
+.qa-system-head b{flex:0 0 auto;padding:6px 8px;border:1px solid rgba(255,122,0,.45);background:rgba(4,16,37,.72);color:#ff9a3d;font-weight:600}
+
+/* Hero: browser/release-control console. */
+.qa-release-console{
+  position:absolute;
+  z-index:5;
+  left:8%;
+  right:8%;
+  top:22%;
+  height:55%;
+  min-height:205px;
+  border:1px solid rgba(110,175,235,.28);
+  border-radius:18px;
+  background:rgba(3,14,31,.78);
+  box-shadow:0 28px 70px rgba(0,0,0,.32),0 0 50px rgba(0,87,184,.16);
+  backdrop-filter:blur(12px);
+  transform:rotateX(2deg) rotateY(-4deg);
+}
+.qa-browser-bar{height:34px;display:flex;align-items:center;gap:6px;padding:0 11px;border-bottom:1px solid rgba(255,255,255,.08);font:8px "DM Mono";color:#7f98b7}
+.qa-browser-bar>i{width:6px;height:6px;border-radius:50%;background:#60738c}
+.qa-browser-bar span{margin-left:7px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qa-browser-bar b{margin-left:auto;color:#32d583;font-size:7px}
+.qa-release-body{height:calc(100% - 34px);display:grid;grid-template-columns:82px minmax(0,1fr)}
+.qa-release-sidebar{border-right:1px solid rgba(255,255,255,.07);padding:14px 8px;display:grid;align-content:start;gap:5px}
+.qa-release-sidebar span{padding:8px 7px;border-radius:6px;font:7px "DM Mono";color:#7187a4}
+.qa-release-sidebar .active{background:rgba(0,112,214,.25);color:#fff;border:1px solid rgba(0,169,255,.25)}
+.qa-release-main{padding:18px 18px;min-width:0}
+.qa-release-title{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.qa-release-title small{display:block;color:#6f89a8;font:7px "DM Mono";letter-spacing:.08em}
+.qa-release-title strong{display:block;margin-top:4px;font:700 clamp(18px,2.2vw,28px)/1 Manrope}
+.qa-release-title em{font:700 7px "DM Mono";font-style:normal;color:#32d583;border:1px solid rgba(50,213,131,.3);padding:6px 7px}
+.qa-progress{height:7px;margin:16px 0 13px;border-radius:10px;background:#142a47;display:flex;align-items:center;position:relative}
+.qa-progress span{width:96%;height:100%;border-radius:10px;background:linear-gradient(90deg,#0057b8,#00a9ff,#ff7a00);box-shadow:0 0 18px rgba(0,169,255,.4)}
+.qa-progress b{position:absolute;right:0;top:-17px;font:7px "DM Mono";color:#ff9a3d}
+.qa-test-list{display:grid;gap:6px}
+.qa-test-list div{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:8px 9px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025);font:8px "DM Mono";color:#a8bbd2}
+.qa-test-list span{display:flex;align-items:center;gap:6px;min-width:0}
+.qa-test-list svg{color:#32d583;flex:0 0 auto}
+.qa-test-list b{color:#32d583;font-size:7px}
+
+/* Automation: pipeline nodes. */
+.qa-pipeline{position:absolute;z-index:5;left:7%;right:7%;top:27%;height:44%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;gap:clamp(8px,1.3vw,18px)}
+.qa-pipeline-line{position:absolute;left:7%;right:7%;top:50%;height:1px;background:linear-gradient(90deg,#0057b8,#00a9ff,#ff7a00);box-shadow:0 0 18px rgba(0,169,255,.35)}
+.qa-pipeline-node{position:relative;z-index:2;display:grid;justify-items:center;gap:7px;text-align:center;min-width:0}
+.qa-pipeline-node>span{font:7px "DM Mono";color:#7188a5}
+.qa-pipeline-icon{width:clamp(42px,5vw,64px);height:clamp(42px,5vw,64px);display:grid;place-items:center;border:1px solid rgba(0,169,255,.35);border-radius:50%;background:#071d3b;box-shadow:0 0 0 7px rgba(5,26,61,.55),0 0 30px rgba(0,112,214,.2);color:#7ec8ff}
+.qa-pipeline-node:nth-of-type(3) .qa-pipeline-icon{border-color:rgba(255,122,0,.5);color:#ff9a3d}
+.qa-pipeline-node strong{font:800 clamp(9px,1vw,13px)/1 Manrope;letter-spacing:.08em}
+.qa-pipeline-node small{max-width:100px;color:#7f98b7;font:7px/1.35 "DM Mono"}
+
+/* Labs: real-device style matrix built from UI primitives. */
+.qa-device-lab{position:absolute;z-index:5;left:8%;right:8%;top:24%;height:52%}
+.qa-device-wall{height:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(7px,1.3vw,16px);align-items:end}
+.qa-device{display:grid;justify-items:center;gap:6px;min-width:0}
+.qa-device-screen{width:min(100%,96px);aspect-ratio:.56;border:2px solid #29486d;border-radius:12px 12px 16px 16px;background:linear-gradient(145deg,#0a2b52,#06162e);padding:12px 7px 8px;display:grid;align-content:start;gap:5px;box-shadow:0 16px 35px rgba(0,0,0,.3)}
+.qa-device-screen span{font:7px "DM Mono";color:#32d583;border:1px solid rgba(50,213,131,.25);padding:5px 4px;text-align:center}
+.qa-device-screen i{height:5px;border-radius:4px;background:linear-gradient(90deg,#155ca1,rgba(21,92,161,.2))}
+.qa-device-screen i:nth-last-child(1){width:60%}
+.qa-device strong{font:700 9px Manrope;color:#e7f2ff}
+.qa-device small{font:7px "DM Mono";color:#7891ae}
+.qa-lab-console{position:absolute;left:0;right:0;bottom:-12px;display:flex;justify-content:space-between;gap:10px;padding:9px 11px;border:1px solid rgba(255,122,0,.28);background:rgba(3,16,36,.76);font:7px "DM Mono";color:#8fa7c1}
+.qa-lab-console span{display:flex;gap:6px;align-items:center}
+.qa-lab-console i{width:5px;height:5px;border-radius:50%;background:#32d583;box-shadow:0 0 10px #32d583}
+.qa-lab-console b{color:#32d583}
+
+/* Shared system core + labels. */
+.qa-system-core{position:absolute;z-index:8;left:50%;bottom:11%;transform:translateX(-50%);display:grid;grid-template-columns:auto 1fr;column-gap:9px;align-items:center;width:min(300px,70%);padding:10px 12px;border:1px solid rgba(255,122,0,.34);border-radius:13px;background:rgba(4,18,40,.82);backdrop-filter:blur(10px);box-shadow:0 15px 40px rgba(0,0,0,.25)}
+.qa-core-icon{grid-row:span 2;width:34px;height:34px;display:grid;place-items:center;border-radius:9px;color:#ff9a3d;background:rgba(255,122,0,.08);border:1px solid rgba(255,122,0,.25)}
+.qa-system-core strong{font:800 12px/1 Manrope;letter-spacing:.06em;color:#fff}
+.qa-system-core span{font:7px "DM Mono";color:#7892b0;letter-spacing:.04em;margin-top:3px}
+.qa-system-chips{position:absolute;z-index:9;left:clamp(12px,2vw,22px);bottom:clamp(12px,2vw,20px);display:flex;flex-wrap:wrap;gap:5px;max-width:55%}
+.qa-system-chips span{padding:6px 8px;border:1px solid rgba(255,255,255,.13);border-radius:999px;background:rgba(4,18,40,.76);color:#a8bdd5;font:7px "DM Mono";white-space:nowrap}
+.qa-system-chips .active{background:#ff7a00;border-color:#ff7a00;color:#061a3d}
+.qa-system-corner{position:absolute;z-index:9;right:clamp(12px,2vw,22px);bottom:clamp(12px,2vw,20px);font:7px/1.5 "DM Mono";color:#5f7896;text-align:right}
+.qa-system-corner b{color:#a8bdd5;font-weight:500}
+
+/* ---------- Global delivery: data-map instead of empty blue panel ---------- */
+.global-visual-system{position:relative;min-height:clamp(360px,42vw,620px);overflow:hidden;border:1px solid rgba(91,155,220,.22);border-radius:24px;background:radial-gradient(circle at 48% 45%,rgba(0,112,214,.25),transparent 32%),linear-gradient(145deg,#061731,#0a2851);isolation:isolate}
+.global-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(130,180,230,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(130,180,230,.07) 1px,transparent 1px);background-size:34px 34px;opacity:.7}
+.global-map{position:absolute;left:8%;right:8%;top:8%;bottom:19%;border-radius:50%;border:1px solid rgba(115,178,231,.16);transform:rotate(-8deg);box-shadow:inset 0 0 80px rgba(0,87,184,.16)}
+.global-map:before,.global-map:after{content:"";position:absolute;inset:11%;border:1px dashed rgba(255,255,255,.08);border-radius:50%}
+.global-map:after{inset:28%}
+.global-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(8deg);width:clamp(100px,13vw,170px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;align-content:center;gap:5px;text-align:center;border:1px solid rgba(255,122,0,.55);background:radial-gradient(circle,rgba(255,122,0,.12),rgba(3,17,38,.95) 66%);box-shadow:0 0 55px rgba(0,112,214,.25),inset 0 0 30px rgba(255,122,0,.08);color:#ff9a3d}
+.global-core strong{font:800 11px Manrope;color:#fff;letter-spacing:.08em}
+.global-core small{font:7px "DM Mono";color:#7f98b6}
+.global-orbit{position:absolute;left:50%;top:50%;width:72%;height:42%;border:1px dashed rgba(0,169,255,.45);border-radius:50%;transform:translate(-50%,-50%) rotate(20deg)}
+.orbit-b{width:52%;height:70%;border-color:rgba(255,122,0,.42);transform:translate(-50%,-50%) rotate(-42deg)}
+.orbit-c{width:92%;height:26%;border-color:rgba(255,255,255,.14);transform:translate(-50%,-50%) rotate(4deg)}
+.global-node{position:absolute;z-index:5;display:flex;align-items:center;gap:5px;padding:5px 7px;border:1px solid rgba(0,169,255,.28);background:rgba(3,18,40,.8);backdrop-filter:blur(8px);font:7px "DM Mono";color:#b5cae1;transform:rotate(8deg)}
+.global-node i{width:6px;height:6px;border-radius:50%;background:#00a9ff;box-shadow:0 0 12px #00a9ff}
+.node-us{left:13%;top:38%}.node-eu{right:17%;top:27%}.node-apac{right:12%;bottom:23%}.node-uk{left:34%;top:13%}
+.global-status{position:absolute;z-index:8;left:5%;right:5%;bottom:7%;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.global-status div{min-width:0;padding:11px 12px;border:1px solid rgba(255,255,255,.08);background:rgba(3,17,38,.78);backdrop-filter:blur(9px)}
+.global-status span{display:block;font:7px "DM Mono";color:#6e87a4;letter-spacing:.08em}.global-status b{display:block;margin-top:4px;font:800 clamp(9px,1vw,13px) Manrope;color:#fff}
+.global-caption{position:absolute;z-index:9;top:16px;left:18px;display:flex;align-items:center;gap:7px;color:#a8bdd5;font:8px "DM Mono";letter-spacing:.08em}.global-caption svg{color:#ff9a3d}
+
+/* Case imagery becomes secondary evidence, not the main visual language. */
+.case-media{border-radius:12px}
+.case-media .media-image{filter:saturate(.65) contrast(1.04)}
+.case-media-shade{background:linear-gradient(180deg,rgba(4,20,47,.05),rgba(4,20,47,.86))}
+
+/* ---------- Responsive containment ---------- */
+@media (max-width:1100px){
+  .nav-actions{gap:7px}
+  .nav-cta{padding-inline:12px}
+  .hero-console{right:2.5vw;bottom:4vw}
+  .qa-release-console{left:5%;right:5%}
+  .qa-pipeline{left:5%;right:5%}
+  .global-map{left:5%;right:5%}
+}
+@media (max-width:900px){
+  .nav{width:100%;max-width:100vw}
+  .hero-inner,.section-top,.split-section,.intro-section,.global-section,.company-section,.contact-inner{min-width:0}
+  .hero-title{max-width:100%;font-size:clamp(3.1rem,14vw,6rem)}
+  .hero-copy{max-width:42rem}
+  .hero-3d{position:relative;right:auto;top:auto;width:min(100%,620px);height:min(72vw,430px);margin:34px auto 0;opacity:1}
+  .hero-3d>.qa-visual-system{position:absolute}
+  .hero-3d-label{display:none}
+  .visual-panel{min-height:clamp(330px,68vw,500px)}
+  .lab-visual{min-height:clamp(330px,68vw,500px)}
+  .qa-release-console{top:22%;height:50%;min-height:190px}
+  .qa-system-core{bottom:13%}
+  .qa-system-chips{max-width:48%}
+  .qa-system-corner{display:none}
+  .global-visual-system{min-height:clamp(360px,72vw,520px)}
+}
+@media (max-width:700px){
+  .section{padding-top:clamp(3.2rem,12vw,5rem);padding-bottom:clamp(3.2rem,12vw,5rem)}
+  .hero{padding-top:5.5rem!important}
+  .hero-title{font-size:clamp(2.9rem,15vw,5rem);line-height:.9}
+  .hero-actions{display:grid;grid-template-columns:1fr;width:100%}
+  .hero-actions .button{width:100%;justify-content:center}
+  .service-grid,.case-grid,.pricing-grid,.testimonial-grid,.leader-grid,.insight-grid{grid-template-columns:1fr}
+  .industry-grid{grid-template-columns:1fr 1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .tech-wall{grid-template-columns:1fr 1fr}
+  .split-section,.intro-section,.global-section,.company-section{grid-template-columns:1fr!important}
+  .visual-panel,.lab-visual{width:100%;min-height:340px}
+  .qa-visual-system{border-radius:16px}
+  .qa-release-console{left:4%;right:4%;top:24%;height:47%;min-height:175px;border-radius:14px}
+  .qa-release-body{grid-template-columns:58px minmax(0,1fr)}
+  .qa-release-sidebar{padding:10px 5px}
+  .qa-release-sidebar span{padding:7px 4px;font-size:6px}
+  .qa-release-main{padding:12px 11px}
+  .qa-release-title strong{font-size:18px}
+  .qa-test-list div{padding:6px 7px;font-size:7px}
+  .qa-pipeline{top:27%;left:4%;right:4%;height:42%;gap:5px}
+  .qa-pipeline-line{left:4%;right:4%}
+  .qa-pipeline-icon{width:42px;height:42px}
+  .qa-pipeline-node strong{font-size:8px}
+  .qa-pipeline-node small{font-size:6px;max-width:62px}
+  .qa-device-lab{left:5%;right:5%;top:23%;height:52%}
+  .qa-device-wall{gap:5px}
+  .qa-device-screen{border-radius:9px 9px 12px 12px;padding:8px 5px 6px}
+  .qa-device strong{font-size:7px}.qa-device small{font-size:6px}
+  .qa-lab-console{font-size:6px;padding:7px}
+  .qa-system-core{width:min(270px,76%);bottom:13%;padding:8px 9px}
+  .qa-core-icon{width:30px;height:30px}
+  .qa-system-core strong{font-size:10px}.qa-system-core span{font-size:6px}
+  .qa-system-chips{left:10px;bottom:10px;max-width:54%;gap:3px}
+  .qa-system-chips span{padding:5px 6px;font-size:6px}
+  .global-visual-system{min-height:390px;border-radius:16px}
+  .global-map{top:10%;bottom:25%;left:4%;right:4%}
+  .global-status{left:4%;right:4%;bottom:4%;gap:4px}
+  .global-status div{padding:8px 7px}.global-status span{font-size:6px}.global-status b{font-size:8px}
+  .global-caption{left:10px;top:11px;font-size:6px}
+  .global-node{font-size:6px;padding:4px 5px}
+}
+@media (max-width:480px){
+  html{scroll-padding-top:62px}
+  .hero{padding-top:5rem!important}
+  .hero-title{font-size:clamp(2.7rem,16.5vw,4.2rem)}
+  .hero-inner{padding-inline:16px}
+  .section-top,.split-section,.intro-section,.global-section,.company-section,.contact-inner{padding-inline:16px}
+  .industry-grid,.stats-grid,.tech-wall{padding-inline:16px}
+  .industry-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .tech-wall{grid-template-columns:1fr 1fr}
+  .hero-3d{height:82vw;max-height:350px;margin-top:25px}
+  .visual-panel,.lab-visual{min-height:310px}
+  .qa-system-head{top:10px;left:10px;right:10px;font-size:6px}
+  .qa-system-head b{padding:5px 6px}
+  .qa-release-console{top:23%;height:48%;min-height:155px}
+  .qa-browser-bar{height:28px;padding:0 8px;font-size:6px}
+  .qa-release-body{height:calc(100% - 28px);grid-template-columns:48px minmax(0,1fr)}
+  .qa-release-sidebar span{padding:5px 3px;font-size:5px}
+  .qa-release-main{padding:9px 8px}
+  .qa-release-title small{font-size:5px}.qa-release-title strong{font-size:15px}
+  .qa-progress{margin:10px 0 9px;height:5px}
+  .qa-test-list{gap:3px}.qa-test-list div{padding:4px 5px;font-size:5.5px}
+  .qa-test-list svg{width:9px}
+  .qa-pipeline{top:25%;height:45%}
+  .qa-pipeline-icon{width:34px;height:34px}
+  .qa-pipeline-icon svg{width:15px}
+  .qa-pipeline-node>span{font-size:5px}.qa-pipeline-node strong{font-size:6px}.qa-pipeline-node small{font-size:5px}
+  .qa-device-screen{width:54px;border-width:1px;padding:7px 4px}
+  .qa-device-screen span{font-size:5px;padding:3px 2px}.qa-device-screen i{height:3px}
+  .qa-device strong{font-size:6px}.qa-device small{font-size:5px}
+  .qa-system-core{width:78%;bottom:12%}
+  .qa-system-chips{max-width:58%}
+  .qa-system-chips span{font-size:5.5px}
+  .global-visual-system{min-height:350px}
+  .global-map{top:13%;bottom:25%}
+  .global-core{width:94px}
+  .global-core svg{width:20px}.global-core strong{font-size:8px}.global-core small{font-size:5px}
+  .node-us{left:7%;top:40%}.node-eu{right:8%;top:25%}.node-apac{right:6%;bottom:18%}.node-uk{left:28%;top:11%}
+  .global-status{grid-template-columns:1fr}
+  .global-status div{display:flex;justify-content:space-between;align-items:center;padding:6px 8px}
+  .global-status span{font-size:5.5px}.global-status b{margin:0;font-size:7px}
+  .global-caption{display:none}
+  .case-media{height:160px;margin-inline:-18px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .qa-system-scan{display:none}
+}
