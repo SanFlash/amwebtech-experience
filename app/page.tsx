@@ -119,10 +119,12 @@ function QAVisual3D({ variant }: { variant: "hero" | "automation" | "labs" }) {
 
       {variant === "automation" && (
         <div className="qa-pipeline"><div className="qa-pipeline-line"/>
-          {[
-            ["01","CODE",Code2,"Commit received"],["02","RUN",Play,"450 test cases"],
-            ["03","CHECK",ScanSearch,"Coverage 94%"],["04","GATE",ShieldCheck,"Release approved"]
-          ].map(([num,title,PipelineIcon,detail])=>
+          {([
+            ["01","CODE",Code2,"Commit received"],
+            ["02","RUN",Play,"450 test cases"],
+            ["03","CHECK",ScanSearch,"Coverage 94%"],
+            ["04","GATE",ShieldCheck,"Release approved"]
+          ] as Array<[string,string,LucideIcon,string]>).map(([num,title,PipelineIcon,detail]) =>
             <div className="qa-pipeline-node" key={num}><span>{num}</span><div className="qa-pipeline-icon"><PipelineIcon size={20}/></div><strong>{title}</strong><small>{detail}</small></div>
           )}
         </div>
