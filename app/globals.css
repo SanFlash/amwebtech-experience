@@ -187,12 +187,12 @@ body{background:var(--navy);color:#fff}
 }
 
 
-/* Final logo sizing — compact, complete lockup */
+/* Final logo — full lockup, compact navbar footprint */
 .brand{
-  width:205px !important;
-  min-width:205px !important;
-  height:58px !important;
-  flex:0 0 205px !important;
+  width:200px !important;
+  min-width:200px !important;
+  flex:0 0 200px !important;
+  height:60px !important;
   padding:0 !important;
   margin:0 !important;
   display:flex !important;
@@ -204,52 +204,25 @@ body{background:var(--navy);color:#fff}
   box-shadow:none !important;
 }
 .brand-logo{
-  width:205px !important;
-  height:58px !important;
-  max-width:205px !important;
-  max-height:58px !important;
   display:block !important;
+  width:200px !important;
+  height:auto !important;
+  max-width:200px !important;
+  max-height:60px !important;
+  aspect-ratio:1400 / 396 !important;
   object-fit:contain !important;
   object-position:left center !important;
   transform:none !important;
   background:transparent !important;
 }
 @media(max-width:1100px){
-  .brand{
-    width:185px !important;
-    min-width:185px !important;
-    flex-basis:185px !important;
-  }
-  .brand-logo{
-    width:185px !important;
-    max-width:185px !important;
-  }
+  .brand,.brand-logo{width:185px !important;max-width:185px !important}
 }
 @media(max-width:900px){
-  .brand{
-    width:175px !important;
-    min-width:175px !important;
-    flex-basis:175px !important;
-    height:54px !important;
-  }
-  .brand-logo{
-    width:175px !important;
-    height:54px !important;
-    max-width:175px !important;
-    max-height:54px !important;
-  }
+  .brand{width:175px !important;min-width:175px !important;flex-basis:175px !important;height:54px !important}
+  .brand-logo{width:175px !important;max-width:175px !important;max-height:54px !important}
 }
 @media(max-width:620px){
-  .brand{
-    width:160px !important;
-    min-width:160px !important;
-    flex-basis:160px !important;
-    height:50px !important;
-  }
-  .brand-logo{
-    width:160px !important;
-    height:50px !important;
-    max-width:160px !important;
-    max-height:50px !important;
-  }
+  .brand{width:160px !important;min-width:160px !important;flex-basis:160px !important;height:50px !important}
+  .brand-logo{width:160px !important;max-width:160px !important;max-height:50px !important}
 }
