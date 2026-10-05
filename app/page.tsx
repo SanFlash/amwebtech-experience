@@ -113,7 +113,7 @@ export default function Home() {
           <span className="brand-fallback" aria-hidden="true"><strong>AM</strong><b>WEBTECH</b></span>
           <img
             className="brand-logo"
-            src="/amwebtech-logo.svg?v=20261005"
+            src="/amwebtech-logo.svg?v=20261005-final"
             alt="AM Webtech"
             width={300}
             height={100}
