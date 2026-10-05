@@ -399,3 +399,124 @@ body{background:var(--navy);color:#fff}
     grid-template-columns:32px 20px 1fr auto;
   }
 }
+
+
+/* Purpose-built 3D QA visuals — no generic 3D assets */
+.qa-3d{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  perspective:1100px;
+  isolation:isolate;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(0,87,184,.24),transparent 36%),
+    radial-gradient(circle at 72% 25%,rgba(255,122,0,.12),transparent 24%);
+}
+.qa-3d-grid{
+  position:absolute;
+  width:150%;
+  height:80%;
+  left:-25%;
+  bottom:-18%;
+  transform:rotateX(64deg) translateZ(-40px);
+  transform-origin:center bottom;
+  background-image:
+    linear-gradient(rgba(0,87,184,.16) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,87,184,.16) 1px,transparent 1px);
+  background-size:42px 42px;
+  opacity:.8;
+}
+.qa-3d-ring{
+  position:absolute;
+  left:50%;
+  top:48%;
+  border:1px solid rgba(255,122,0,.38);
+  border-radius:50%;
+  transform-style:preserve-3d;
+  box-shadow:0 0 35px rgba(255,122,0,.08);
+}
+.ring-one{width:330px;height:330px;margin:-165px;transform:rotateX(68deg) rotateZ(8deg)}
+.ring-two{width:250px;height:250px;margin:-125px;transform:rotateX(68deg) rotateZ(-18deg);border-color:rgba(0,87,184,.55)}
+.ring-three{width:175px;height:175px;margin:-87.5px;transform:rotateX(68deg) rotateZ(35deg);border-style:dashed}
+.qa-3d-core{
+  position:absolute;
+  left:50%;
+  top:48%;
+  width:150px;
+  height:150px;
+  margin:-75px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  border:1px solid rgba(255,122,0,.65);
+  border-radius:28px;
+  background:linear-gradient(145deg,rgba(0,87,184,.9),rgba(6,26,61,.96));
+  transform:translateZ(65px) rotateX(8deg) rotateY(-8deg);
+  box-shadow:0 25px 60px rgba(0,0,0,.32),inset 0 0 35px rgba(255,122,0,.08);
+  animation:qaCoreFloat 5s ease-in-out infinite;
+}
+.qa-3d-core-icon{
+  width:58px;height:58px;border-radius:17px;
+  display:grid;place-items:center;
+  color:var(--orange);
+  border:1px solid rgba(255,122,0,.4);
+  background:rgba(255,122,0,.08);
+}
+.qa-3d-core strong{font:800 22px/1 Manrope,sans-serif;letter-spacing:.08em;color:#fff}
+.qa-3d-core span{font:8px "DM Mono";letter-spacing:.16em;color:#b9cae0}
+.qa-3d-node{
+  position:absolute;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:9px 12px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:10px;
+  background:rgba(6,26,61,.88);
+  backdrop-filter:blur(10px);
+  color:#dbe8f7;
+  font:9px "DM Mono";
+  letter-spacing:.1em;
+  box-shadow:0 14px 30px rgba(0,0,0,.18);
+  transform:translateZ(80px);
+}
+.qa-3d-node svg{color:var(--orange)}
+.node-one{left:15%;top:27%}.node-two{right:11%;top:32%}.node-three{left:10%;bottom:22%}.node-four{right:13%;bottom:20%}
+.qa-3d-label{
+  position:absolute;
+  left:22px;
+  bottom:22px;
+  display:grid;
+  gap:4px;
+  padding:11px 13px;
+  border-left:2px solid var(--orange);
+  background:rgba(6,26,61,.72);
+  backdrop-filter:blur(10px);
+  color:#fff;
+  font:9px "DM Mono";
+  letter-spacing:.1em;
+}
+.qa-3d-label b{font-size:8px;color:var(--orange);font-weight:500}
+.qa-3d-automation .qa-3d-core{border-radius:50%;width:170px;height:170px;margin:-85px}
+.qa-3d-automation .ring-one{border-color:rgba(0,87,184,.58);transform:rotateX(70deg) rotateZ(-12deg)}
+.qa-3d-automation .ring-two{border-color:rgba(255,122,0,.48);transform:rotateX(70deg) rotateZ(24deg)}
+.qa-3d-automation .node-one{left:9%;top:23%}.qa-3d-automation .node-two{right:8%;top:25%}
+.qa-3d-automation .node-three{left:13%;bottom:18%}.qa-3d-automation .node-four{right:10%;bottom:22%}
+.qa-3d-labs .qa-3d-core{width:135px;height:135px;margin:-67.5px;border-radius:22px}
+.qa-3d-labs .ring-one{width:380px;height:380px;margin:-190px}
+.qa-3d-labs .ring-two{width:290px;height:290px;margin:-145px}
+.qa-3d-labs .ring-three{width:210px;height:210px;margin:-105px}
+@keyframes qaCoreFloat{
+  0%,100%{transform:translateZ(65px) rotateX(8deg) rotateY(-8deg)}
+  50%{transform:translateZ(95px) rotateX(4deg) rotateY(8deg)}
+}
+@media(max-width:620px){
+  .qa-3d-ring{transform:scale(.72) rotateX(68deg)}
+  .qa-3d-core{transform:scale(.82) translateZ(45px)}
+  .qa-3d-node{transform:scale(.82) translateZ(50px)}
+  .node-one{left:4%;top:24%}.node-two{right:3%;top:28%}
+  .node-three{left:4%;bottom:18%}.node-four{right:3%;bottom:20%}
+  .qa-3d-label{left:14px;bottom:14px}
+}
