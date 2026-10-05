@@ -16,7 +16,7 @@ type Room = {
 type Worker = {
   title:string; room:string; x:number; z:number; color:string;
   group?:THREE.Group; phase:number;
-  roam?:{points:[number,number][];duration:number};
+  roam?:{points:number[][];duration:number};
 };
 
 const rooms:Room[]=[
