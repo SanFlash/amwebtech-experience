@@ -232,6 +232,7 @@ function buildScene(scene:THREE.Scene){
   return root;
 }
 
+export const dynamic = "force-dynamic";
 export default function OfficeTourPage(){
   const canvasRef=useRef<HTMLCanvasElement|null>(null);
   const keysRef=useRef<Record<string,boolean>>({});
