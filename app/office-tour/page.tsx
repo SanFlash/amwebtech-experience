@@ -70,14 +70,9 @@ const clamp = (v:number,min:number,max:number) => Math.max(min,Math.min(max,v));
 const distance = (a:Vec,b:Vec) => Math.hypot(a.x-b.x,a.y-b.y);
 
 function isWalkable(p:Vec){
-  if(p.x<90 || p.x>1440 || p.y<75 || p.y>885) return false;
-  const blocked = [
-    {x:450,y:40,w:100,h:220},{x:730,y:40,w:110,h:220},{x:870,y:40,w:110,h:220},
-    {x:1010,y:40,w:120,h:220},{x:1155,y:40,w:235,h:220},{x:1390,y:40,w:80,h:220},
-    {x:60,y:265,w:360,h:275},{x:60,y:540,w:360,h:160},{x:60,y:700,w:360,h:220},
-    {x:630,y:300,w:840,h:40}
-  ];
-  return !blocked.some(r => p.x>r.x-16 && p.x<r.x+r.w+16 && p.y>r.y-16 && p.y<r.y+r.h+16);
+  // The reference floor plan is open-office oriented, so the player can cross
+  // doorways and interior partitions while the outer shell remains solid.
+  return p.x>=92 && p.x<=1438 && p.y>=78 && p.y<=882;
 }
 
 function roomAt(p:Vec){
@@ -145,7 +140,8 @@ export default function OfficeTourPage(){
 
       const p=playerRef.current;
       const r=roomAt(p);
-      if(r?.id!==activeRoom) setActiveRoom(r?.id||"corridor");
+      const nextRoom=r?.id||"corridor";
+      setActiveRoom(prev=>prev===nextRoom?prev:nextRoom);
 
       npcRef.current.forEach(n=>{
         const wanderTarget=n.target||{
@@ -177,7 +173,7 @@ export default function OfficeTourPage(){
       window.removeEventListener("keydown",onKey);
       window.removeEventListener("keyup",onUp);
     };
-  },[activeRoom]);
+  },[]);
 
   const teleport=(room:Room)=>{
     playerRef.current={x:room.x+room.w/2,y:room.y+room.h/2};
