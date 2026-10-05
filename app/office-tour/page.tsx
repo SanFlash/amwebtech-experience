@@ -217,11 +217,11 @@ export default function OfficeTourPage(){
           ))}
         </div>
 
-        <div className={styles.mobilePad} aria-label="Mobile movement controls">
-          <button type="button" onPointerDown={()=>keysRef.current.w=true} onPointerUp={()=>keysRef.current.w=false} onPointerLeave={()=>keysRef.current.w=false}><ChevronUp/></button>
-          <button type="button" onPointerDown={()=>keysRef.current.a=true} onPointerUp={()=>keysRef.current.a=false} onPointerLeave={()=>keysRef.current.a=false}><ChevronLeft/></button>
-          <button type="button" onPointerDown={()=>keysRef.current.s=true} onPointerUp={()=>keysRef.current.s=false} onPointerLeave={()=>keysRef.current.s=false}><ChevronDown/></button>
-          <button type="button" onPointerDown={()=>keysRef.current.d=true} onPointerUp={()=>keysRef.current.d=false} onPointerLeave={()=>keysRef.current.d=false}><ChevronRight/></button>
+        <div className={styles.mobilePad} aria-label="Mobile movement controls" onContextMenu={e=>e.preventDefault()}>
+          <button type="button" aria-label="Move up" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);keysRef.current.w=true;setStarted(true)}} onPointerUp={e=>{keysRef.current.w=false;e.currentTarget.releasePointerCapture(e.pointerId)}} onPointerCancel={()=>keysRef.current.w=false}><ChevronUp/></button>
+          <button type="button" aria-label="Move left" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);keysRef.current.a=true;setStarted(true)}} onPointerUp={e=>{keysRef.current.a=false;e.currentTarget.releasePointerCapture(e.pointerId)}} onPointerCancel={()=>keysRef.current.a=false}><ChevronLeft/></button>
+          <button type="button" aria-label="Move down" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);keysRef.current.s=true;setStarted(true)}} onPointerUp={e=>{keysRef.current.s=false;e.currentTarget.releasePointerCapture(e.pointerId)}} onPointerCancel={()=>keysRef.current.s=false}><ChevronDown/></button>
+          <button type="button" aria-label="Move right" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);keysRef.current.d=true;setStarted(true)}} onPointerUp={e=>{keysRef.current.d=false;e.currentTarget.releasePointerCapture(e.pointerId)}} onPointerCancel={()=>keysRef.current.d=false}><ChevronRight/></button>
         </div>
 
         {mapOpen && <div className={styles.mapPanel}>
