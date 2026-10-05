@@ -82,17 +82,19 @@ function addDesk(parent:THREE.Group,x:number,z:number,rotation=0,qa=false){
   addChair(parent,x,z+d*.92,rotation);
 }
 function addQABench(parent:THREE.Group,x:number,z:number){
+  // Long vertical bench islands: 4 seats on each side, matching the reference.
   const length=6.8,depth=1.18,height=.8;
-  const table=box(parent,[length,.13,depth],[x,height,z],"#b9783e",.5);
+  const table=box(parent,[depth,.13,length],[x,height,z],"#b9783e",.5);
   table.castShadow=true;
   [-2.55,-.85,.85,2.55].forEach(offset=>{
-    box(parent,[.44,.38,.08],[x+offset,.98,z],"#17232e",.25);
-    box(parent,[.32,.20,.025],[x+offset,.99,z-.075],"#0b67c1",.2);
-    box(parent,[.04,.18,.04],[x+offset,.78,z],"#4a5660",.4);
-    addChair(parent,x+offset,z-.98,0);
-    addChair(parent,x+offset,z+.98,Math.PI);
+    const stationZ=z+offset;
+    box(parent,[.44,.38,.08],[x,.98,stationZ],"#17232e",.25);
+    box(parent,[.32,.20,.025],[x,.99,stationZ-.075],"#0b67c1",.2);
+    box(parent,[.04,.18,.04],[x,.78,stationZ],"#4a5660",.4);
+    addChair(parent,x-.98,stationZ,Math.PI/2);
+    addChair(parent,x+.98,stationZ,-Math.PI/2);
   });
-  box(parent,[length,.14,.12],[x,1.05,z],"#5d6a72",.45);
+  box(parent,[.12,.14,length],[x,1.05,z],"#5d6a72",.45);
 }
 
 function addWorker(parent:THREE.Group,w:Worker){
