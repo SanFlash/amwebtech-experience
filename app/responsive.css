@@ -1,0 +1,86 @@
+/* Final responsive override layer — loaded after globals.css. */
+:root{--page-pad:clamp(16px,4vw,48px)}
+html,body{width:100%;max-width:100%;overflow-x:clip}
+body{min-width:0}
+.site,.site main,.section{width:100%;min-width:0;max-width:100%}
+.section{padding-left:max(var(--page-pad),calc((100vw - var(--max))/2));padding-right:max(var(--page-pad),calc((100vw - var(--max))/2))}
+.section>*{min-width:0}
+img,video,canvas,svg{max-width:100%}
+h1,h2,h3,p,strong,small,a,span{overflow-wrap:break-word}
+.service-grid,.case-grid,.pricing-grid,.testimonial-grid,.leader-grid,.linkedin-post-grid,.industry-grid,.tech-wall,.stats-grid,.insight-grid,.process-line{min-width:0}
+
+@media(max-width:1200px){
+ .section{padding-left:32px;padding-right:32px}
+ .nav{padding-inline:22px}.nav-links{gap:14px}.nav-links a{font-size:12px}
+ .hero-inner{max-width:62%}.hero-title{font-size:clamp(64px,9vw,118px)}
+ .hero-3d{width:42vw;height:42vw;right:1%}
+ .intro-section,.split-section,.lab-section,.global-section,.company-card{gap:48px}
+ .service-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .leader-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .linkedin-post-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .linkedin-post-feature{grid-column:span 2}
+ .process-line{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:28px}
+}
+
+@media(max-width:980px){
+ .section{padding:clamp(68px,9vw,96px) 24px}
+ .nav{height:68px;padding-inline:16px}.nav-links{top:68px}
+ .hero{min-height:auto;padding:100px 24px 72px!important;display:block}
+ .hero-inner{max-width:100%;padding:0}.hero-title{font-size:clamp(58px,12vw,92px);max-width:760px}.hero-copy{max-width:680px}
+ .hero-3d{position:relative!important;inset:auto!important;width:100%!important;height:clamp(360px,62vw,540px)!important;margin:40px 0 0!important;opacity:1!important;min-height:0!important}
+ .hero-console{display:none}.scroll-cue{display:none}
+ .intro-section,.split-section,.lab-section,.global-section,.company-card{grid-template-columns:1fr!important;gap:34px}
+ .visual-panel,.lab-visual,.global-visual-system{width:100%;min-height:clamp(360px,60vw,520px)}
+ .service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .case-grid,.pricing-grid,.testimonial-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .leader-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .industry-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .tech-wall{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .footer{grid-template-columns:1fr 1fr;padding-inline:24px}.footer>div:first-child{grid-column:1/-1}
+ .linkedin-achievement-bar{grid-template-columns:repeat(2,1fr)}
+ .linkedin-achievement-bar div:nth-child(2){border-right:0}.linkedin-achievement-bar div:nth-child(-n+2){border-bottom:1px solid #d6e1ef}
+}
+
+@media(max-width:720px){
+ :root{--page-pad:16px}
+ .section{padding:58px 16px}
+ .nav{height:62px;min-height:62px;padding-inline:10px}.nav-links{top:62px;left:8px;right:8px}
+ .brand{width:150px!important;min-width:150px!important;flex-basis:150px!important;height:46px!important}.brand-logo{width:150px!important;max-width:150px!important;max-height:46px!important}
+ .menu-btn{display:grid!important;place-items:center;width:40px;height:40px;flex:0 0 40px}.nav-actions{display:none}
+ .hero{padding:78px 16px 54px!important}.hero-title{font-size:clamp(48px,15vw,72px);line-height:.9;margin-block:20px 24px}.hero-copy{font-size:15px;line-height:1.62}.hero-actions{display:grid;grid-template-columns:1fr}.hero-actions .button{width:100%;justify-content:center}
+ .hero-3d{height:clamp(300px,82vw,430px)!important;margin-top:30px!important;border-radius:18px}
+ .section-top{padding:0!important}.section-top h2,.intro-copy h2,.split-copy h2,.lab-copy h2,.global-copy h2,.company-card h2,.contact-inner h2{font-size:clamp(34px,10vw,50px)!important;line-height:.98;margin:16px 0 20px}
+ .section-top>p:last-child,.intro-copy>p:last-child,.split-copy>p,.lab-copy>p,.global-copy>p,.contact-inner>p{font-size:14px;line-height:1.65}
+ .service-grid,.case-grid,.pricing-grid,.testimonial-grid,.leader-grid,.linkedin-post-grid,.industry-grid,.insight-grid{grid-template-columns:1fr!important;margin-top:34px;padding:0!important}
+ .linkedin-post-feature{grid-column:auto}
+ .service-card,.case-card,.price-card,.testimonial,.leader{min-width:0;border-radius:14px}.service-card{min-height:260px;padding:20px}.case-card{padding:20px}.case-media{margin:-20px -20px 22px!important;height:190px}
+ .intro-metrics{grid-template-columns:1fr 1fr}.intro-metrics div{padding:18px 12px}.intro-metrics strong{font-size:36px}
+ .tech-wall{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:32px;padding:0!important}.tech-wall span{padding:14px 10px;font-size:11px;min-width:0}
+ .process-line{grid-template-columns:1fr;margin-top:34px}.process-step{border-right:0;border-bottom:1px solid rgba(255,255,255,.15);margin:0;padding:20px 0}.process-step h3{margin:12px 0 8px}
+ .stats-grid{grid-template-columns:1fr 1fr;padding:0!important}.stat{padding:18px 10px;border-left:0;border-top:1px solid #dbe3f0}.stat strong{font-size:clamp(36px,12vw,58px)}
+ .client-wall{margin-top:32px}.client-wall span{flex:1 1 calc(50% - 8px);text-align:center;padding:11px 8px;font-size:10px}
+ .linkedin-achievement-bar{grid-template-columns:1fr}.linkedin-achievement-bar div{border-right:0!important;border-bottom:1px solid #d6e1ef!important}.linkedin-achievement-bar div:last-child{border-bottom:0!important}
+ .post-visual{min-height:220px}.post-content{padding:20px}.post-content h3{font-size:22px}.linkedin-post-feature .post-content h3{font-size:25px}
+ .visual-panel,.lab-visual,.global-visual-system{min-height:330px;border-radius:16px}.floating-card{display:none}.radar{transform:translate(-50%,-50%) scale(.72)}
+ .lab-items a{grid-template-columns:30px 20px minmax(0,1fr) auto;font-size:9px;gap:8px;padding:12px 0}
+ .global-points{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.global-points span{justify-content:center}
+ .company-card{padding:24px!important}.engagement-list div{grid-template-columns:28px minmax(0,1fr) auto;gap:8px;font-size:11px}
+ .contact-section{min-height:auto!important}.contact-actions{display:grid!important;grid-template-columns:1fr;width:100%}.contact-actions .button{width:100%;justify-content:center}.contact-meta{flex-direction:column;align-items:center;margin-top:34px}
+ .footer{grid-template-columns:1fr;padding:34px 16px;gap:20px}.footer>div:first-child{grid-column:auto}.footer-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .qa-system-head{font-size:6px}.qa-system-corner{display:none}.qa-system-chips{max-width:65%}.qa-release-console{left:4%;right:4%;top:21%;height:53%}.qa-pipeline{left:3%;right:3%;gap:4px}.qa-pipeline-node small{display:none}.qa-device-lab{left:4%;right:4%}
+}
+
+@media(max-width:420px){
+ .section{padding:50px 14px}.hero{padding-inline:14px!important}.hero-title{font-size:clamp(44px,15.5vw,62px)}
+ .brand{width:138px!important;min-width:138px!important;flex-basis:138px!important}.brand-logo{width:138px!important;max-width:138px!important}
+ .hero-3d{height:300px!important}.intro-metrics,.stats-grid,.tech-wall{grid-template-columns:1fr}.intro-metrics div:nth-child(odd){border-right:0}.client-wall span{flex-basis:100%}
+ .global-points{grid-template-columns:1fr 1fr}.global-status{grid-template-columns:1fr!important}.global-status div{display:flex;justify-content:space-between;align-items:center}.global-status b{margin:0!important}
+ .qa-release-sidebar{display:none}.qa-release-body{grid-template-columns:1fr!important}.qa-release-main{padding:10px!important}.qa-pipeline-icon{width:32px!important;height:32px!important}.qa-pipeline-node strong{font-size:6px!important}.qa-device-screen{width:48px!important}.qa-system-core{width:82%!important}.qa-system-chips{display:none}
+}
+
+@media(orientation:landscape) and (max-height:560px) and (max-width:980px){
+ .hero{padding-top:70px!important}.hero-title{font-size:clamp(44px,9vw,68px)}.hero-3d{height:300px!important}.section{padding-top:48px;padding-bottom:48px}
+}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
