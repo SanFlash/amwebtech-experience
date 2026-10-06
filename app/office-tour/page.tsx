@@ -336,6 +336,13 @@ function addAvatar(parent:THREE.Group, color:string, scale=1){
   badge.position.set(.13*scale,.03*scale,.22*scale); torso.add(badge);
   const badgeClip=new THREE.Mesh(new THREE.BoxGeometry(.055*scale,.025*scale,.025*scale),metal);
   badgeClip.position.set(.13*scale,.12*scale,.23*scale); torso.add(badgeClip);
+  // Lightweight shoulder accents / lanyard for a game-character silhouette.
+  [-1,1].forEach(side=>{
+    const pad=new THREE.Mesh(new THREE.SphereGeometry(.11*scale,10,7),shirt);
+    pad.scale.set(1.25,.55,.9);pad.position.set(side*.29*scale,1.07*scale,.01);torso.add(pad);
+  });
+  const lanyard=new THREE.Mesh(new THREE.TorusGeometry(.075*scale,.012*scale,6,14,Math.PI),metal);
+  lanyard.rotation.x=Math.PI/2;lanyard.position.set(0,.18*scale,.225*scale);torso.add(lanyard);
 
   const neck=new THREE.Mesh(new THREE.CylinderGeometry(.105*scale,.12*scale,.16*scale,12),skin);
   neck.position.y=1.18*scale; avatar.add(neck);
@@ -347,6 +354,19 @@ function addAvatar(parent:THREE.Group, color:string, scale=1){
   // Hair cap + side locks.
   const hair=new THREE.Mesh(new THREE.SphereGeometry(.292*scale,20,12,0,Math.PI*2,0,Math.PI*.58),hairMat);
   hair.position.y=.075*scale; head.add(hair);
+  // Stylized game/anime silhouette: layered fringe spikes make characters readable
+  // from the third-person camera without using external character assets.
+  [-.20,-.10,0,.10,.20].forEach((offset,index)=>{
+    const spike=new THREE.Mesh(new THREE.ConeGeometry(.075*scale,.18*scale,7),hairMat);
+    spike.name=`hairSpike${index}`;
+    spike.position.set(offset*scale,.13*scale,.22*scale);
+    spike.rotation.x=-.48;
+    spike.rotation.z=offset*.35;
+    head.add(spike);
+  });
+  const earL=new THREE.Mesh(new THREE.TorusGeometry(.055*scale,.012*scale,6,12,Math.PI),hairMat);
+  earL.rotation.y=Math.PI/2;earL.position.set(-.27*scale,.02*scale,.02);head.add(earL);
+  const earR=earL.clone();earR.position.x=.27*scale;head.add(earR);
   [-1,1].forEach(side=>{
     const lock=new THREE.Mesh(new THREE.SphereGeometry(.075*scale,10,8),hairMat);
     lock.scale.set(.65,1.35,.72); lock.position.set(side*.245*scale,.005*scale,.01); head.add(lock);
