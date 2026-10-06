@@ -509,6 +509,10 @@ export default function OfficeTourPage(){
   const playerVelocityRef=useRef(new THREE.Vector2());
   const collisionRectsRef=useRef<any[]>([]);
   const startedRef=useRef(false);
+  const inputVectorRef=useRef(new THREE.Vector2());
+  const collisionCandidateRef=useRef(new THREE.Vector3());
+  const cameraTargetRef=useRef(new THREE.Vector3());
+  const cameraDesiredRef=useRef(new THREE.Vector3());
   const [activeRoom,setActiveRoom]=useState("reception");
   const [activeNpc,setActiveNpc]=useState<Worker|null>(null);
   const [started,setStarted]=useState(false);
@@ -553,8 +557,9 @@ export default function OfficeTourPage(){
       const inputX=(k.d||k.arrowright?1:0)-(k.a||k.arrowleft?1:0);
       const inputZ=(k.s||k.arrowdown?1:0)-(k.w||k.arrowup?1:0);
       const inputLen=Math.hypot(inputX,inputZ);
-      const input=inputLen?new THREE.Vector2(inputX/inputLen,inputZ/inputLen):new THREE.Vector2();
-      const maxSpeed=3.55,acceleration=15.5,drag=inputLen?2.5:9.5;
+      const input=inputVectorRef.current;
+      if(inputLen){input.set(inputX/inputLen,inputZ/inputLen);}else input.set(0,0);
+      const maxSpeed=3.55,acceleration=18,drag=inputLen?3.2:11;
       const velocity=playerVelocityRef.current;
       if(inputLen){
         velocity.x=dampNumber(velocity.x,input.x*maxSpeed,acceleration,dt);
@@ -564,14 +569,30 @@ export default function OfficeTourPage(){
         velocity.x=dampNumber(velocity.x,0,drag,dt);
         velocity.y=dampNumber(velocity.y,0,drag,dt);
       }
-      const nextX=player.x+velocity.x*dt;
-      collisionCandidate.set(nextX,player.y,player.z);
-      const resolvedX=resolvePlayerCollision(collisionCandidate,collisionRects,PLAYER_RADIUS,"x");
-      if(resolvedX!==null){player.x=resolvedX;velocity.x=0;}else player.x=nextX;
-      const nextZ=player.z+velocity.y*dt;
-      collisionCandidate.set(player.x,player.y,nextZ);
-      const resolvedZ=resolvePlayerCollision(collisionCandidate,collisionRects,PLAYER_RADIUS,"z");
-      if(resolvedZ!==null){player.z=resolvedZ;velocity.y=0;}else player.z=nextZ;
+
+      // Fixed movement substeps prevent tunnelling through walls and remove the
+      // "sticky corner" feeling caused by large frame-time jumps.
+      const distance=Math.hypot(velocity.x,velocity.y)*dt;
+      const steps=Math.max(1,Math.min(6,Math.ceil(distance/.075)));
+      const stepDt=dt/steps;
+      const collisionCandidate=collisionCandidateRef.current;
+      for(let step=0;step<steps;step++){
+        const nextX=player.x+velocity.x*stepDt;
+        collisionCandidate.set(nextX,player.y,player.z);
+        const resolvedX=resolvePlayerCollision(collisionCandidate,collisionRects,PLAYER_RADIUS,"x");
+        if(resolvedX!==null){
+          player.x=resolvedX;
+          velocity.x=0;
+        }else player.x=nextX;
+
+        const nextZ=player.z+velocity.y*stepDt;
+        collisionCandidate.set(player.x,player.y,nextZ);
+        const resolvedZ=resolvePlayerCollision(collisionCandidate,collisionRects,PLAYER_RADIUS,"z");
+        if(resolvedZ!==null){
+          player.z=resolvedZ;
+          velocity.y=0;
+        }else player.z=nextZ;
+      }
       const moved=Math.hypot(player.x-lastSafeX,player.z-lastSafeZ);
       if(moved>.12){lastSafeX=player.x;lastSafeZ=player.z;lastProgressAt=now;}
       else if(inputLen && now-lastProgressAt>1800){
@@ -579,7 +600,7 @@ export default function OfficeTourPage(){
       }
       const r=rooms.find(q=>player.x>=q.x-q.w/2&&player.x<=q.x+q.w/2&&player.z>=q.z-q.d/2&&player.z<=q.z+q.d/2);
       if(r && activeRoomId!==r.id){activeRoomId=r.id;setActiveRoom(r.id);}
-      workersRef.current.forEach((w)=>{
+      if(Math.floor(now/16)%2===0) workersRef.current.forEach((w)=>{
         if(!w.group)return;
         if(w.roam){
           const points=w.roam.points;
@@ -627,9 +648,11 @@ export default function OfficeTourPage(){
         visitor.position.z=player.z;
         if(inputLen)visitor.rotation.y=Math.atan2(input.x,input.y);
       }
-      cameraDesired.set(player.x,7.6,player.z+8.4);
-      camera.position.lerp(cameraDesired,1-Math.pow(.0007,dt));
-      cameraTarget.set(player.x,.45,player.z);
+      const cameraDesired=cameraDesiredRef.current;
+      const cameraTarget=cameraTargetRef.current;
+      cameraDesired.set(player.x,7.2,player.z+7.8);
+      camera.position.lerp(cameraDesired,1-Math.exp(-7.5*dt));
+      cameraTarget.set(player.x,.55,player.z);
       camera.lookAt(cameraTarget);
       renderer.render(scene,camera);
       raf=requestAnimationFrame(tick);
@@ -673,10 +696,10 @@ export default function OfficeTourPage(){
       <div className={styles.hud}><div><span>LOCATION</span><strong>{roomById(activeRoom)?.name||"Main Floor"}</strong></div><div><span>MODE</span><strong>TRUE 3D WALKOVER</strong></div><button type="button" onClick={interact}><Users size={15}/> Talk / E</button></div>
       <div className={styles.roomRail}>{rooms.filter(r=>!["male","female"].includes(r.id)).map(r=><button key={r.id} type="button" onClick={()=>teleport(r)}><span>{r.name}</span><small>{r.subtitle}</small></button>)}</div>
       <div className={styles.mobilePad} aria-label="Mobile movement controls" onContextMenu={e=>e.preventDefault()}>
-        <button type="button" aria-label="Move up" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);keysRef.current.w=true;setStarted(true)}} onPointerUp={e=>{keysRef.current.w=false}} onPointerCancel={()=>keysRef.current.w=false}><ChevronUp/></button>
-        <button type="button" aria-label="Move left" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);keysRef.current.a=true;setStarted(true)}} onPointerUp={e=>{keysRef.current.a=false}} onPointerCancel={()=>keysRef.current.a=false}><ChevronLeft/></button>
-        <button type="button" aria-label="Move down" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);keysRef.current.s=true;setStarted(true)}} onPointerUp={e=>{keysRef.current.s=false}} onPointerCancel={()=>keysRef.current.s=false}><ChevronDown/></button>
-        <button type="button" aria-label="Move right" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);keysRef.current.d=true;setStarted(true)}} onPointerUp={e=>{keysRef.current.d=false}} onPointerCancel={()=>keysRef.current.d=false}><ChevronRight/></button>
+        <button type="button" aria-label="Move up" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);keysRef.current.w=true;setStarted(true)}} onPointerUp={()=>{keysRef.current.w=false}} onLostPointerCapture={()=>{keysRef.current.w=false}} onPointerCancel={()=>keysRef.current.w=false}><ChevronUp/></button>
+        <button type="button" aria-label="Move left" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);keysRef.current.a=true;setStarted(true)}} onPointerUp={()=>{keysRef.current.a=false}} onLostPointerCapture={()=>{keysRef.current.a=false}} onPointerCancel={()=>keysRef.current.a=false}><ChevronLeft/></button>
+        <button type="button" aria-label="Move down" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);keysRef.current.s=true;setStarted(true)}} onPointerUp={()=>{keysRef.current.s=false}} onLostPointerCapture={()=>{keysRef.current.s=false}} onPointerCancel={()=>keysRef.current.s=false}><ChevronDown/></button>
+        <button type="button" aria-label="Move right" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);keysRef.current.d=true;setStarted(true)}} onPointerUp={()=>{keysRef.current.d=false}} onLostPointerCapture={()=>{keysRef.current.d=false}} onPointerCancel={()=>keysRef.current.d=false}><ChevronRight/></button>
       </div>
       {mapOpen&&<div className={styles.mapPanel}><div className={styles.mapHead}><div><b>OFFICE DIRECTORY</b><span>Select a destination.</span></div><button type="button" onClick={()=>setMapOpen(false)}><X/></button></div><FloorPlanMap/><div className={styles.mapGrid}>{rooms.map(r=><button key={r.id} type="button" onClick={()=>teleport(r)}><MapPin size={15}/><span>{r.name}</span><small>{r.subtitle}</small></button>)}</div></div>}
       {activeNpc&&<div className={styles.npcCard}><button type="button" onClick={()=>setActiveNpc(null)}><X size={15}/></button><div className={styles.npcAvatar}><Users size={23}/></div><p>AM WEBTECH / WORKSTATION</p><h2>{activeNpc.title}</h2><span>Seated • Working on PC</span><small>{roomById(activeNpc.room)?.name||"the office"} · Active workstation</small></div>}
