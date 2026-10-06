@@ -313,3 +313,77 @@
   .floorMapWrap{padding:7px}
   .floorMapTitle{font-size:7px}
 }
+
+
+/* RESPONSIVE HARDENING v3 — prevents clipping, overlap and touch trapping */
+.page,.game,.canvas{box-sizing:border-box}
+.page{width:100%;max-width:100vw;overflow:hidden}
+.game{position:relative;min-width:0;overflow:hidden;isolation:isolate}
+.canvas{display:block;width:100%;height:100%;max-width:100%;touch-action:none}
+.topbar,.roomRail,.hud,.tip,.intro,.mapPanel,.npcCard,.mobilePad{max-width:100%;box-sizing:border-box}
+.roomRail{overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x}
+.roomRail::-webkit-scrollbar{display:none}
+.roomRail button{flex:0 0 auto;white-space:nowrap}
+.intro{overflow:auto;overscroll-behavior:contain}
+.intro h1,.intro p,.npcCard h2,.mapHead span{overflow-wrap:anywhere}
+.mapPanel{overflow-x:hidden}
+.mapGrid button{min-width:0}
+.mapGrid span,.mapGrid small{min-width:0;overflow-wrap:anywhere}
+.npcCard{overflow:hidden}
+.hud{overflow:hidden}
+.hud>div{min-width:0}
+.hud strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mobilePad{pointer-events:none}
+.mobilePad button{pointer-events:auto}
+@media(max-width:900px){
+  .topbar{padding-inline:clamp(8px,2vw,18px)}
+  .actions{min-width:0}
+  .actions button{white-space:nowrap}
+  .roomRail{display:flex;gap:6px}
+  .roomRail button{min-width:clamp(92px,18vw,140px)}
+  .intro{max-width:calc(100vw - 20px)}
+}
+@media(max-width:700px){
+  .topbar{height:56px;min-height:56px}
+  .game{height:calc(100dvh - 56px);min-height:420px}
+  .roomRail{top:6px;left:6px;right:6px}
+  .roomRail button{padding:7px 8px}
+  .roomRail button span{display:block;max-width:18vw;overflow:hidden;text-overflow:ellipsis}
+  .intro{top:54px;left:8px;width:calc(100% - 16px);max-height:calc(100dvh - 145px)}
+  .intro h1{font-size:clamp(24px,7.5vw,34px);line-height:1.02}
+  .hud{left:8px;right:8px;bottom:8px;width:auto}
+  .mobilePad{right:8px;bottom:72px}
+  .mapPanel{top:62px;left:8px;right:8px;width:auto;max-height:calc(100dvh - 78px);padding:12px}
+  .floorMap{max-height:40vh}
+  .npcCard{left:8px;right:8px;bottom:8px;width:auto;padding:14px}
+}
+@media(max-width:480px){
+  .topbar{height:52px;min-height:52px}
+  .game{height:calc(100dvh - 52px);min-height:360px}
+  .back{max-width:42vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .actions button{padding:7px 8px}
+  .roomRail button{min-width:90px;max-width:110px}
+  .roomRail button span{max-width:92px;font-size:8px}
+  .roomRail button small{font-size:7px}
+  .hud{gap:5px;padding:6px}
+  .hud>div{max-width:52%}
+  .hud strong{font-size:9px}
+  .hud button{flex:0 0 auto;max-width:38vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .mobilePad{transform:scale(.9);transform-origin:bottom right}
+  .mapGrid{grid-template-columns:1fr}
+  .mapHead b{font-size:10px}
+  .mapHead span{font-size:9px}
+  .floorMapWrap{margin-top:9px;padding:6px}
+  .floorMapTitle{font-size:6px}
+}
+@media(orientation:landscape) and (max-height:520px){
+  .game{min-height:300px}
+  .roomRail{max-height:58px}
+  .intro{max-height:calc(100dvh - 70px);max-width:420px}
+  .intro>p:not(.kicker){display:none}
+  .hud{bottom:6px}
+  .mobilePad{bottom:58px}
+}
+@media(prefers-reduced-motion:reduce){
+  .mobilePad button:active{transform:none}
+}
