@@ -386,6 +386,40 @@ function buildScene(scene:THREE.Scene){
 }
 
 
+function FloorPlanMap(){
+  return <div className={styles.floorMapWrap}>
+    <div className={styles.floorMapTitle}>REFERENCE OFFICE / INTERACTIVE DESTINATION MAP</div>
+    <svg className={styles.floorMap} viewBox="0 0 1000 620" role="img" aria-label="AM Webtech office floor plan">
+      <rect x="18" y="18" width="964" height="584" rx="18" fill="#e9e2d4"/>
+      <g fill="#d7b47e" stroke="#263746" strokeWidth="5">
+        <rect x="45" y="45" width="250" height="120" rx="8"/><rect x="305" y="45" width="90" height="120" rx="8"/>
+        <rect x="405" y="45" width="90" height="120" rx="8"/><rect x="505" y="45" width="105" height="120" rx="8"/>
+        <rect x="620" y="45" width="150" height="120" rx="8"/><rect x="780" y="45" width="175" height="120" rx="8"/>
+      </g>
+      <g fill="#dfe6e8" stroke="#263746" strokeWidth="5">
+        <rect x="45" y="180" width="115" height="62" rx="7"/><rect x="170" y="180" width="115" height="62" rx="7"/>
+      </g>
+      <rect x="45" y="255" width="300" height="105" rx="8" fill="#d8c09a" stroke="#263746" strokeWidth="5"/>
+      <rect x="45" y="375" width="300" height="190" rx="8" fill="#cfc4b1" stroke="#263746" strokeWidth="5"/>
+      <rect x="365" y="465" width="220" height="100" rx="8" fill="#8b6035" stroke="#263746" strokeWidth="5"/>
+      <rect x="365" y="180" width="590" height="265" rx="10" fill="#e6d49b" stroke="#263746" strokeWidth="5"/>
+      <g stroke="#b9783e" strokeWidth="26" strokeLinecap="round">
+        <line x1="475" y1="220" x2="475" y2="410"/><line x1="650" y1="220" x2="650" y2="410"/><line x1="825" y1="220" x2="825" y2="410"/>
+      </g>
+      <g fill="#fff" fontFamily="Arial" fontWeight="800" textAnchor="middle">
+        <text x="170" y="105" fontSize="22">AUTOMATION · 8</text><text x="350" y="105" fontSize="18">HR</text>
+        <text x="450" y="105" fontSize="18">SR HR</text><text x="557" y="105" fontSize="18">MANAGER</text>
+        <text x="695" y="105" fontSize="18">SALES · 4</text><text x="868" y="105" fontSize="18">DIRECTOR · 3</text>
+        <text x="102" y="218" fontSize="13">MALE WASHROOM</text><text x="228" y="218" fontSize="13">FEMALE WASHROOM</text>
+        <text x="195" y="310" fontSize="20">KITCHEN</text><text x="195" y="475" fontSize="20">MEETING ROOM</text>
+        <text x="660" y="325" fontSize="24">QA TEAM · OPEN · 24 SEATS</text><text x="475" y="525" fontSize="19">RECEPTION / ENTRY</text>
+      </g>
+      <g fill="#25c77a" stroke="#fff" strokeWidth="3"><circle cx="475" cy="570" r="14"/></g>
+      <text x="500" y="577" fill="#1d6b43" fontFamily="Arial" fontSize="16" fontWeight="800">ENTRY</text>
+    </svg>
+  </div>;
+}
+
 export const dynamic = "force-dynamic";
 export default function OfficeTourPage(){
   const canvasRef=useRef<HTMLCanvasElement|null>(null);
@@ -404,8 +438,12 @@ export default function OfficeTourPage(){
   useEffect(()=>{
     const canvas=canvasRef.current;if(!canvas)return;
     const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:"high-performance"});
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.7));
-    renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
+    renderer.outputColorSpace=THREE.SRGBColorSpace;
+    renderer.toneMapping=THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure=1.12;
+    renderer.shadowMap.enabled=true;
+    renderer.shadowMap.type=THREE.PCFSoftShadowMap;
     const scene=new THREE.Scene();sceneRef.current=scene;
     buildScene(scene);
     const collisionRects=buildCollisionRects();
@@ -427,6 +465,7 @@ export default function OfficeTourPage(){
     window.addEventListener("keydown",onKey);window.addEventListener("keyup",onUp);
 
     let raf=0,last=performance.now();
+    let lastSafeX=player.x,lastSafeZ=player.z,lastProgressAt=performance.now();
     const tick=(now:number)=>{
       const dt=Math.min((now-last)/1000,.04);last=now;
       const k=keysRef.current;
@@ -452,6 +491,11 @@ export default function OfficeTourPage(){
       collisionCandidate.set(player.x,player.y,nextZ);
       const resolvedZ=resolvePlayerCollision(collisionCandidate,collisionRects,PLAYER_RADIUS,"z");
       if(resolvedZ!==null){player.z=resolvedZ;velocity.y=0;}else player.z=nextZ;
+      const moved=Math.hypot(player.x-lastSafeX,player.z-lastSafeZ);
+      if(moved>.12){lastSafeX=player.x;lastSafeZ=player.z;lastProgressAt=now;}
+      else if(inputLen && now-lastProgressAt>1800){
+        player.x=lastSafeX;player.z=lastSafeZ;velocity.set(0,0);lastProgressAt=now;
+      }
       const r=rooms.find(q=>player.x>=q.x-q.w/2&&player.x<=q.x+q.w/2&&player.z>=q.z-q.d/2&&player.z<=q.z+q.d/2);
       if(r && activeRoomId!==r.id){activeRoomId=r.id;setActiveRoom(r.id);}
       workersRef.current.forEach((w)=>{
@@ -495,7 +539,20 @@ export default function OfficeTourPage(){
     return()=>{cancelAnimationFrame(raf);window.removeEventListener("resize",resize);window.removeEventListener("keydown",onKey);window.removeEventListener("keyup",onUp);renderer.dispose();scene.clear();sceneRef.current=null;playerVelocityRef.current.set(0,0);collisionRectsRef.current=[];startedRef.current=false;};
   },[]);
 
-  const teleport=(room:Room)=>{playerRef.current.set(room.x, .35, room.z);setActiveRoom(room.id);setMapOpen(false);setStarted(true);};
+  const destinationFor=(room:Room):[number,number]=>{
+    const points:Record<string,[number,number]>={
+      automation:[-11.1,-3.55],hr:[-5.9,-3.55],srhr:[-3,-3.55],manager:[0,-3.55],
+      sales:[3.8,-3.55],director:[7.9,-3.55],male:[-11.6,-2.05],female:[-8.2,-2.05],
+      kitchen:[-6.0,-.4],meeting:[-5.8,4.0],reception:[-2.1,8.05],qa:[5.2,6.95]
+    };
+    return points[room.id]||[room.x,room.z];
+  };
+  const teleport=(room:Room)=>{
+    const [x,z]=destinationFor(room);
+    playerRef.current.set(x,.35,z);
+    playerVelocityRef.current.set(0,0);
+    setActiveRoom(room.id);setActiveNpc(null);setMapOpen(false);setStarted(true);
+  };
   const interact=()=>{let best:Worker|null=null,min=1.8;workersRef.current.forEach(w=>{const d=Math.hypot(playerRef.current.x-w.x,playerRef.current.z-w.z);if(d<min){min=d;best=w;}});if(best)setActiveNpc(best);};
 
   return <main className={styles.page}>
