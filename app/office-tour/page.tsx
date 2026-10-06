@@ -21,6 +21,9 @@ type Worker = {
 };
 
 const rooms:Room[]=[
+  // Layout follows the supplied reference floor plan: six private rooms across the north,
+  // facilities + kitchen + meeting room on the west, open QA benches on the east,
+  // and reception/entry at the south-center.
   {id:"automation",name:"Automation Team",subtitle:"8 seats",x:-11.1,z:-6.0,w:7.2,d:4.3,floor:"#d9b27b",accent:"#0057b8"},
   {id:"hr",name:"HR",subtitle:"2 seats",x:-5.9,z:-6.0,w:2.6,d:4.3,floor:"#dfbc89",accent:"#ff7a00"},
   {id:"srhr",name:"Sr HR",subtitle:"2 seats",x:-3.0,z:-6.0,w:2.6,d:4.3,floor:"#dfbc89",accent:"#ff7a00"},
@@ -32,7 +35,7 @@ const rooms:Room[]=[
   {id:"kitchen",name:"Kitchen",subtitle:"2 seats",x:-9.9,z:-0.4,w:6.6,d:2.9,floor:"#d9c19c",accent:"#ff7a00"},
   {id:"meeting",name:"Meeting Room",subtitle:"6 seats",x:-9.5,z:4.0,w:7.4,d:4.3,floor:"#cfc4b1",accent:"#0057b8"},
   {id:"reception",name:"Reception / Entry",subtitle:"Welcome",x:-2.1,z:7.0,w:4.5,d:2.0,floor:"#8b6035",accent:"#25c77a"},
-  {id:"qa",name:"QA Team Cabins (Open)",subtitle:"Approximately 24 seats",x:4.1,z:2.0,w:17.2,d:8.5,floor:"#d6bd91",accent:"#0057b8"},
+  {id:"qa",name:"QA Team Cabins (Open)",subtitle:"Approximately 24 seats",x:5.2,z:2.0,w:13.8,d:8.5,floor:"#d6bd91",accent:"#0057b8"},
 ];
 
 const workerData=[
@@ -43,13 +46,15 @@ const workerData=[
   ...([[3.0,-6.0],[4.4,-6.0],[3.0,-4.7],[4.4,-4.7]].map(([x,z])=>({title:"Business Development",room:"sales",x,z,color:"#0b8ca6"}))),
   ...([[7.0,-6.0],[8.4,-6.0],[7.7,-4.7]].map(([x,z])=>({title:"Leadership",room:"director",x,z,color:"#d14b7d"}))),
   ...Array.from({length:24},(_,i)=>{
-    const x=[1.4,4.6,7.8][i%3];
+    const x=[2.0,5.2,8.4][i%3];
     const z=[-1.0,.25,1.5,2.75,4.0,5.25,6.5,7.75][Math.floor(i/3)];
     const roaming=[1,8,15,22].includes(i);
     return {
       title:"QA Engineer",room:"qa",x,z,
       color:["#0057b8","#ff7a00","#2f7d5a","#7b61ff","#0b8ca6","#9b6b24"][i%6],
-      ...(roaming?{roam:{points:[[x,z],[x,-2.55],[0,-3.15],[0,-5.15],[0,-3.15],[x,-2.55],[x,z]],duration:18+i*.35}}:{})
+      ...(roaming?{roam:{points:[
+        [x-.98,z],[x-.98,5.15],[3.45,5.15],[3.45,-1.25],[6.55,-1.25],[6.55,5.15],[9.75,5.15],[9.75,-1.25],[x-.98,-1.25],[x-.98,z]
+      ],duration:22+i*.35}}:{})
     };
   })
 ];
@@ -122,34 +127,50 @@ function addWorker(parent:THREE.Group,w:Worker){
   }
   parent.add(g);
 }
+type WallSide = "north"|"south"|"east"|"west";
+function doorSide(id:string):WallSide|null{
+  if(["automation","hr","srhr","manager","sales","director","male","female"].includes(id)) return "south";
+  if(id==="kitchen" || id==="meeting") return "east";
+  if(id==="reception") return "north";
+  if(id==="qa") return null; // open south edge; the reference has a clear entry aisle.
+  return null;
+}
+function addWallWithDoor(root:THREE.Group,r:Room,side:WallSide,material:THREE.Material,height:number,thickness:number,doorWidth=.95){
+  const isH=side==="north"||side==="south";
+  const edge=isH ? r.z+(side==="north"?-1:1)*r.d/2 : r.x+(side==="east"?1:-1)*r.w/2;
+  const span=isH?r.w:r.d;
+  const center=isH?r.x:r.z;
+  const gap=doorSide(r.id)===side?doorWidth:0;
+  const addSeg=(a:number,b:number)=>{
+    const len=b-a;
+    if(len<=.05)return;
+    const mid=(a+b)/2;
+    const mesh=new THREE.Mesh(new THREE.BoxGeometry(isH?len:thickness,height,isH?thickness:len),material);
+    mesh.position.set(isH?mid:edge,height/2,isH?edge:mid);
+    root.add(mesh);
+  };
+  if(gap){
+    addSeg(center-span/2,center-gap/2);
+    addSeg(center+gap/2,center+span/2);
+  }else{
+    addSeg(center-span/2,center+span/2);
+  }
+}
 function addRoomShell(root:THREE.Group,r:Room){
   const floor=box(root,[r.w,.16,r.d],[r.x,0,r.z],r.floor,.9);
   floor.receiveShadow=true;
   const wallH=1.65,wall=.16;
   const glass=r.id==="qa";
   if(glass){
-    const glassMat=new THREE.MeshPhysicalMaterial({color:"#9ebfc4",transparent:true,opacity:.32,roughness:.18,metalness:.08});
+    const glassMat=new THREE.MeshPhysicalMaterial({color:"#9ebfc4",transparent:true,opacity:.28,roughness:.18,metalness:.08});
     const lowH=.78;
-    [[r.w,wall,r.d/2],[r.w,wall,-r.d/2]].forEach(([w,h,z])=>{
-      const m=new THREE.Mesh(new THREE.BoxGeometry(w,lowH,wall),glassMat);
-      m.position.set(r.x,.39,r.z+z);root.add(m);
-    });
-    [-1,1].forEach(s=>{
-      const m=new THREE.Mesh(new THREE.BoxGeometry(wall,lowH,r.d),glassMat);
-      m.position.set(r.x+s*r.w/2,.39,r.z);root.add(m);
-    });
+    (["north","east","west"] as WallSide[]).forEach(side=>addWallWithDoor(root,r,side,glassMat,lowH,wall,1.25));
     return;
   }
   const wm=new THREE.MeshStandardMaterial({color:"#eef1f2",roughness:.5,metalness:.08});
-  [[r.w,wall,r.d/2],[r.w,wall,-r.d/2]].forEach(([w,h,z])=>{
-    const m=new THREE.Mesh(new THREE.BoxGeometry(w,wallH,wall),wm);
-    m.position.set(r.x,.83,r.z+z);root.add(m);
-  });
   const sideMat=new THREE.MeshStandardMaterial({color:"#d8dee1",roughness:.52});
-  [-1,1].forEach(s=>{
-    const m=new THREE.Mesh(new THREE.BoxGeometry(wall,wallH,r.d),sideMat);
-    m.position.set(r.x+s*r.w/2,.83,r.z);root.add(m);
-  });
+  (["north","south"] as WallSide[]).forEach(side=>addWallWithDoor(root,r,side,wm,wallH,wall));
+  (["east","west"] as WallSide[]).forEach(side=>addWallWithDoor(root,r,side,sideMat,wallH,wall));
   const label=makeLabel(r.name,r.subtitle,r.accent);
   label.position.set(r.x,.08,r.z-r.d*.05);
   label.rotation.x=-Math.PI/2;root.add(label);
@@ -170,8 +191,9 @@ function makeLabel(title:string,sub:string,color:string){
 function addRoomFurniture(root:THREE.Group){
   [ -12.2,-10.7,-9.2,-7.7].forEach(x=>{addDesk(root,x,-6.0);addDesk(root,x,-4.7);});
   [[-6.4,-6],[-5.4,-4.7],[-3.5,-6],[-2.5,-4.7],[-.5,-6],[.5,-4.7],[3,-6],[4.4,-6],[3,-4.7],[4.4,-4.7],[7,-6],[8.4,-6],[7.7,-4.7]].forEach(([x,z])=>addDesk(root,x,z));
-  // QA open floor: three long shared bench islands, four seats per side.
-  [1.4,4.6,7.8].forEach(x=>addQABench(root,x,3.35));
+  // QA open floor: three long shared bench islands, four seats on each side.
+  // Their spacing creates the same three central aisles as the supplied reference.
+  [2.0,5.2,8.4].forEach(x=>addQABench(root,x,3.35));
   // Kitchen
   box(root,[4.8,.9,.38],[-9.9,.55,-.95],"#795331");box(root,[2.0,.72,1.1],[-9.9,.45,.1],"#c98c4c");
   // Meeting room
@@ -199,6 +221,66 @@ function addVisitor(root:THREE.Group){
   g.traverse(o=>{if(o instanceof THREE.Mesh)o.castShadow=true;});
   root.add(g);return g;
 }
+type CollisionRect={x:number;z:number;w:number;d:number};
+
+const PLAYER_RADIUS=.34;
+function pushWallRects(out:CollisionRect[],r:Room,side:WallSide,doorWidth=.95){
+  const hasDoor=doorSide(r.id)===side;
+  const isH=side==="north"||side==="south";
+  const edge=isH?r.z+(side==="north"?-1:1)*r.d/2:r.x+(side==="east"?1:-1)*r.w/2;
+  const span=isH?r.w:r.d;
+  const center=isH?r.x:r.z;
+  const thickness=.24;
+  if(hasDoor){
+    const gap=Math.max(doorWidth,.82);
+    const a1=center-span/2;
+    const b1=center-gap/2;
+    const a2=center+gap/2;
+    const b2=center+span/2;
+    if(b1>a1) out.push({x:isH?(a1+b1)/2:edge,z:isH?edge:(a1+b1)/2,w:isH?b1-a1:thickness,d:isH?thickness:b1-a1});
+    if(b2>a2) out.push({x:isH?(a2+b2)/2:edge,z:isH?edge:(a2+b2)/2,w:isH?b2-a2:thickness,d:isH?thickness:b2-a2});
+  }else{
+    out.push({x:isH?r.x:edge,z:isH?edge:r.z,w:isH?r.w:thickness,d:isH?thickness:r.d});
+  }
+}
+function buildCollisionRects():CollisionRect[]{
+  const out:CollisionRect[]=[];
+  // Outer shell of the reference plan.
+  out.push({x:-15.5,z:0,w:.3,d:18},{x:15.5,z:0,w:.3,d:18},{x:0,z:-9,w:31,d:.3},{x:0,z:9,w:31,d:.3});
+  rooms.forEach(r=>{
+    if(r.id==="qa") {
+      (["north","east","west"] as WallSide[]).forEach(side=>pushWallRects(out,r,side,1.25));
+    } else if(r.id==="reception"){
+      (["north","east","west"] as WallSide[]).forEach(side=>pushWallRects(out,r,side,.95));
+      // South side is the open main entrance.
+    } else {
+      (["north","south","east","west"] as WallSide[]).forEach(side=>pushWallRects(out,r,side,.95));
+    }
+  });
+  // Furniture collision: desks, shared QA benches, meeting/reception/kitchen counters.
+  [-12.2,-10.7,-9.2,-7.7].forEach(x=>[-6.0,-4.7].forEach(z=>out.push({x,z,w:1.45,d:.9})));
+  [[-6.4,-6],[-5.4,-4.7],[-3.5,-6],[-2.5,-4.7],[-.5,-6],[.5,-4.7],[3,-6],[4.4,-6],[3,-4.7],[4.4,-4.7],[7,-6],[8.4,-6],[7.7,-4.7]]
+    .forEach(([x,z])=>out.push({x,z,w:1.45,d:.9}));
+  [2.0,5.2,8.4].forEach(x=>out.push({x,z:3.35,w:1.45,d:7.1}));
+  out.push({x:-9.9,z:-.95,w:4.95,d:.55},{x:-9.9,z:.1,w:2.1,d:1.2});
+  out.push({x:-9.5,z:4.0,w:4.0,d:2.0});
+  out.push({x:-2.1,z:7.0,w:4.0,d:.85});
+  return out;
+}
+function resolvePlayerCollision(candidate:THREE.Vector3,rects:CollisionRect[],radius:number,axis:"x"|"z"):number|null{
+  let value=axis==="x"?candidate.x:candidate.z;
+  const other=axis==="x"?candidate.z:candidate.x;
+  for(const r of rects){
+    const minX=r.x-r.w/2-radius,maxX=r.x+r.w/2+radius;
+    const minZ=r.z-r.d/2-radius,maxZ=r.z+r.d/2+radius;
+    if(other>=minZ && other<=maxZ && value>=minX && value<=maxX){
+      value=axis==="x" ? (candidate.x<r.x? r.x-r.w/2-radius : r.x+r.w/2+radius)
+                       : (candidate.z<r.z? r.z-r.d/2-radius : r.z+r.d/2+radius);
+    }
+  }
+  return value=== (axis==="x"?candidate.x:candidate.z) ? null : value;
+}
+
 function buildScene(scene:THREE.Scene){
   scene.background=new THREE.Color("#1d2934");
   scene.fog=new THREE.Fog("#1d2934",25,55);
@@ -232,11 +314,44 @@ function buildScene(scene:THREE.Scene){
   return root;
 }
 
+function FloorPlanMap(){
+  return <div className={styles.floorMapWrap}>
+    <div className={styles.floorMapTitle}>REFERENCE LAYOUT / INTERACTIVE DIRECTORY</div>
+    <svg className={styles.floorMap} viewBox="0 0 1000 680" role="img" aria-label="AM Webtech reference office floor plan">
+      <rect x="10" y="10" width="980" height="650" rx="14" fill="#eef1f2" stroke="#87939d" strokeWidth="8"/>
+      <g stroke="#26313a" strokeWidth="6" fill="#f5f1e8">
+        <rect x="45" y="38" width="250" height="155"/><rect x="300" y="38" width="90" height="155"/>
+        <rect x="395" y="38" width="90" height="155"/><rect x="490" y="38" width="100" height="155"/>
+        <rect x="595" y="38" width="150" height="155"/><rect x="750" y="38" width="195" height="155"/>
+        <rect x="45" y="205" width="115" height="72"/><rect x="165" y="205" width="115" height="72"/>
+        <rect x="45" y="285" width="235" height="105"/><rect x="45" y="400" width="250" height="205"/>
+        <rect x="330" y="235" width="600" height="350" fill="#f4efd0"/>
+        <rect x="330" y="565" width="210" height="72" fill="#f0f3f3"/>
+      </g>
+      <g fill="#1d2934" fontFamily="Arial" fontWeight="700" fontSize="18" textAnchor="middle">
+        <text x="170" y="75">AUTOMATION TEAM</text><text x="345" y="75">HR</text><text x="440" y="75">SR HR</text>
+        <text x="540" y="75">MANAGER</text><text x="670" y="75">SALES TEAM</text><text x="848" y="75">DIRECTOR</text>
+        <text x="102" y="245">MALE</text><text x="222" y="245">FEMALE</text><text x="162" y="335">KITCHEN</text>
+        <text x="170" y="500">MEETING ROOM</text><text x="630" y="270">QA TEAM CABINS (OPEN)</text><text x="435" y="610">RECEPTION / ENTRY</text>
+      </g>
+      <g fill="#b9783e">
+        <rect x="75" y="110" width="190" height="50" rx="6"/><rect x="625" y="315" width="48" height="235" rx="6"/>
+        <rect x="725" y="315" width="48" height="235" rx="6"/><rect x="825" y="315" width="48" height="235" rx="6"/>
+        <rect x="95" y="440" width="150" height="75" rx="6"/>
+      </g>
+      <g fill="#25c77a"><circle cx="435" cy="610" r="16"/><path d="M435 585v-22m0 0-9 10m9-10 9 10" stroke="#25c77a" strokeWidth="7"/></g>
+      <g fill="#fff" fontFamily="Arial" fontSize="12" fontWeight="700"><text x="435" y="614" textAnchor="middle">ENTRY</text></g>
+    </svg>
+  </div>;
+}
+
 export const dynamic = "force-dynamic";
 export default function OfficeTourPage(){
   const canvasRef=useRef<HTMLCanvasElement|null>(null);
   const keysRef=useRef<Record<string,boolean>>({});
   const playerRef=useRef(new THREE.Vector3(-2.1,.35,8.1));
+  const playerVelocityRef=useRef(new THREE.Vector2());
+  const collisionRectsRef=useRef<any[]>([]);
   const [activeRoom,setActiveRoom]=useState("reception");
   const [activeNpc,setActiveNpc]=useState<Worker|null>(null);
   const [started,setStarted]=useState(false);
@@ -251,8 +366,10 @@ export default function OfficeTourPage(){
     renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
     const scene=new THREE.Scene();sceneRef.current=scene;
     buildScene(scene);
-    const camera=new THREE.PerspectiveCamera(48,1,.1,100);
-    camera.position.set(-2.1,18,22);
+    const collisionRects=buildCollisionRects();
+    collisionRectsRef.current=collisionRects;
+    const camera=new THREE.PerspectiveCamera(58,1,.1,100);
+    camera.position.set(-2.1,8.5,16);
     const player=playerRef.current;
     const workerObjects=scene.children.find(o=>o.type==="Group") as THREE.Group|undefined;
     workersRef.current=workerData.map((w,i)=>({...w,group:workerObjects?.children.find(c=>c instanceof THREE.Group && Math.abs(c.position.x-w.x)<.01 && Math.abs(c.position.z-w.z)<.01) as THREE.Group,phase:i*.55}));
@@ -266,8 +383,27 @@ export default function OfficeTourPage(){
     let raf=0,last=performance.now();
     const tick=(now:number)=>{
       const dt=Math.min((now-last)/1000,.04);last=now;
-      const k=keysRef.current;let dx=(k.d||k.arrowright?1:0)-(k.a||k.arrowleft?1:0);let dz=(k.s||k.arrowdown?1:0)-(k.w||k.arrowup?1:0);
-      if(dx||dz){const len=Math.hypot(dx,dz);dx/=len;dz/=len;player.x=THREE.MathUtils.clamp(player.x+dx*4.0*dt,-14.2,14.2);player.z=THREE.MathUtils.clamp(player.z+dz*4.0*dt,-8.25,8.25);setStarted(true);}
+      const k=keysRef.current;
+      const inputX=(k.d||k.arrowright?1:0)-(k.a||k.arrowleft?1:0);
+      const inputZ=(k.s||k.arrowdown?1:0)-(k.w||k.arrowup?1:0);
+      const inputLen=Math.hypot(inputX,inputZ);
+      const input=inputLen?new THREE.Vector2(inputX/inputLen,inputZ/inputLen):new THREE.Vector2();
+      const maxSpeed=3.55,acceleration=15.5,drag=inputLen?2.5:9.5;
+      const velocity=playerVelocityRef.current;
+      if(inputLen){
+        velocity.x=THREE.MathUtils.damp(velocity.x,input.x*maxSpeed,acceleration,dt);
+        velocity.y=THREE.MathUtils.damp(velocity.y,input.y*maxSpeed,acceleration,dt);
+        setStarted(true);
+      }else{
+        velocity.x=THREE.MathUtils.damp(velocity.x,0,drag,dt);
+        velocity.y=THREE.MathUtils.damp(velocity.y,0,drag,dt);
+      }
+      const nextX=player.x+velocity.x*dt;
+      const resolvedX=resolvePlayerCollision(new THREE.Vector3(nextX,player.y,player.z),collisionRects,PLAYER_RADIUS,"x");
+      if(resolvedX!==null){player.x=resolvedX;velocity.x=0;}else player.x=nextX;
+      const nextZ=player.z+velocity.y*dt;
+      const resolvedZ=resolvePlayerCollision(new THREE.Vector3(player.x,player.y,nextZ),collisionRects,PLAYER_RADIUS,"z");
+      if(resolvedZ!==null){player.z=resolvedZ;velocity.y=0;}else player.z=nextZ;
       const r=rooms.find(q=>player.x>=q.x-q.w/2&&player.x<=q.x+q.w/2&&player.z>=q.z-q.d/2&&player.z<=q.z+q.d/2);
       if(r)setActiveRoom(prev=>prev===r.id?prev:r.id);
       workersRef.current.forEach((w)=>{
@@ -306,15 +442,14 @@ export default function OfficeTourPage(){
         visitor.position.z=player.z;
         if(dx||dz)visitor.rotation.y=Math.atan2(dx,dz);
       }
-      const target=new THREE.Vector3(player.x,0,player.z);
-      const desired=new THREE.Vector3(player.x,10.5,player.z+13);
-      camera.position.lerp(desired,1-Math.pow(.001,dt));
-      camera.lookAt(new THREE.Vector3(player.x,.55,player.z));
+      const desired=new THREE.Vector3(player.x,7.6,player.z+8.4);
+      camera.position.lerp(desired,1-Math.pow(.0007,dt));
+      camera.lookAt(new THREE.Vector3(player.x,.45,player.z));
       renderer.render(scene,camera);
       raf=requestAnimationFrame(tick);
     };
     raf=requestAnimationFrame(tick);
-    return()=>{cancelAnimationFrame(raf);window.removeEventListener("resize",resize);window.removeEventListener("keydown",onKey);window.removeEventListener("keyup",onUp);renderer.dispose();scene.clear();sceneRef.current=null;};
+    return()=>{cancelAnimationFrame(raf);window.removeEventListener("resize",resize);window.removeEventListener("keydown",onKey);window.removeEventListener("keyup",onUp);renderer.dispose();scene.clear();sceneRef.current=null;playerVelocityRef.current.set(0,0);collisionRectsRef.current=[];};
   },[]);
 
   const teleport=(room:Room)=>{playerRef.current.set(room.x, .35, room.z);setActiveRoom(room.id);setMapOpen(false);setStarted(true);};
@@ -344,7 +479,7 @@ export default function OfficeTourPage(){
         <button type="button" aria-label="Move down" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);keysRef.current.s=true;setStarted(true)}} onPointerUp={e=>{keysRef.current.s=false}} onPointerCancel={()=>keysRef.current.s=false}><ChevronDown/></button>
         <button type="button" aria-label="Move right" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);keysRef.current.d=true;setStarted(true)}} onPointerUp={e=>{keysRef.current.d=false}} onPointerCancel={()=>keysRef.current.d=false}><ChevronRight/></button>
       </div>
-      {mapOpen&&<div className={styles.mapPanel}><div className={styles.mapHead}><div><b>OFFICE DIRECTORY</b><span>Select a destination.</span></div><button type="button" onClick={()=>setMapOpen(false)}><X/></button></div><div className={styles.mapGrid}>{rooms.map(r=><button key={r.id} type="button" onClick={()=>teleport(r)}><MapPin size={15}/><span>{r.name}</span><small>{r.subtitle}</small></button>)}</div></div>}
+      {mapOpen&&<div className={styles.mapPanel}><div className={styles.mapHead}><div><b>OFFICE DIRECTORY</b><span>Select a destination.</span></div><button type="button" onClick={()=>setMapOpen(false)}><X/></button></div><FloorPlanMap/><div className={styles.mapGrid}>{rooms.map(r=><button key={r.id} type="button" onClick={()=>teleport(r)}><MapPin size={15}/><span>{r.name}</span><small>{r.subtitle}</small></button>)}</div></div>}
       {activeNpc&&<div className={styles.npcCard}><button type="button" onClick={()=>setActiveNpc(null)}><X size={15}/></button><div className={styles.npcAvatar}><Users size={23}/></div><p>AM WEBTECH / WORKSTATION</p><h2>{activeNpc.title}</h2><span>Seated • Working on PC</span><small>{roomById(activeNpc.room)?.name||"the office"} · Active workstation</small></div>}
       <div className={styles.tip}><MousePointer2 size={14}/> True 3D perspective · employees remain seated at PCs · <b>E</b> inspects nearby work.</div>
     </section>
