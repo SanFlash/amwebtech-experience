@@ -250,24 +250,44 @@ function buildCollisionRects():CollisionRect[]{
   const out:CollisionRect[]=[];
   // Outer shell of the reference plan.
   out.push({x:-15.5,z:0,w:.3,d:18},{x:15.5,z:0,w:.3,d:18},{x:0,z:-9,w:31,d:.3},{x:0,z:9,w:31,d:.3});
+
   rooms.forEach(r=>{
-    if(r.id==="qa") {
-      (["north","east","west"] as WallSide[]).forEach(side=>pushWallRects(out,r,side,1.25));
+    if(r.id==="qa"){
+      // The QA floor is intentionally open at the south-west entry.
+      // The player exits reception and enters the open QA floor through this aisle.
+      pushWallRects(out,r,"north",1.25);
+      pushWallRects(out,r,"east",1.25);
+      const westX=r.x-r.w/2;
+      const westZ=r.z;
+      const wallD=r.d;
+      const entranceCenter=5.15;
+      const entranceWidth=2.0;
+      const gapStart=entranceCenter-entranceWidth/2;
+      const gapEnd=entranceCenter+entranceWidth/2;
+      const lowerEnd=westZ-wallD/2;
+      const upperStart=westZ+wallD/2;
+      if(gapStart>lowerEnd) out.push({x:westX,z:(lowerEnd+gapStart)/2,w:.24,d:gapStart-lowerEnd});
+      if(upperStart>gapEnd) out.push({x:westX,z:(gapEnd+upperStart)/2,w:.24,d:upperStart-gapEnd});
     } else if(r.id==="reception"){
-      (["north","east","west"] as WallSide[]).forEach(side=>pushWallRects(out,r,side,.95));
-      // South side is the open main entrance.
+      // Reception is a lobby, not a sealed room. Keep its side walls but
+      // leave the north side open so the avatar can naturally walk into QA.
+      pushWallRects(out,r,"east",.95);
+      pushWallRects(out,r,"west",.95);
+      // South remains the main entry.
     } else {
       (["north","south","east","west"] as WallSide[]).forEach(side=>pushWallRects(out,r,side,.95));
     }
   });
-  // Furniture collision: desks, shared QA benches, meeting/reception/kitchen counters.
+
+  // Furniture collision: keep real workstations solid, but do NOT block the
+  // reception lobby with its decorative front desk. The visible desk remains
+  // unchanged; this is intentionally an interaction/entry corridor.
   [-12.2,-10.7,-9.2,-7.7].forEach(x=>[-6.0,-4.7].forEach(z=>out.push({x,z,w:1.45,d:.9})));
   [[-6.4,-6],[-5.4,-4.7],[-3.5,-6],[-2.5,-4.7],[-.5,-6],[.5,-4.7],[3,-6],[4.4,-6],[3,-4.7],[4.4,-4.7],[7,-6],[8.4,-6],[7.7,-4.7]]
     .forEach(([x,z])=>out.push({x,z,w:1.45,d:.9}));
   [2.0,5.2,8.4].forEach(x=>out.push({x,z:3.35,w:1.45,d:7.1}));
   out.push({x:-9.9,z:-.95,w:4.95,d:.55},{x:-9.9,z:.1,w:2.1,d:1.2});
   out.push({x:-9.5,z:4.0,w:4.0,d:2.0});
-  out.push({x:-2.1,z:7.0,w:4.0,d:.85});
   return out;
 }
 function resolvePlayerCollision(candidate:THREE.Vector3,rects:CollisionRect[],radius:number,axis:"x"|"z"):number|null{
