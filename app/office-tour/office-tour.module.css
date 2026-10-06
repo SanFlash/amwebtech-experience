@@ -285,3 +285,31 @@
 @media(prefers-reduced-motion:reduce){
   .mobilePad button:active{transform:none}
 }
+
+
+/* REFERENCE FLOOR PLAN + WALKTHROUGH PHYSICS UI */
+.floorMapWrap{
+  margin-top:14px;
+  border:1px solid rgba(255,122,0,.28);
+  border-radius:12px;
+  padding:10px;
+  background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(0,87,184,.08));
+}
+.floorMapTitle{
+  font:700 8px "DM Mono",monospace;
+  letter-spacing:.12em;
+  color:#ff7a00;
+  margin:2px 2px 8px;
+}
+.floorMap{
+  display:block;
+  width:100%;
+  height:auto;
+  border-radius:8px;
+  background:#dfe5e8;
+}
+.mapPanel .floorMap + .mapGrid{margin-top:12px}
+@media(max-width:800px){
+  .floorMapWrap{padding:7px}
+  .floorMapTitle{font-size:7px}
+}
