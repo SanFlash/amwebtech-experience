@@ -170,58 +170,84 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const isTouch = window.matchMedia("(pointer: coarse)").matches;
-    const lenis = (!isTouch && !reduceMotion) ? new Lenis({ autoRaf: true, lerp: 0.085, smoothWheel: true }) : null;
-    if (lenis) lenis.on("scroll", ScrollTrigger.update);
+    let ctx: gsap.Context | null = null;
+    let lenis: Lenis | null = null;
+    let mm: ReturnType<typeof gsap.matchMedia> | null = null;
 
-    const ctx = gsap.context(() => {
-      if (reduceMotion) {
-        gsap.set(".reveal", { opacity: 1, y: 0 });
-        return;
+    try {
+      const reduceMotion = typeof window !== "undefined" &&
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const isTouch = typeof window !== "undefined" &&
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(pointer: coarse)").matches;
+
+      if (!reduceMotion && !isTouch) {
+        try {
+          lenis = new Lenis({ autoRaf: true, lerp: 0.085, smoothWheel: true });
+          lenis.on("scroll", ScrollTrigger.update);
+        } catch (error) {
+          console.warn("Lenis enhancement disabled:", error);
+          lenis = null;
+        }
       }
 
-      gsap.from(".hero-kicker", { y:24, opacity:0, duration:.8, delay:.12 });
-      gsap.from(".hero-title span", { y:90, opacity:0, duration:1, stagger:.1, ease:"power4.out", delay:.18 });
-      gsap.from(".hero-copy", { y:25, opacity:0, duration:.8, delay:.6 });
-      gsap.from(".hero-actions", { y:25, opacity:0, duration:.8, delay:.75 });
+      ctx = gsap.context(() => {
+        if (reduceMotion) {
+          gsap.set(".reveal", { opacity: 1, y: 0 });
+          return;
+        }
 
-      gsap.utils.toArray<HTMLElement>(".reveal").forEach((el) => gsap.from(el, {
-        y:48, opacity:0, duration:.85, ease:"power3.out",
-        scrollTrigger:{ trigger:el, start:"top 88%", once:true }
-      }));
+        gsap.from(".hero-kicker", { y:24, opacity:0, duration:.8, delay:.12 });
+        gsap.from(".hero-title span", { y:90, opacity:0, duration:1, stagger:.1, ease:"power4.out", delay:.18 });
+        gsap.from(".hero-copy", { y:25, opacity:0, duration:.8, delay:.6 });
+        gsap.from(".hero-actions", { y:25, opacity:0, duration:.8, delay:.75 });
 
-      gsap.utils.toArray<HTMLElement>(".case-card").forEach((el, i) => gsap.from(el, {
-        x: i % 2 ? 45 : -45, opacity:0, duration:.8, ease:"power3.out",
-        scrollTrigger:{ trigger:el, start:"top 88%", once:true }
-      }));
+        gsap.utils.toArray<HTMLElement>(".reveal").forEach((el) => gsap.from(el, {
+          y:48, opacity:0, duration:.85, ease:"power3.out",
+          scrollTrigger:{ trigger:el, start:"top 88%", once:true }
+        }));
 
-      const mm = gsap.matchMedia();
-      mm.add("(min-width: 901px)", () => {
-        gsap.to(".orb", { y:-80, rotate:22, ease:"none", scrollTrigger:{ trigger:".hero", scrub:1 } });
-        gsap.utils.toArray<HTMLElement>(".parallax").forEach((el) => gsap.to(el, { yPercent:-8, ease:"none", scrollTrigger:{ trigger:el, scrub:1 } }));
-        gsap.utils.toArray<HTMLElement>(".qa-system-scan").forEach((el) => gsap.to(el, {
-          xPercent:28, ease:"none", scrollTrigger:{ trigger:el.closest(".qa-visual-system"), start:"top bottom", end:"bottom top", scrub:1.2 }
+        gsap.utils.toArray<HTMLElement>(".case-card").forEach((el, i) => gsap.from(el, {
+          x: i % 2 ? 45 : -45, opacity:0, duration:.8, ease:"power3.out",
+          scrollTrigger:{ trigger:el, start:"top 88%", once:true }
         }));
-        gsap.utils.toArray<HTMLElement>(".qa-pipeline-node").forEach((el, i) => gsap.from(el, {
-          y:35, opacity:0, scale:.92, duration:.65, delay:i*.08, ease:"back.out(1.6)",
-          scrollTrigger:{ trigger:el.closest(".qa-visual-system"), start:"top 76%", once:true }
-        }));
-        gsap.utils.toArray<HTMLElement>(".qa-device").forEach((el, i) => gsap.from(el, {
-          y:35, rotateY:i % 2 ? -8 : 8, opacity:0, duration:.7, delay:i*.07, ease:"power3.out",
-          scrollTrigger:{ trigger:el.closest(".qa-visual-system"), start:"top 76%", once:true }
-        }));
-      });
-      mm.add("(max-width: 900px)", () => {
-        gsap.utils.toArray<HTMLElement>(".qa-pipeline-node, .qa-device").forEach((el, i) => gsap.from(el, {
-          y:18, opacity:0, duration:.5, delay:i*.04, ease:"power2.out",
-          scrollTrigger:{ trigger:el.closest(".qa-visual-system"), start:"top 82%", once:true }
-        }));
-      });
-      return () => mm.revert();
-    }, root);
 
-    return () => { ctx.revert(); if (lenis) lenis.destroy(); };
+        mm = gsap.matchMedia();
+        mm.add("(min-width: 901px)", () => {
+          gsap.to(".orb", { y:-80, rotate:22, ease:"none", scrollTrigger:{ trigger:".hero", scrub:1 } });
+          gsap.utils.toArray<HTMLElement>(".parallax").forEach((el) => gsap.to(el, {
+            yPercent:-8, ease:"none", scrollTrigger:{ trigger:el, scrub:1 }
+          }));
+          gsap.utils.toArray<HTMLElement>(".qa-system-scan").forEach((el) => gsap.to(el, {
+            xPercent:28, ease:"none",
+            scrollTrigger:{ trigger:el.closest(".qa-visual-system") || el, start:"top bottom", end:"bottom top", scrub:1.2 }
+          }));
+          gsap.utils.toArray<HTMLElement>(".qa-pipeline-node").forEach((el, i) => gsap.from(el, {
+            y:35, opacity:0, scale:.92, duration:.65, delay:i*.08, ease:"back.out(1.6)",
+            scrollTrigger:{ trigger:el.closest(".qa-visual-system") || el, start:"top 76%", once:true }
+          }));
+          gsap.utils.toArray<HTMLElement>(".qa-device").forEach((el, i) => gsap.from(el, {
+            y:35, rotateY:i % 2 ? -8 : 8, opacity:0, duration:.7, delay:i*.07, ease:"power3.out",
+            scrollTrigger:{ trigger:el.closest(".qa-visual-system") || el, start:"top 76%", once:true }
+          }));
+        });
+        mm.add("(max-width: 900px)", () => {
+          gsap.utils.toArray<HTMLElement>(".qa-pipeline-node, .qa-device").forEach((el, i) => gsap.from(el, {
+            y:18, opacity:0, duration:.5, delay:i*.04, ease:"power2.out",
+            scrollTrigger:{ trigger:el.closest(".qa-visual-system") || el, start:"top 82%", once:true }
+          }));
+        });
+      }, root);
+    } catch (error) {
+      console.error("Homepage animation enhancement failed:", error);
+    }
+
+    return () => {
+      try { if (ctx) ctx.revert(); } catch (error) { console.warn("GSAP cleanup skipped:", error); }
+      try { if (mm) mm.revert(); } catch (error) { console.warn("GSAP media cleanup skipped:", error); }
+      try { if (lenis) lenis.destroy(); } catch (error) { console.warn("Lenis cleanup skipped:", error); }
+    };
   }, []);
 
   return (
