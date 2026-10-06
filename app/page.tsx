@@ -92,12 +92,13 @@ function QAVisual3D({ variant }: { variant: "hero" | "automation" | "labs" }) {
     automation: { label:"AUTOMATION PIPELINE", title:"AUTO QA", sub:"FRAMEWORK → EXECUTION → QUALITY GATE", icon:Workflow, chips:["450 TESTS","94% PASS","CI READY"] },
     labs: { label:"DEVICE MATRIX", title:"QA LAB", sub:"REAL DEVICES → SCENARIOS → RELEASE SIGNALS", icon:Smartphone, chips:["iOS","ANDROID","REAL DEVICES"] },
   };
-  const Icon: LucideIcon = variant === "hero" ? MonitorCheck : variant === "automation" ? Workflow : Smartphone;
+  const config = configs[variant];
+  const Icon: LucideIcon = config.icon;
   return (
-    <div className={`qa-visual-system qa-system-${variant}`} aria-label={configs.label}>
+    <div className={`qa-visual-system qa-system-${variant}`} aria-label={config.label}>
       <div className="qa-system-grid"/>
       <div className="qa-system-scan"/>
-      <div className="qa-system-head"><span><i/> AM / QUALITY ENGINEERING</span><b>{configs.label}</b></div>
+      <div className="qa-system-head"><span><i/> AM / QUALITY ENGINEERING</span><b>{config.label}</b></div>
 
       {variant === "hero" && (
         <div className="qa-release-console">
@@ -141,8 +142,8 @@ function QAVisual3D({ variant }: { variant: "hero" | "automation" | "labs" }) {
         </div>
       )}
 
-      <div className="qa-system-core"><div className="qa-core-icon"><Icon size={23}/></div><strong>{configs.title}</strong><span>{configs.sub}</span></div>
-      <div className="qa-system-chips">{configs.chips.map((chip,i)=><span className={i === 1 ? "active" : ""} key={chip}>{chip}</span>)}</div>
+      <div className="qa-system-core"><div className="qa-core-icon"><Icon size={23}/></div><strong>{config.title}</strong><span>{config.sub}</span></div>
+      <div className="qa-system-chips">{config.chips.map((chip,i)=><span className={i === 1 ? "active" : ""} key={chip}>{chip}</span>)}</div>
       <div className="qa-system-corner">01 / 04<br/><b>OBSERVE → VALIDATE → SHIP</b></div>
     </div>
   );
