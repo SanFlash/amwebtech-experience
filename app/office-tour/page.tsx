@@ -305,21 +305,101 @@ function resolvePlayerCollision(candidate:THREE.Vector3,rects:CollisionRect[],ra
 }
 
 function addAvatar(parent:THREE.Group, color:string, scale=1){
+  // Procedural AAA-inspired game NPC.  No external models/textures are required,
+  // which keeps the tour deterministic and deploy-safe.
   const avatar=new THREE.Group();
-  const skin=makeMat("#e5ad87",.8), shirt=makeMat(color,.72), pants=makeMat("#263341",.8);
-  const shadow=new THREE.Mesh(new THREE.CircleGeometry(.34*scale,18),new THREE.MeshBasicMaterial({color:"#000",transparent:true,opacity:.16}));
-  shadow.rotation.x=-Math.PI/2; shadow.position.y=.02; avatar.add(shadow);
-  const legs=new THREE.Mesh(new THREE.BoxGeometry(.22*scale,.48*scale,.20*scale),pants); legs.position.set(-.12*scale,.30*scale,0); avatar.add(legs);
-  const leg2=legs.clone(); leg2.position.x=.12*scale; avatar.add(leg2);
-  const torso=new THREE.Mesh(new THREE.BoxGeometry(.52*scale,.62*scale,.34*scale),shirt); torso.position.y=.78*scale; avatar.add(torso);
-  const head=new THREE.Mesh(new THREE.SphereGeometry(.24*scale,18,14),skin); head.position.y=1.25*scale; avatar.add(head);
-  const hair=new THREE.Mesh(new THREE.SphereGeometry(.245*scale,18,10,0,Math.PI*2,0,Math.PI*.55),makeMat("#20252b",.85)); hair.position.y=1.34*scale; avatar.add(hair);
-  const arm=new THREE.Mesh(new THREE.BoxGeometry(.12*scale,.46*scale,.12*scale),skin); arm.position.set(-.36*scale,.77*scale,.02); arm.rotation.z=-.18; avatar.add(arm);
-  const arm2=arm.clone(); arm2.position.x=.36*scale; arm2.rotation.z=.18; avatar.add(arm2);
-  avatar.traverse(o=>{if(o instanceof THREE.Mesh)o.castShadow=true;});
-  parent.add(avatar); return avatar;
-}
+  avatar.name="avatar";
+  const skin=makeMat("#c98f6b",.72);
+  const shirt=makeMat(color,.62);
+  const pants=makeMat("#17222d",.78);
+  const shoe=makeMat("#0d1218",.68);
+  const hairMat=makeMat("#1b2026",.9);
+  const white=makeMat("#f4f7fa",.45);
+  const eyeMat=makeMat("#101820",.2);
+  const metal=makeMat("#66737d",.28,.55);
 
+  const shadow=new THREE.Mesh(
+    new THREE.CircleGeometry(.36*scale,24),
+    new THREE.MeshBasicMaterial({color:"#000",transparent:true,opacity:.20})
+  );
+  shadow.name="shadow"; shadow.rotation.x=-Math.PI/2; shadow.position.y=.018; avatar.add(shadow);
+
+  const pelvis=new THREE.Group(); pelvis.name="pelvis"; pelvis.position.y=.66*scale; avatar.add(pelvis);
+  const torso=new THREE.Group(); torso.name="torso"; torso.position.y=.88*scale; avatar.add(torso);
+  const chest=new THREE.Mesh(new THREE.CapsuleGeometry(.29*scale,.48*scale,6,14),shirt);
+  chest.name="chest"; chest.scale.z=.72; torso.add(chest);
+
+  // Shirt collar + subtle ID badge make the NPC read as an office employee.
+  const collar=new THREE.Mesh(new THREE.TorusGeometry(.16*scale,.025*scale,6,16,Math.PI*1.25),white);
+  collar.name="collar"; collar.rotation.x=Math.PI/2; collar.position.set(0,.22*scale,.205*scale); torso.add(collar);
+  const badge=new THREE.Mesh(new THREE.BoxGeometry(.11*scale,.14*scale,.018*scale),white);
+  badge.position.set(.13*scale,.03*scale,.22*scale); torso.add(badge);
+  const badgeClip=new THREE.Mesh(new THREE.BoxGeometry(.055*scale,.025*scale,.025*scale),metal);
+  badgeClip.position.set(.13*scale,.12*scale,.23*scale); torso.add(badgeClip);
+
+  const neck=new THREE.Mesh(new THREE.CylinderGeometry(.105*scale,.12*scale,.16*scale,12),skin);
+  neck.position.y=1.18*scale; avatar.add(neck);
+
+  const head=new THREE.Group(); head.name="head"; head.position.y=1.43*scale; avatar.add(head);
+  const face=new THREE.Mesh(new THREE.SphereGeometry(.285*scale,20,16),skin);
+  face.scale.set(.92,1.05,.92); head.add(face);
+
+  // Hair cap + side locks.
+  const hair=new THREE.Mesh(new THREE.SphereGeometry(.292*scale,20,12,0,Math.PI*2,0,Math.PI*.58),hairMat);
+  hair.position.y=.075*scale; head.add(hair);
+  [-1,1].forEach(side=>{
+    const lock=new THREE.Mesh(new THREE.SphereGeometry(.075*scale,10,8),hairMat);
+    lock.scale.set(.65,1.35,.72); lock.position.set(side*.245*scale,.005*scale,.01); head.add(lock);
+  });
+
+  // Eyes, brows and nose give the character a readable face at close range.
+  [-1,1].forEach(side=>{
+    const eye=new THREE.Mesh(new THREE.SphereGeometry(.032*scale,10,8),white);
+    eye.position.set(side*.095*scale,.02*scale,.262*scale); head.add(eye);
+    const pupil=new THREE.Mesh(new THREE.SphereGeometry(.014*scale,8,6),eyeMat);
+    pupil.position.set(side*.095*scale,.02*scale,.291*scale); head.add(pupil);
+    const brow=new THREE.Mesh(new THREE.BoxGeometry(.085*scale,.018*scale,.018*scale),hairMat);
+    brow.position.set(side*.095*scale,.105*scale,.255*scale);
+    brow.rotation.z=side*.08; head.add(brow);
+  });
+  const nose=new THREE.Mesh(new THREE.ConeGeometry(.045*scale,.12*scale,8),skin);
+  nose.rotation.x=Math.PI/2; nose.position.set(0,-.005*scale,.285*scale); head.add(nose);
+
+  const makeLimb=(name:string,side:number)=>{
+    const arm=new THREE.Group(); arm.name=name;
+    arm.position.set(side*.34*scale,.97*scale,.01); avatar.add(arm);
+    const upper=new THREE.Mesh(new THREE.CapsuleGeometry(.075*scale,.31*scale,5,8),shirt);
+    upper.name="upper"; upper.position.y=-.14*scale; arm.add(upper);
+    const fore=new THREE.Mesh(new THREE.CapsuleGeometry(.065*scale,.27*scale,5,8),skin);
+    fore.name="forearm"; fore.position.y=-.42*scale; arm.add(fore);
+    const hand=new THREE.Mesh(new THREE.SphereGeometry(.075*scale,10,8),skin);
+    hand.name="hand"; hand.position.y=-.59*scale; arm.add(hand);
+    arm.rotation.z=side*.08;
+    return arm;
+  };
+  const armL=makeLimb("armL",-1), armR=makeLimb("armR",1);
+
+  const makeLeg=(name:string,side:number)=>{
+    const leg=new THREE.Group(); leg.name=name;
+    leg.position.set(side*.13*scale,.63*scale,.01); avatar.add(leg);
+    const thigh=new THREE.Mesh(new THREE.CapsuleGeometry(.09*scale,.34*scale,5,8),pants);
+    thigh.name="thigh"; thigh.position.y=-.18*scale; leg.add(thigh);
+    const shin=new THREE.Mesh(new THREE.CapsuleGeometry(.075*scale,.34*scale,5,8),pants);
+    shin.name="shin"; shin.position.y=-.51*scale; leg.add(shin);
+    const foot=new THREE.Mesh(new THREE.BoxGeometry(.17*scale,.10*scale,.34*scale),shoe);
+    foot.name="foot"; foot.position.set(0,-.72*scale,.075*scale); leg.add(foot);
+    return leg;
+  };
+  const legL=makeLeg("legL",-1), legR=makeLeg("legR",1);
+
+  // Desk-worker posture: seated staff keep their feet under the desk and lean
+  // slightly toward their workstation; roaming NPCs keep the full standing rig.
+  avatar.userData.parts={torso,head,armL,armR,legL,legR};
+  avatar.userData.baseRot={armL:armL.rotation.z,armR:armR.rotation.z};
+  avatar.traverse(o=>{if(o instanceof THREE.Mesh){o.castShadow=true;o.receiveShadow=true;}});
+  parent.add(avatar);
+  return avatar;
+}
 function buildScene(scene:THREE.Scene){
   // Deliberately uses only core Three.js primitives so the walkthrough remains
   // visible even when optional browser/WebGL features are unavailable.
@@ -360,6 +440,7 @@ function buildScene(scene:THREE.Scene){
     const g=new THREE.Group();
     const body=addAvatar(g,d.color,.72);
     body.position.y=.02;
+    body.userData.seated=true;
     if(d.room==="qa"){
       const q=i-21, side=q%2===0?-.98:.98;
       g.position.set(d.x+side,.0,d.z);
@@ -519,8 +600,26 @@ export default function OfficeTourPage(){
           w.group.rotation.y=Math.sin(now*.002+w.phase)*.035;
         }
         const avatar=w.group.children[0] as THREE.Group|undefined;
-        const torso=avatar?.children[3] as THREE.Object3D|undefined;
-        if(torso)torso.rotation.z=Math.sin(now*.004+w.phase)*.012;
+        const parts=avatar?.userData.parts as any;
+        if(parts){
+          const walking=!!w.roam;
+          const stride=Math.sin(now*.011+w.phase);
+          if(walking){
+            parts.armL.rotation.x=stride*.38;
+            parts.armR.rotation.x=-stride*.38;
+            parts.legL.rotation.x=-stride*.48;
+            parts.legR.rotation.x=stride*.48;
+            parts.torso.rotation.z=Math.sin(now*.006+w.phase)*.018;
+          }else{
+            // Natural seated micro-movements: typing/looking at the monitor.
+            parts.armL.rotation.x=-1.02+Math.sin(now*.004+w.phase)*.035;
+            parts.armR.rotation.x=-1.02+Math.sin(now*.004+w.phase+1.4)*.035;
+            parts.legL.rotation.x=-.28;
+            parts.legR.rotation.x=-.28;
+            parts.torso.rotation.z=Math.sin(now*.0025+w.phase)*.012;
+            parts.head.rotation.y=Math.sin(now*.0018+w.phase)*.055;
+          }
+        }
       });
       const visitor=workerObjects?.getObjectByName("visitor");
       if(visitor){
