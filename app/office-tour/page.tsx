@@ -663,6 +663,11 @@ export default function OfficeTourPage(){
     raf=requestAnimationFrame(tick);
     safeRaf=raf;
     return()=>{disposed=true;cancelAnimationFrame(raf);canvas.removeEventListener("webglcontextlost",onContextLost as EventListener);window.removeEventListener("resize",resize);window.removeEventListener("keydown",onKey);window.removeEventListener("keyup",onUp);renderer.dispose();scene.clear();sceneRef.current=null;playerVelocityRef.current.set(0,0);collisionRectsRef.current=[];startedRef.current=false;};
+    } catch(error) {
+      console.error("Office Tour initialization failed:",error);
+      safeFailed=true;
+      setTourError("3D rendering could not start on this device. The office map remains available.");
+    }
   },[]);
 
   const destinationFor=(room:Room):[number,number]=>{
