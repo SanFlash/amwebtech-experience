@@ -378,7 +378,7 @@ function addAvatar(parent:THREE.Group, color:string, scale=1, isPlayer=false){
   });
   parent.add(avatar); return avatar;
 }
-function buildScene(scene:THREE.Scene){
+function buildScene(scene:THREE.Scene,coarse=false){
   // Deliberately uses only core Three.js primitives so the walkthrough remains
   // visible even when optional browser/WebGL features are unavailable.
   scene.background=new THREE.Color("#aab6c0");
@@ -517,7 +517,7 @@ export default function OfficeTourPage(){
     renderer.shadowMap.enabled=true;
     renderer.shadowMap.type=THREE.PCFSoftShadowMap;
     const scene=new THREE.Scene();sceneRef.current=scene;
-    buildScene(scene);
+    buildScene(scene,coarse);
     const collisionRects=buildCollisionRects();
     collisionRectsRef.current=collisionRects;
     const camera=new THREE.PerspectiveCamera(58,1,.1,100);
