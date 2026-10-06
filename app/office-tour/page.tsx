@@ -393,6 +393,7 @@ export default function OfficeTourPage(){
   const playerRef=useRef(new THREE.Vector3(-2.1,.35,8.1));
   const playerVelocityRef=useRef(new THREE.Vector2());
   const collisionRectsRef=useRef<any[]>([]);
+  const startedRef=useRef(false);
   const [activeRoom,setActiveRoom]=useState("reception");
   const [activeNpc,setActiveNpc]=useState<Worker|null>(null);
   const [started,setStarted]=useState(false);
@@ -415,9 +416,13 @@ export default function OfficeTourPage(){
     const workerObjects=scene.getObjectByName("office-root") as THREE.Group|undefined;
     workersRef.current=workerData.map((w,i)=>({...w,group:workerObjects?.children.find(c=>c instanceof THREE.Group && c.userData.workerIndex===i) as THREE.Group,phase:i*.55}));
     const resize=()=>{const r=canvas.getBoundingClientRect();renderer.setSize(Math.max(1,r.width),Math.max(1,r.height),false);camera.aspect=Math.max(1,r.width)/Math.max(1,r.height);camera.updateProjectionMatrix();};
+    const cameraTarget=new THREE.Vector3();
+    const cameraDesired=new THREE.Vector3();
+    const collisionCandidate=new THREE.Vector3();
+    let activeRoomId="";
     resize();window.addEventListener("resize",resize);
 
-    const onKey=(e:KeyboardEvent)=>{if(["INPUT","TEXTAREA","BUTTON"].includes((e.target as HTMLElement)?.tagName))return;const k=e.key.toLowerCase();if(["w","a","s","d","arrowup","arrowdown","arrowleft","arrowright","e","m"].includes(k)){e.preventDefault();keysRef.current[k]=true;setStarted(true);if(k==="m")setMapOpen(v=>!v);}};
+    const onKey=(e:KeyboardEvent)=>{if(["INPUT","TEXTAREA","BUTTON"].includes((e.target as HTMLElement)?.tagName))return;const k=e.key.toLowerCase();if(["w","a","s","d","arrowup","arrowdown","arrowleft","arrowright","e","m"].includes(k)){e.preventDefault();keysRef.current[k]=true;if(!startedRef.current){startedRef.current=true;setStarted(true);}if(k==="m")setMapOpen(v=>!v);}};
     const onUp=(e:KeyboardEvent)=>{keysRef.current[e.key.toLowerCase()]=false;};
     window.addEventListener("keydown",onKey);window.addEventListener("keyup",onUp);
 
@@ -434,19 +439,21 @@ export default function OfficeTourPage(){
       if(inputLen){
         velocity.x=dampNumber(velocity.x,input.x*maxSpeed,acceleration,dt);
         velocity.y=dampNumber(velocity.y,input.y*maxSpeed,acceleration,dt);
-        setStarted(true);
+        if(!startedRef.current){startedRef.current=true;setStarted(true);}
       }else{
         velocity.x=dampNumber(velocity.x,0,drag,dt);
         velocity.y=dampNumber(velocity.y,0,drag,dt);
       }
       const nextX=player.x+velocity.x*dt;
-      const resolvedX=resolvePlayerCollision(new THREE.Vector3(nextX,player.y,player.z),collisionRects,PLAYER_RADIUS,"x");
+      collisionCandidate.set(nextX,player.y,player.z);
+      const resolvedX=resolvePlayerCollision(collisionCandidate,collisionRects,PLAYER_RADIUS,"x");
       if(resolvedX!==null){player.x=resolvedX;velocity.x=0;}else player.x=nextX;
       const nextZ=player.z+velocity.y*dt;
-      const resolvedZ=resolvePlayerCollision(new THREE.Vector3(player.x,player.y,nextZ),collisionRects,PLAYER_RADIUS,"z");
+      collisionCandidate.set(player.x,player.y,nextZ);
+      const resolvedZ=resolvePlayerCollision(collisionCandidate,collisionRects,PLAYER_RADIUS,"z");
       if(resolvedZ!==null){player.z=resolvedZ;velocity.y=0;}else player.z=nextZ;
       const r=rooms.find(q=>player.x>=q.x-q.w/2&&player.x<=q.x+q.w/2&&player.z>=q.z-q.d/2&&player.z<=q.z+q.d/2);
-      if(r)setActiveRoom(prev=>prev===r.id?prev:r.id);
+      if(r && activeRoomId!==r.id){activeRoomId=r.id;setActiveRoom(r.id);}
       workersRef.current.forEach((w)=>{
         if(!w.group)return;
         if(w.roam){
@@ -477,14 +484,15 @@ export default function OfficeTourPage(){
         visitor.position.z=player.z;
         if(inputLen)visitor.rotation.y=Math.atan2(input.x,input.y);
       }
-      const desired=new THREE.Vector3(player.x,7.6,player.z+8.4);
-      camera.position.lerp(desired,1-Math.pow(.0007,dt));
-      camera.lookAt(new THREE.Vector3(player.x,.45,player.z));
+      cameraDesired.set(player.x,7.6,player.z+8.4);
+      camera.position.lerp(cameraDesired,1-Math.pow(.0007,dt));
+      cameraTarget.set(player.x,.45,player.z);
+      camera.lookAt(cameraTarget);
       renderer.render(scene,camera);
       raf=requestAnimationFrame(tick);
     };
     raf=requestAnimationFrame(tick);
-    return()=>{cancelAnimationFrame(raf);window.removeEventListener("resize",resize);window.removeEventListener("keydown",onKey);window.removeEventListener("keyup",onUp);renderer.dispose();scene.clear();sceneRef.current=null;playerVelocityRef.current.set(0,0);collisionRectsRef.current=[];};
+    return()=>{cancelAnimationFrame(raf);window.removeEventListener("resize",resize);window.removeEventListener("keydown",onKey);window.removeEventListener("keyup",onUp);renderer.dispose();scene.clear();sceneRef.current=null;playerVelocityRef.current.set(0,0);collisionRectsRef.current=[];startedRef.current=false;};
   },[]);
 
   const teleport=(room:Room)=>{playerRef.current.set(room.x, .35, room.z);setActiveRoom(room.id);setMapOpen(false);setStarted(true);};
