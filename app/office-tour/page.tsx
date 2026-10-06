@@ -224,6 +224,9 @@ function addVisitor(root:THREE.Group){
 type CollisionRect={x:number;z:number;w:number;d:number};
 
 const PLAYER_RADIUS=.34;
+function dampNumber(current:number,target:number,smoothing:number,dt:number){
+  return THREE.MathUtils.lerp(current,target,1-Math.exp(-smoothing*dt));
+}
 function pushWallRects(out:CollisionRect[],r:Room,side:WallSide,doorWidth=.95){
   const hasDoor=doorSide(r.id)===side;
   const isH=side==="north"||side==="south";
@@ -391,12 +394,12 @@ export default function OfficeTourPage(){
       const maxSpeed=3.55,acceleration=15.5,drag=inputLen?2.5:9.5;
       const velocity=playerVelocityRef.current;
       if(inputLen){
-        velocity.x=THREE.MathUtils.damp(velocity.x,input.x*maxSpeed,acceleration,dt);
-        velocity.y=THREE.MathUtils.damp(velocity.y,input.y*maxSpeed,acceleration,dt);
+        velocity.x=dampNumber(velocity.x,input.x*maxSpeed,acceleration,dt);
+        velocity.y=dampNumber(velocity.y,input.y*maxSpeed,acceleration,dt);
         setStarted(true);
       }else{
-        velocity.x=THREE.MathUtils.damp(velocity.x,0,drag,dt);
-        velocity.y=THREE.MathUtils.damp(velocity.y,0,drag,dt);
+        velocity.x=dampNumber(velocity.x,0,drag,dt);
+        velocity.y=dampNumber(velocity.y,0,drag,dt);
       }
       const nextX=player.x+velocity.x*dt;
       const resolvedX=resolvePlayerCollision(new THREE.Vector3(nextX,player.y,player.z),collisionRects,PLAYER_RADIUS,"x");
