@@ -245,9 +245,10 @@ export default function Home() {
           />
         </a>
         <nav className={menuOpen ? "nav-links open" : "nav-links"}>
-          {["Services","Solutions","Cases","Labs","Office Tour","Company","Contact"].map((item) =>
-            <a key={item} href={"#"+item.toLowerCase()} onClick={() => setMenuOpen(false)}>{item}</a>
-          )}
+          {["Services","Solutions","Cases","Labs","Office Tour","Company","Contact"].map((item) => {
+            const href = item === "Office Tour" ? "/office-tour" : "#" + item.toLowerCase();
+            return <a key={item} href={href} onClick={() => setMenuOpen(false)}>{item}</a>;
+          })}
         </nav>
         <div className="nav-actions"><a className="nav-tour" href="/office-tour"><Building2 size={15}/> 3D Office Tour</a><a className="nav-cta" href="#contact">Book a QA Consultation <ArrowRight size={16}/></a></div>
         <button className="menu-btn" aria-label="Menu" onClick={() => setMenuOpen(v => !v)}>{menuOpen ? <X/> : <Menu/>}</button>
