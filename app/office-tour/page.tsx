@@ -179,7 +179,8 @@ function makeLabel(title:string,sub:string,color:string){
   const c=document.createElement("canvas");c.width=512;c.height=128;const x=c.getContext("2d")!;
   x.fillStyle="rgba(7,16,28,.94)";
   x.beginPath();
-  x.roundRect(8,8,496,112,18);
+  if(typeof (x as any).roundRect==="function") (x as any).roundRect(8,8,496,112,18);
+  else x.rect(8,8,496,112);
   x.fill();
   x.strokeStyle=color;x.lineWidth=5;x.stroke();
   x.fillStyle="#fff";x.font="800 27px Arial";x.textAlign="center";x.fillText(title.toUpperCase(),256,55);
@@ -498,11 +499,15 @@ export default function OfficeTourPage(){
   const [activeNpc,setActiveNpc]=useState<Worker|null>(null);
   const [started,setStarted]=useState(false);
   const [mapOpen,setMapOpen]=useState(false);
+  const [tourError,setTourError]=useState("");
   const workersRef=useRef<Worker[]>([]);
   const sceneRef=useRef<THREE.Scene|null>(null);
 
   useEffect(()=>{
     const canvas=canvasRef.current;if(!canvas)return;
+    let safeRaf=0;
+    let safeFailed=false;
+    try {
     const coarse=window.matchMedia("(pointer:coarse)").matches;
     const renderer=new THREE.WebGLRenderer({canvas,antialias:!coarse,alpha:false,powerPreference:"high-performance"});
     renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,coarse?1.15:1.35));
@@ -538,6 +543,8 @@ export default function OfficeTourPage(){
     let raf=0,last=performance.now();
     let lastSafeX=player.x,lastSafeZ=player.z,lastProgressAt=performance.now();
     const tick=(now:number)=>{
+      if(safeFailed)return;
+      try {
       const dt=Math.min((now-last)/1000,.04);last=now;
       const k=keysRef.current;
       const inputX=(k.d||k.arrowright?1:0)-(k.a||k.arrowleft?1:0);
@@ -646,8 +653,15 @@ export default function OfficeTourPage(){
       camera.lookAt(cameraTarget);
       if(!document.hidden && !disposed) renderer.render(scene,camera);
       raf=requestAnimationFrame(tick);
+      } catch(error) {
+        console.error("Office Tour frame error:",error);
+        safeFailed=true;
+        cancelAnimationFrame(raf);
+        setTourError("3D rendering paused safely. Use the office map to continue.");
+      }
     };
     raf=requestAnimationFrame(tick);
+    safeRaf=raf;
     return()=>{disposed=true;cancelAnimationFrame(raf);canvas.removeEventListener("webglcontextlost",onContextLost as EventListener);window.removeEventListener("resize",resize);window.removeEventListener("keydown",onKey);window.removeEventListener("keyup",onUp);renderer.dispose();scene.clear();sceneRef.current=null;playerVelocityRef.current.set(0,0);collisionRectsRef.current=[];startedRef.current=false;};
   },[]);
 
@@ -668,6 +682,11 @@ export default function OfficeTourPage(){
   const interact=()=>{let best:Worker|null=null,min=1.8;workersRef.current.forEach(w=>{const d=Math.hypot(playerRef.current.x-w.x,playerRef.current.z-w.z);if(d<min){min=d;best=w;}});if(best)setActiveNpc(best);};
 
   return <main className={styles.page}>
+    {tourError && <div className={styles.rendererError} role="alert">
+      <strong>3D Office Tour paused safely</strong>
+      <span>{tourError}</span>
+      <button type="button" onClick={()=>window.location.reload()}>Retry 3D</button>
+    </div>}
     <div className={styles.topbar}>
       <a href="/" className={styles.back}><ArrowLeft size={16}/> AM WEBTECH</a>
       <div className={styles.title}><Building2 size={17}/><span>TRUE 3D OFFICE WALKTHROUGH</span></div>
