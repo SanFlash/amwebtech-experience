@@ -304,121 +304,78 @@ function resolvePlayerCollision(candidate:THREE.Vector3,rects:CollisionRect[],ra
   return value=== (axis==="x"?candidate.x:candidate.z) ? null : value;
 }
 
-function addAvatar(parent:THREE.Group, color:string, scale=1){
-  // Procedural AAA-inspired game NPC.  No external models/textures are required,
-  // which keeps the tour deterministic and deploy-safe.
-  const avatar=new THREE.Group();
-  avatar.name="avatar";
-  const skin=makeMat("#c98f6b",.72);
-  const shirt=makeMat(color,.62);
-  const pants=makeMat("#17222d",.78);
-  const shoe=makeMat("#0d1218",.68);
-  const hairMat=makeMat("#1b2026",.9);
-  const white=makeMat("#f4f7fa",.45);
-  const eyeMat=makeMat("#101820",.2);
-  const metal=makeMat("#66737d",.28,.55);
+function addAvatar(parent:THREE.Group, color:string, scale=1, isPlayer=false){
+  const avatar=new THREE.Group(); avatar.name="avatar";
+  const seg=isPlayer?14:8, seg2=isPlayer?10:6;
+  const skin=makeMat("#c98f6b",.78), shirt=makeMat(color,.68);
+  const pants=makeMat("#17222d",.82), shoe=makeMat("#0d1218",.72);
+  const hairMat=makeMat("#1b2026",.9), white=makeMat("#f4f7fa",.5), eyeMat=makeMat("#101820",.25);
 
-  const shadow=new THREE.Mesh(
-    new THREE.CircleGeometry(.36*scale,24),
-    new THREE.MeshBasicMaterial({color:"#000",transparent:true,opacity:.20})
-  );
+  const shadow=new THREE.Mesh(new THREE.CircleGeometry(.34*scale,isPlayer?16:8),
+    new THREE.MeshBasicMaterial({color:"#000",transparent:true,opacity:.17}));
   shadow.name="shadow"; shadow.rotation.x=-Math.PI/2; shadow.position.y=.018; avatar.add(shadow);
 
-  const pelvis=new THREE.Group(); pelvis.name="pelvis"; pelvis.position.y=.66*scale; avatar.add(pelvis);
   const torso=new THREE.Group(); torso.name="torso"; torso.position.y=.88*scale; avatar.add(torso);
-  const chest=new THREE.Mesh(new THREE.CapsuleGeometry(.29*scale,.48*scale,6,14),shirt);
+  const chest=new THREE.Mesh(new THREE.CapsuleGeometry(.28*scale,.46*scale,4,seg2),shirt);
   chest.name="chest"; chest.scale.z=.72; torso.add(chest);
+  const neck=new THREE.Mesh(new THREE.CylinderGeometry(.10*scale,.12*scale,.14*scale,seg2),skin);
+  neck.position.y=1.17*scale; avatar.add(neck);
 
-  // Shirt collar + subtle ID badge make the NPC read as an office employee.
-  const collar=new THREE.Mesh(new THREE.TorusGeometry(.16*scale,.025*scale,6,16,Math.PI*1.25),white);
-  collar.name="collar"; collar.rotation.x=Math.PI/2; collar.position.set(0,.22*scale,.205*scale); torso.add(collar);
-  const badge=new THREE.Mesh(new THREE.BoxGeometry(.11*scale,.14*scale,.018*scale),white);
-  badge.position.set(.13*scale,.03*scale,.22*scale); torso.add(badge);
-  const badgeClip=new THREE.Mesh(new THREE.BoxGeometry(.055*scale,.025*scale,.025*scale),metal);
-  badgeClip.position.set(.13*scale,.12*scale,.23*scale); torso.add(badgeClip);
-  // Lightweight shoulder accents / lanyard for a game-character silhouette.
-  [-1,1].forEach(side=>{
-    const pad=new THREE.Mesh(new THREE.SphereGeometry(.11*scale,10,7),shirt);
-    pad.scale.set(1.25,.55,.9);pad.position.set(side*.29*scale,1.07*scale,.01);torso.add(pad);
-  });
-  const lanyard=new THREE.Mesh(new THREE.TorusGeometry(.075*scale,.012*scale,6,14,Math.PI),metal);
-  lanyard.rotation.x=Math.PI/2;lanyard.position.set(0,.18*scale,.225*scale);torso.add(lanyard);
+  const head=new THREE.Group(); head.name="head"; head.position.y=1.40*scale; avatar.add(head);
+  const face=new THREE.Mesh(new THREE.SphereGeometry(.275*scale,seg,seg2),skin);
+  face.scale.set(.92,1.06,.92); head.add(face);
+  const hair=new THREE.Mesh(new THREE.SphereGeometry(.282*scale,seg,seg2,0,Math.PI*2,0,Math.PI*.60),hairMat);
+  hair.position.y=.07*scale; head.add(hair);
 
-  const neck=new THREE.Mesh(new THREE.CylinderGeometry(.105*scale,.12*scale,.16*scale,12),skin);
-  neck.position.y=1.18*scale; avatar.add(neck);
+  // Readable anime/game facial accents; kept low-poly for smooth frame time.
+  if(isPlayer){
+    [-1,1].forEach(side=>{
+      const eye=new THREE.Mesh(new THREE.SphereGeometry(.028*scale,6,5),white);
+      eye.position.set(side*.09*scale,.015*scale,.255*scale); head.add(eye);
+      const pupil=new THREE.Mesh(new THREE.SphereGeometry(.012*scale,6,5),eyeMat);
+      pupil.position.set(side*.09*scale,.015*scale,.282*scale); head.add(pupil);
+      const brow=new THREE.Mesh(new THREE.BoxGeometry(.075*scale,.014*scale,.014*scale),hairMat);
+      brow.position.set(side*.09*scale,.095*scale,.25*scale); brow.rotation.z=side*.08; head.add(brow);
+    });
+    [-.18,-.09,0,.09,.18].forEach((offset,i)=>{
+      const spike=new THREE.Mesh(new THREE.ConeGeometry(.065*scale,.15*scale,5),hairMat);
+      spike.name="hairSpike"+i; spike.position.set(offset*scale,.13*scale,.21*scale);
+      spike.rotation.x=-.48; spike.rotation.z=offset*.3; head.add(spike);
+    });
+  }
 
-  const head=new THREE.Group(); head.name="head"; head.position.y=1.43*scale; avatar.add(head);
-  const face=new THREE.Mesh(new THREE.SphereGeometry(.285*scale,20,16),skin);
-  face.scale.set(.92,1.05,.92); head.add(face);
-
-  // Hair cap + side locks.
-  const hair=new THREE.Mesh(new THREE.SphereGeometry(.292*scale,20,12,0,Math.PI*2,0,Math.PI*.58),hairMat);
-  hair.position.y=.075*scale; head.add(hair);
-  // Stylized game/anime silhouette: layered fringe spikes make characters readable
-  // from the third-person camera without using external character assets.
-  [-.20,-.10,0,.10,.20].forEach((offset,index)=>{
-    const spike=new THREE.Mesh(new THREE.ConeGeometry(.075*scale,.18*scale,7),hairMat);
-    spike.name=`hairSpike${index}`;
-    spike.position.set(offset*scale,.13*scale,.22*scale);
-    spike.rotation.x=-.48;
-    spike.rotation.z=offset*.35;
-    head.add(spike);
-  });
-  const earL=new THREE.Mesh(new THREE.TorusGeometry(.055*scale,.012*scale,6,12,Math.PI),hairMat);
-  earL.rotation.y=Math.PI/2;earL.position.set(-.27*scale,.02*scale,.02);head.add(earL);
-  const earR=earL.clone();earR.position.x=.27*scale;head.add(earR);
-  [-1,1].forEach(side=>{
-    const lock=new THREE.Mesh(new THREE.SphereGeometry(.075*scale,10,8),hairMat);
-    lock.scale.set(.65,1.35,.72); lock.position.set(side*.245*scale,.005*scale,.01); head.add(lock);
-  });
-
-  // Eyes, brows and nose give the character a readable face at close range.
-  [-1,1].forEach(side=>{
-    const eye=new THREE.Mesh(new THREE.SphereGeometry(.032*scale,10,8),white);
-    eye.position.set(side*.095*scale,.02*scale,.262*scale); head.add(eye);
-    const pupil=new THREE.Mesh(new THREE.SphereGeometry(.014*scale,8,6),eyeMat);
-    pupil.position.set(side*.095*scale,.02*scale,.291*scale); head.add(pupil);
-    const brow=new THREE.Mesh(new THREE.BoxGeometry(.085*scale,.018*scale,.018*scale),hairMat);
-    brow.position.set(side*.095*scale,.105*scale,.255*scale);
-    brow.rotation.z=side*.08; head.add(brow);
-  });
-  const nose=new THREE.Mesh(new THREE.ConeGeometry(.045*scale,.12*scale,8),skin);
-  nose.rotation.x=Math.PI/2; nose.position.set(0,-.005*scale,.285*scale); head.add(nose);
-
-  const makeLimb=(name:string,side:number)=>{
-    const arm=new THREE.Group(); arm.name=name;
-    arm.position.set(side*.34*scale,.97*scale,.01); avatar.add(arm);
-    const upper=new THREE.Mesh(new THREE.CapsuleGeometry(.075*scale,.31*scale,5,8),shirt);
-    upper.name="upper"; upper.position.y=-.14*scale; arm.add(upper);
-    const fore=new THREE.Mesh(new THREE.CapsuleGeometry(.065*scale,.27*scale,5,8),skin);
-    fore.name="forearm"; fore.position.y=-.42*scale; arm.add(fore);
-    const hand=new THREE.Mesh(new THREE.SphereGeometry(.075*scale,10,8),skin);
-    hand.name="hand"; hand.position.y=-.59*scale; arm.add(hand);
-    arm.rotation.z=side*.08;
+  const makeArm=(name:string,side:number)=>{
+    const arm=new THREE.Group(); arm.name=name; arm.position.set(side*.32*scale,.96*scale,.01); avatar.add(arm);
+    const upper=new THREE.Mesh(new THREE.CapsuleGeometry(.07*scale,.29*scale,3,seg2),shirt);
+    upper.position.y=-.14*scale; arm.add(upper);
+    const fore=new THREE.Mesh(new THREE.CapsuleGeometry(.058*scale,.25*scale,3,seg2),skin);
+    fore.position.y=-.40*scale; arm.add(fore);
+    if(isPlayer){const hand=new THREE.Mesh(new THREE.SphereGeometry(.065*scale,7,5),skin);hand.position.y=-.55*scale;arm.add(hand);}
     return arm;
   };
-  const armL=makeLimb("armL",-1), armR=makeLimb("armR",1);
+  const armL=makeArm("armL",-1), armR=makeArm("armR",1);
 
   const makeLeg=(name:string,side:number)=>{
-    const leg=new THREE.Group(); leg.name=name;
-    leg.position.set(side*.13*scale,.63*scale,.01); avatar.add(leg);
-    const thigh=new THREE.Mesh(new THREE.CapsuleGeometry(.09*scale,.34*scale,5,8),pants);
-    thigh.name="thigh"; thigh.position.y=-.18*scale; leg.add(thigh);
-    const shin=new THREE.Mesh(new THREE.CapsuleGeometry(.075*scale,.34*scale,5,8),pants);
-    shin.name="shin"; shin.position.y=-.51*scale; leg.add(shin);
-    const foot=new THREE.Mesh(new THREE.BoxGeometry(.17*scale,.10*scale,.34*scale),shoe);
-    foot.name="foot"; foot.position.set(0,-.72*scale,.075*scale); leg.add(foot);
-    return leg;
+    const leg=new THREE.Group(); leg.name=name; leg.position.set(side*.12*scale,.62*scale,.01); avatar.add(leg);
+    const thigh=new THREE.Mesh(new THREE.CapsuleGeometry(.085*scale,.32*scale,3,seg2),pants);
+    thigh.position.y=-.17*scale; leg.add(thigh);
+    const shin=new THREE.Mesh(new THREE.CapsuleGeometry(.068*scale,.30*scale,3,seg2),pants);
+    shin.position.y=-.47*scale; leg.add(shin);
+    const foot=new THREE.Mesh(new THREE.BoxGeometry(.15*scale,.09*scale,.28*scale),shoe);
+    foot.position.set(0,-.67*scale,.06*scale); leg.add(foot); return leg;
   };
   const legL=makeLeg("legL",-1), legR=makeLeg("legR",1);
 
-  // Desk-worker posture: seated staff keep their feet under the desk and lean
-  // slightly toward their workstation; roaming NPCs keep the full standing rig.
   avatar.userData.parts={torso,head,armL,armR,legL,legR};
-  avatar.userData.baseRot={armL:armL.rotation.z,armR:armR.rotation.z};
-  avatar.traverse(o=>{if(o instanceof THREE.Mesh){o.castShadow=true;o.receiveShadow=true;}});
-  parent.add(avatar);
-  return avatar;
+  avatar.userData.isPlayer=isPlayer;
+  avatar.traverse(o=>{
+    if(o instanceof THREE.Mesh){
+      // NPC shadows are the main GPU cost. Only the player participates in the shadow map.
+      o.castShadow=isPlayer;
+      o.receiveShadow=isPlayer;
+    }
+  });
+  parent.add(avatar); return avatar;
 }
 function buildScene(scene:THREE.Scene){
   // Deliberately uses only core Three.js primitives so the walkthrough remains
@@ -427,7 +384,11 @@ function buildScene(scene:THREE.Scene){
   scene.fog=new THREE.Fog("#aab6c0",34,62);
   scene.add(new THREE.HemisphereLight("#ffffff","#52616d",2.2));
   const sun=new THREE.DirectionalLight("#fff3d6",4.0);
-  sun.position.set(-12,22,14); sun.castShadow=true; sun.shadow.mapSize.set(1024,1024); scene.add(sun);
+  sun.position.set(-12,22,14); sun.castShadow=true;
+    const shadowSize=coarse?512:768; sun.shadow.mapSize.set(shadowSize,shadowSize);
+    sun.shadow.camera.near=.5; sun.shadow.camera.far=60;
+    sun.shadow.camera.left=-22;sun.shadow.camera.right=22;sun.shadow.camera.top=18;sun.shadow.camera.bottom=-18;
+    scene.add(sun);
 
   const root=new THREE.Group(); root.name="office-root"; scene.add(root);
   box(root,[31,.25,18],[0,-.15,0],"#d8dee1",1);
@@ -458,7 +419,7 @@ function buildScene(scene:THREE.Scene){
   // Seated office staff: simple, reliable humanoids at every workstation.
   workerData.forEach((d,i)=>{
     const g=new THREE.Group();
-    const body=addAvatar(g,d.color,.72);
+    const body=addAvatar(g,d.color,.72,false);
     body.position.y=.02;
     body.userData.seated=true;
     if(d.room==="qa"){
@@ -475,7 +436,7 @@ function buildScene(scene:THREE.Scene){
   });
 
   // Player avatar: always visible and positioned at the real entry.
-  const player=addAvatar(root,"#25c77a",1);
+  const player=addAvatar(root,"#25c77a",1,true);
   player.name="visitor";
   player.position.set(-2.1,0,8.1);
 
@@ -542,8 +503,9 @@ export default function OfficeTourPage(){
 
   useEffect(()=>{
     const canvas=canvasRef.current;if(!canvas)return;
-    const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:"high-performance"});
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
+    const coarse=window.matchMedia("(pointer:coarse)").matches;
+    const renderer=new THREE.WebGLRenderer({canvas,antialias:!coarse,alpha:false,powerPreference:"high-performance"});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,coarse?1.15:1.35));
     renderer.outputColorSpace=THREE.SRGBColorSpace;
     renderer.toneMapping=THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure=1.12;
@@ -563,8 +525,12 @@ export default function OfficeTourPage(){
     const cameraDesired=new THREE.Vector3();
     const collisionCandidate=new THREE.Vector3();
     let activeRoomId="";
+    let npcAccumulator=0;
+    let disposed=false;
     resize();window.addEventListener("resize",resize);
 
+    const onContextLost=(e:Event)=>{e.preventDefault();};
+    canvas.addEventListener("webglcontextlost",onContextLost as EventListener,{passive:false});
     const onKey=(e:KeyboardEvent)=>{if(["INPUT","TEXTAREA","BUTTON"].includes((e.target as HTMLElement)?.tagName))return;const k=e.key.toLowerCase();if(["w","a","s","d","arrowup","arrowdown","arrowleft","arrowright","e","m"].includes(k)){e.preventDefault();keysRef.current[k]=true;if(!startedRef.current){startedRef.current=true;setStarted(true);}if(k==="m")setMapOpen(v=>!v);}};
     const onUp=(e:KeyboardEvent)=>{keysRef.current[e.key.toLowerCase()]=false;};
     window.addEventListener("keydown",onKey);window.addEventListener("keyup",onUp);
@@ -620,7 +586,10 @@ export default function OfficeTourPage(){
       }
       const r=rooms.find(q=>player.x>=q.x-q.w/2&&player.x<=q.x+q.w/2&&player.z>=q.z-q.d/2&&player.z<=q.z+q.d/2);
       if(r && activeRoomId!==r.id){activeRoomId=r.id;setActiveRoom(r.id);}
-      if(Math.floor(now/16)%2===0) workersRef.current.forEach((w)=>{
+      npcAccumulator+=dt;
+      if(npcAccumulator>=.033){
+        npcAccumulator=0;
+        workersRef.current.forEach((w)=>{
         if(!w.group)return;
         if(w.roam){
           const points=w.roam.points;
@@ -661,7 +630,8 @@ export default function OfficeTourPage(){
             parts.head.rotation.y=Math.sin(now*.0018+w.phase)*.055;
           }
         }
-      });
+        });
+      }
       const visitor=workerObjects?.getObjectByName("visitor");
       if(visitor){
         visitor.position.x=player.x;
@@ -674,11 +644,11 @@ export default function OfficeTourPage(){
       camera.position.lerp(cameraDesired,1-Math.exp(-7.5*dt));
       cameraTarget.set(player.x,.55,player.z);
       camera.lookAt(cameraTarget);
-      renderer.render(scene,camera);
+      if(!document.hidden && !disposed) renderer.render(scene,camera);
       raf=requestAnimationFrame(tick);
     };
     raf=requestAnimationFrame(tick);
-    return()=>{cancelAnimationFrame(raf);window.removeEventListener("resize",resize);window.removeEventListener("keydown",onKey);window.removeEventListener("keyup",onUp);renderer.dispose();scene.clear();sceneRef.current=null;playerVelocityRef.current.set(0,0);collisionRectsRef.current=[];startedRef.current=false;};
+    return()=>{disposed=true;cancelAnimationFrame(raf);canvas.removeEventListener("webglcontextlost",onContextLost as EventListener);window.removeEventListener("resize",resize);window.removeEventListener("keydown",onKey);window.removeEventListener("keyup",onUp);renderer.dispose();scene.clear();sceneRef.current=null;playerVelocityRef.current.set(0,0);collisionRectsRef.current=[];startedRef.current=false;};
   },[]);
 
   const destinationFor=(room:Room):[number,number]=>{
