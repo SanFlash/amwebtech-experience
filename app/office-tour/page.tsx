@@ -284,69 +284,87 @@ function resolvePlayerCollision(candidate:THREE.Vector3,rects:CollisionRect[],ra
   return value=== (axis==="x"?candidate.x:candidate.z) ? null : value;
 }
 
+function addAvatar(parent:THREE.Group, color:string, scale=1){
+  const avatar=new THREE.Group();
+  const skin=makeMat("#e5ad87",.8), shirt=makeMat(color,.72), pants=makeMat("#263341",.8);
+  const shadow=new THREE.Mesh(new THREE.CircleGeometry(.34*scale,18),new THREE.MeshBasicMaterial({color:"#000",transparent:true,opacity:.16}));
+  shadow.rotation.x=-Math.PI/2; shadow.position.y=.02; avatar.add(shadow);
+  const legs=new THREE.Mesh(new THREE.BoxGeometry(.22*scale,.48*scale,.20*scale),pants); legs.position.set(-.12*scale,.30*scale,0); avatar.add(legs);
+  const leg2=legs.clone(); leg2.position.x=.12*scale; avatar.add(leg2);
+  const torso=new THREE.Mesh(new THREE.BoxGeometry(.52*scale,.62*scale,.34*scale),shirt); torso.position.y=.78*scale; avatar.add(torso);
+  const head=new THREE.Mesh(new THREE.SphereGeometry(.24*scale,18,14),skin); head.position.y=1.25*scale; avatar.add(head);
+  const hair=new THREE.Mesh(new THREE.SphereGeometry(.245*scale,18,10,0,Math.PI*2,0,Math.PI*.55),makeMat("#20252b",.85)); hair.position.y=1.34*scale; avatar.add(hair);
+  const arm=new THREE.Mesh(new THREE.BoxGeometry(.12*scale,.46*scale,.12*scale),skin); arm.position.set(-.36*scale,.77*scale,.02); arm.rotation.z=-.18; avatar.add(arm);
+  const arm2=arm.clone(); arm2.position.x=.36*scale; arm2.rotation.z=.18; avatar.add(arm2);
+  avatar.traverse(o=>{if(o instanceof THREE.Mesh)o.castShadow=true;});
+  parent.add(avatar); return avatar;
+}
+
 function buildScene(scene:THREE.Scene){
-  scene.background=new THREE.Color("#1d2934");
-  scene.fog=new THREE.Fog("#1d2934",25,55);
-  scene.add(new THREE.HemisphereLight("#f6f7f8","#4a5965",2.1));
-  const sun=new THREE.DirectionalLight("#fff7df",4.2);sun.position.set(-10,22,10);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);scene.add(sun);
-  const fill=new THREE.DirectionalLight("#b9d9ff",1.4);fill.position.set(14,10,-16);scene.add(fill);
-  const root=new THREE.Group();scene.add(root);
-  box(root,[31,.25,18],[0,-.15,0],"#cbd3d7",1);
+  // Deliberately uses only core Three.js primitives so the walkthrough remains
+  // visible even when optional browser/WebGL features are unavailable.
+  scene.background=new THREE.Color("#aab6c0");
+  scene.fog=new THREE.Fog("#aab6c0",34,62);
+  scene.add(new THREE.HemisphereLight("#ffffff","#52616d",2.2));
+  const sun=new THREE.DirectionalLight("#fff3d6",4.0);
+  sun.position.set(-12,22,14); sun.castShadow=true; sun.shadow.mapSize.set(1024,1024); scene.add(sun);
+
+  const root=new THREE.Group(); root.name="office-root"; scene.add(root);
+  box(root,[31,.25,18],[0,-.15,0],"#d8dee1",1);
+
+  // Reference floor zoning.
   rooms.forEach(r=>addRoomShell(root,r));
-  addRoomFurniture(root);
+
+  // North private-office desks.
+  [-12.2,-10.7,-9.2,-7.7].forEach(x=>{addDesk(root,x,-6);addDesk(root,x,-4.7);});
+  [[-6.4,-6],[-5.4,-4.7],[-3.5,-6],[-2.5,-4.7],[-.5,-6],[.5,-4.7],
+   [3,-6],[4.4,-6],[3,-4.7],[4.4,-4.7],[7,-6],[8.4,-6],[7.7,-4.7]]
+    .forEach(([x,z])=>addDesk(root,x,z));
+
+  // Three long QA islands matching the reference image.
+  [2.0,5.2,8.4].forEach(x=>addQABench(root,x,3.35));
+
+  // Kitchen + meeting room + reception.
+  box(root,[4.8,.9,.38],[-9.9,.55,-.95],"#795331",.5);
+  box(root,[2.0,.72,1.1],[-9.9,.45,.1],"#c98c4c");
+  box(root,[3.8,.12,1.8],[-9.5,.75,4],"#c98c4c",.5);
+  [-11.2,-9.5,-7.8].forEach(x=>{addChair(root,x,2.8);addChair(root,x,5.2);});
+  box(root,[3.8,1.15,.65],[-2.1,.62,7],"#5b321d",.5);
+
+  [[-14,-7.7],[-7.2,-7.7],[.9,-7.7],[6.3,-7.7],[10.3,-7.7],
+   [-13,-.9],[-5.7,.4],[-5.5,6.9],[.2,6.9],[9.8,6.9]]
+    .forEach(([x,z])=>addPlant(root,x,z,1.15));
+
+  // Seated office staff: simple, reliable humanoids at every workstation.
   workerData.forEach((d,i)=>{
-    const seat={...d,phase:i*.55};
+    const g=new THREE.Group();
+    const body=addAvatar(g,d.color,.72);
+    body.position.y=.02;
     if(d.room==="qa"){
-      const q=i-21;
-      const side=q%2===0?-0.98:0.98;
-      seat.x=d.x+side;
-      seat.z=d.z;
-      if(d.roam){
-        seat.roam={points:[[seat.x,seat.z],[seat.x,-2.55],[0,-3.15],[0,-5.15],[0,-3.15],[seat.x,-2.55],[seat.x,seat.z]],duration:d.roam.duration};
-      }
+      const q=i-21, side=q%2===0?-.98:.98;
+      g.position.set(d.x+side,.0,d.z);
+      if(d.roam) d.roam={points:d.roam.points,duration:d.roam.duration};
     }else{
-      seat.z=d.z+.70;
+      g.position.set(d.x,.0,d.z+.72);
+      g.rotation.y=Math.PI;
     }
-    addWorker(root,seat);
+    g.userData.workerIndex=i;
+    root.add(g);
+    d.group=g;
   });
-  const visitor=addVisitor(root);
-  visitor.position.set(-2.1,0,8.1);
-  // Entry doors and brand wall.
-  box(root,[2.2,2.0,.18],[-2.1,1,8.0],"#f1f4f5",.5);
-  const brand=makeLabel("AM WEBTECH","QUALITY ENGINEERING","#25c77a");brand.position.set(-2.1,1.4,7.45);brand.scale.set(1.25,.32,1);brand.rotation.x=-Math.PI/2;root.add(brand);
+
+  // Player avatar: always visible and positioned at the real entry.
+  const player=addAvatar(root,"#25c77a",1);
+  player.name="visitor";
+  player.position.set(-2.1,0,8.1);
+
+  // Clear entry marker.
+  const marker=new THREE.Mesh(new THREE.CylinderGeometry(.75,.75,.05,32),new THREE.MeshStandardMaterial({color:"#25c77a",transparent:true,opacity:.65}));
+  marker.position.set(-2.1,.04,8.1); root.add(marker);
+
   return root;
 }
 
-function FloorPlanMap(){
-  return <div className={styles.floorMapWrap}>
-    <div className={styles.floorMapTitle}>REFERENCE LAYOUT / INTERACTIVE DIRECTORY</div>
-    <svg className={styles.floorMap} viewBox="0 0 1000 680" role="img" aria-label="AM Webtech reference office floor plan">
-      <rect x="10" y="10" width="980" height="650" rx="14" fill="#eef1f2" stroke="#87939d" strokeWidth="8"/>
-      <g stroke="#26313a" strokeWidth="6" fill="#f5f1e8">
-        <rect x="45" y="38" width="250" height="155"/><rect x="300" y="38" width="90" height="155"/>
-        <rect x="395" y="38" width="90" height="155"/><rect x="490" y="38" width="100" height="155"/>
-        <rect x="595" y="38" width="150" height="155"/><rect x="750" y="38" width="195" height="155"/>
-        <rect x="45" y="205" width="115" height="72"/><rect x="165" y="205" width="115" height="72"/>
-        <rect x="45" y="285" width="235" height="105"/><rect x="45" y="400" width="250" height="205"/>
-        <rect x="330" y="235" width="600" height="350" fill="#f4efd0"/>
-        <rect x="330" y="565" width="210" height="72" fill="#f0f3f3"/>
-      </g>
-      <g fill="#1d2934" fontFamily="Arial" fontWeight="700" fontSize="18" textAnchor="middle">
-        <text x="170" y="75">AUTOMATION TEAM</text><text x="345" y="75">HR</text><text x="440" y="75">SR HR</text>
-        <text x="540" y="75">MANAGER</text><text x="670" y="75">SALES TEAM</text><text x="848" y="75">DIRECTOR</text>
-        <text x="102" y="245">MALE</text><text x="222" y="245">FEMALE</text><text x="162" y="335">KITCHEN</text>
-        <text x="170" y="500">MEETING ROOM</text><text x="630" y="270">QA TEAM CABINS (OPEN)</text><text x="435" y="610">RECEPTION / ENTRY</text>
-      </g>
-      <g fill="#b9783e">
-        <rect x="75" y="110" width="190" height="50" rx="6"/><rect x="625" y="315" width="48" height="235" rx="6"/>
-        <rect x="725" y="315" width="48" height="235" rx="6"/><rect x="825" y="315" width="48" height="235" rx="6"/>
-        <rect x="95" y="440" width="150" height="75" rx="6"/>
-      </g>
-      <g fill="#25c77a"><circle cx="435" cy="610" r="16"/><path d="M435 585v-22m0 0-9 10m9-10 9 10" stroke="#25c77a" strokeWidth="7"/></g>
-      <g fill="#fff" fontFamily="Arial" fontSize="12" fontWeight="700"><text x="435" y="614" textAnchor="middle">ENTRY</text></g>
-    </svg>
-  </div>;
-}
 
 export const dynamic = "force-dynamic";
 export default function OfficeTourPage(){
@@ -374,8 +392,8 @@ export default function OfficeTourPage(){
     const camera=new THREE.PerspectiveCamera(58,1,.1,100);
     camera.position.set(-2.1,8.5,16);
     const player=playerRef.current;
-    const workerObjects=scene.children.find(o=>o.type==="Group") as THREE.Group|undefined;
-    workersRef.current=workerData.map((w,i)=>({...w,group:workerObjects?.children.find(c=>c instanceof THREE.Group && Math.abs(c.position.x-w.x)<.01 && Math.abs(c.position.z-w.z)<.01) as THREE.Group,phase:i*.55}));
+    const workerObjects=scene.getObjectByName("office-root") as THREE.Group|undefined;
+    workersRef.current=workerData.map((w,i)=>({...w,group:workerObjects?.children.find(c=>c instanceof THREE.Group && c.userData.workerIndex===i) as THREE.Group,phase:i*.55}));
     const resize=()=>{const r=canvas.getBoundingClientRect();renderer.setSize(Math.max(1,r.width),Math.max(1,r.height),false);camera.aspect=Math.max(1,r.width)/Math.max(1,r.height);camera.updateProjectionMatrix();};
     resize();window.addEventListener("resize",resize);
 
@@ -429,21 +447,15 @@ export default function OfficeTourPage(){
           w.group.position.y=.02+Math.sin(now*.004+w.phase)*.012;
           w.group.rotation.y=Math.sin(now*.002+w.phase)*.035;
         }
-        const armL=w.group.children[4] as THREE.Object3D|undefined;
-        const armR=w.group.children[5] as THREE.Object3D|undefined;
-        if(w.roam){
-          if(armL)armL.rotation.x=-.35+Math.sin(now*.010+w.phase)*.12;
-          if(armR)armR.rotation.x=.35-Math.sin(now*.010+w.phase)*.12;
-        }else{
-          if(armL)armL.rotation.x=-1.05+Math.sin(now*.014+w.phase)*.10;
-          if(armR)armR.rotation.x=-1.05-Math.sin(now*.014+w.phase)*.10;
-        }
+        const avatar=w.group.children[0] as THREE.Group|undefined;
+        const torso=avatar?.children[3] as THREE.Object3D|undefined;
+        if(torso)torso.rotation.z=Math.sin(now*.004+w.phase)*.012;
       });
       const visitor=workerObjects?.getObjectByName("visitor");
       if(visitor){
         visitor.position.x=player.x;
         visitor.position.z=player.z;
-        if(dx||dz)visitor.rotation.y=Math.atan2(dx,dz);
+        if(inputLen)visitor.rotation.y=Math.atan2(input.x,input.y);
       }
       const desired=new THREE.Vector3(player.x,7.6,player.z+8.4);
       camera.position.lerp(desired,1-Math.pow(.0007,dt));
