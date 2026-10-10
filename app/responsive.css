@@ -213,3 +213,70 @@ canvas{display:block}
   .qa-system-scan,.ticker-track,.lab-orbit{animation:none!important}
   .service-card,.case-card,.price-card,.testimonial,.leader,.button,.case-media img{transition:none!important}
 }
+
+
+/* Regression fix: prevent scroll-reveal transforms and fixed visual canvases from
+   leaving blank bands or overlapping adjacent sections on narrow screens. */
+.site main{position:relative;isolation:isolate}
+.site main>.section,.site main>section{
+  position:relative;
+  clear:both;
+  min-height:0;
+  scroll-margin-top:82px;
+}
+.site main>.section:after,.site main>section:after{content:"";display:table;clear:both}
+.section,.section-top,.intro-section,.split-section,.lab-section,.global-section,
+.company-section,.contact-section,.capability-band,.cases-section,.process-section{
+  min-width:0;
+  max-width:100%;
+}
+.section-top,.intro-copy,.split-copy,.lab-copy,.global-copy,.company-card,.contact-inner{
+  overflow-wrap:anywhere;
+}
+.hero-3d,.visual-panel,.lab-visual,.global-visual-system,.world-panel{
+  min-width:0;
+  max-width:100%;
+}
+.qa-visual-system{pointer-events:none}
+@media(max-width:900px){
+  /* ScrollTrigger may calculate stale positions after mobile reflow; keep content
+     readable even if a reveal animation does not receive its trigger callback. */
+  .reveal{opacity:1!important;visibility:visible!important;transform:none!important}
+  .section-top,.intro-copy,.split-copy,.lab-copy,.global-copy,.company-card,.contact-inner{
+    position:relative;
+    z-index:1;
+  }
+  .section-top{margin-inline:0}
+  .section-top h2,.intro-copy h2,.split-copy h2,.lab-copy h2,.global-copy h2,
+  .company-card h2,.contact-inner h2{max-width:100%;overflow-wrap:anywhere}
+  .service-grid,.case-grid,.pricing-grid,.testimonial-grid,.leader-grid,
+  .linkedin-post-grid,.industry-grid,.insight-grid,.tech-wall,.stats-grid{
+    width:100%;max-width:100%;min-width:0;
+  }
+  .hero-3d,.visual-panel,.lab-visual,.global-visual-system,.world-panel{
+    contain:layout paint;
+  }
+  .case-media{max-width:100%;overflow:hidden}
+}
+@media(max-width:700px){
+  .section{height:auto!important;min-height:0!important}
+  .section-top{padding-top:0!important;padding-bottom:0!important}
+  .intro-section,.split-section,.lab-section,.global-section,.company-section{
+    height:auto!important;min-height:0!important;align-content:start;
+  }
+  .intro-section>* ,.split-section>* ,.lab-section>* ,.global-section>* ,.company-section>*{
+    min-width:0;max-width:100%;
+  }
+  .visual-panel,.lab-visual,.global-visual-system,.world-panel{
+    height:auto;min-height:300px;max-height:none;
+  }
+  .hero-3d{height:clamp(270px,82vw,370px)!important}
+  .qa-visual-system{position:absolute;inset:0;width:100%;height:100%}
+  .footer{position:relative;clear:both}
+}
+@media(max-width:390px){
+  .section{padding-inline:14px}
+  .section-top h2,.intro-copy h2,.split-copy h2,.lab-copy h2,.global-copy h2,
+  .company-card h2,.contact-inner h2{font-size:clamp(1.9rem,9vw,2.5rem)!important}
+  .hero-3d{height:270px!important}
+}
