@@ -280,3 +280,90 @@ canvas{display:block}
   .company-card h2,.contact-inner h2{font-size:clamp(1.9rem,9vw,2.5rem)!important}
   .hero-3d{height:270px!important}
 }
+
+
+/* Mobile full-page regression patch: keep every section in normal document flow.
+   This also neutralizes stale ScrollTrigger reveal states after responsive reflow. */
+.site main{display:block!important;overflow:visible}
+.site main>section,.site main>.section{
+  display:block;
+  float:none!important;
+  position:relative;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin-block:0;
+  transform:none;
+}
+.site main>section>* ,.site main>.section>*{max-width:100%;min-width:0}
+.site .reveal,.site .reveal.reveal-up,.site .reveal.reveal-left,.site .reveal.reveal-right{
+  opacity:1!important;
+  visibility:visible!important;
+  transform:none!important;
+}
+.site .reveal [style*="opacity: 0"],.site .reveal [style*="opacity:0"]{
+  opacity:1!important;
+}
+@media(max-width:700px){
+  .site main>section,.site main>.section{
+    padding-top:clamp(42px,10vw,64px)!important;
+    padding-bottom:clamp(42px,10vw,64px)!important;
+    overflow:clip;
+  }
+  .site main>section>.section-top,.site main>.section>.section-top{
+    margin:0 auto 28px!important;
+    padding:0!important;
+  }
+  .site main>section>.section-top h2,.site main>.section>.section-top h2{
+    margin-top:12px!important;
+    margin-bottom:16px!important;
+  }
+  .site main>section .service-grid,.site main>.section .service-grid,
+  .site main>section .case-grid,.site main>.section .case-grid,
+  .site main>section .pricing-grid,.site main>.section .pricing-grid,
+  .site main>section .testimonial-grid,.site main>.section .testimonial-grid,
+  .site main>section .leader-grid,.site main>.section .leader-grid,
+  .site main>section .linkedin-post-grid,.site main>.section .linkedin-post-grid,
+  .site main>section .insight-grid,.site main>.section .insight-grid{
+    margin-top:26px!important;
+  }
+  .site main>section .visual-panel,.site main>.section .visual-panel,
+  .site main>section .lab-visual,.site main>.section .lab-visual,
+  .site main>section .global-visual-system,.site main>.section .global-visual-system,
+  .site main>section .world-panel,.site main>.section .world-panel{
+    width:100%!important;
+    min-height:260px!important;
+    height:auto;
+    margin:0;
+  }
+  .site main>section .company-card,.site main>.section .company-card{
+    display:grid;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:24px!important;
+    padding:22px!important;
+  }
+  .site main>section .company-card>*{min-width:0}
+  .site main>section .footer,.site main>.section .footer{clear:both}
+}
+@media(max-width:390px){
+  .site main>section,.site main>.section{
+    padding-left:14px!important;
+    padding-right:14px!important;
+  }
+  .site .section-top h2,.site .intro-copy h2,.site .split-copy h2,
+  .site .lab-copy h2,.site .global-copy h2,.site .company-card h2,
+  .site .contact-inner h2{
+    font-size:clamp(26px,8.6vw,36px)!important;
+    line-height:1.04!important;
+    letter-spacing:-.04em!important;
+  }
+  .site .section-top>p:last-child,.site .intro-copy>p:last-child,
+  .site .split-copy>p,.site .lab-copy>p,.site .global-copy>p,
+  .site .contact-inner>p{font-size:13px!important;line-height:1.65!important}
+  .site .hero{min-height:0!important}
+  .site .hero-title{font-size:clamp(38px,14vw,56px)!important}
+  .site .hero-3d{height:250px!important}
+  .site .visual-panel,.site .lab-visual,.site .global-visual-system,.site .world-panel{
+    min-height:240px!important;
+  }
+}
