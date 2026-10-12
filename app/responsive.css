@@ -445,7 +445,9 @@ canvas{display:block}
   width:clamp(18px,1.8vw,26px);
   border:2px solid #ff554d;
   background:linear-gradient(135deg,rgba(255,72,64,.5),rgba(255,72,64,.12));
-  opacity:1!important;
+  opacity:1;
+  transform-origin:center;
+  will-change:transform,opacity;
   z-index:7;
   box-shadow:0 0 0 5px rgba(255,74,68,.1),0 0 24px rgba(255,66,58,.38),inset 0 0 12px rgba(255,100,90,.25);
 }
