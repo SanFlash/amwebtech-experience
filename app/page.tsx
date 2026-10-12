@@ -231,12 +231,33 @@ export default function Home() {
             y:35, rotateY:i % 2 ? -8 : 8, opacity:0, duration:.7, delay:i*.07, ease:"power3.out",
             scrollTrigger:{ trigger:el.closest(".qa-visual-system") || el, start:"top 76%", once:true }
           }));
+          // QA signal tiles: the square controls light up in a deliberate test-run sequence.
+          gsap.utils.toArray<HTMLElement>(".qa-core-icon, .qa-pipeline-icon, .qa-device-screen, .qa-release-title em, .qa-system-head b").forEach((el, i) => {
+            const visual = el.closest(".qa-visual-system") || el;
+            gsap.fromTo(el,
+              { scale:.86, rotate:i % 2 ? 3 : -3, opacity:.72, transformOrigin:"50% 50%" },
+              { scale:1, rotate:0, opacity:1, duration:.58, delay:(i % 4)*.055, ease:"back.out(1.45)",
+                scrollTrigger:{ trigger:visual, start:"top 78%", once:true } }
+            );
+          });
+          // Subtle scroll-linked precision pass across the QA grid; never pins the page.
+          gsap.utils.toArray<HTMLElement>(".qa-system-grid").forEach((el) => gsap.to(el, {
+            backgroundPosition:"18px 18px", ease:"none",
+            scrollTrigger:{ trigger:el.closest(".qa-visual-system") || el, start:"top bottom", end:"bottom top", scrub:1.4 }
+          }));
         });
         mm.add("(max-width: 900px)", () => {
           gsap.utils.toArray<HTMLElement>(".qa-pipeline-node, .qa-device").forEach((el, i) => gsap.from(el, {
             y:18, opacity:0, duration:.5, delay:i*.04, ease:"power2.out",
             scrollTrigger:{ trigger:el.closest(".qa-visual-system") || el, start:"top 82%", once:true }
           }));
+          // Keep mobile motion short and inexpensive while retaining the QA sequence.
+          gsap.utils.toArray<HTMLElement>(".qa-core-icon, .qa-pipeline-icon, .qa-device-screen, .qa-release-title em, .qa-system-head b").forEach((el, i) => {
+            gsap.fromTo(el, { scale:.92, opacity:.78 }, {
+              scale:1, opacity:1, duration:.38, delay:(i % 4)*.035, ease:"power2.out",
+              scrollTrigger:{ trigger:el.closest(".qa-visual-system") || el, start:"top 84%", once:true }
+            });
+          });
         });
       }, root);
     } catch (error) {
