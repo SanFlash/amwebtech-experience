@@ -56,7 +56,7 @@ h1,h2,h3,p,strong,small,a,span{overflow-wrap:break-word}
  .linkedin-post-feature{grid-column:auto}
  .service-card,.case-card,.price-card,.testimonial,.leader{min-width:0;border-radius:14px}.service-card{min-height:260px;padding:20px}.case-card{padding:20px}.case-media{margin:-20px -20px 22px!important;height:190px}
  .intro-metrics{grid-template-columns:1fr 1fr}.intro-metrics div{padding:18px 12px}.intro-metrics strong{font-size:36px}
- .tech-wall{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:32px;padding:0!important}.tech-wall span{padding:14px 10px;font-size:11px;min-width:0}
+ .tech-wall{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:32px;padding:0!important}.tech-wall > span{padding:14px 10px;font-size:11px;min-width:0}
  .process-line{grid-template-columns:1fr;margin-top:34px}.process-step{border-right:0;border-bottom:1px solid rgba(255,255,255,.15);margin:0;padding:20px 0}.process-step h3{margin:12px 0 8px}
  .stats-grid{grid-template-columns:1fr 1fr;padding:0!important}.stat{padding:18px 10px;border-left:0;border-top:1px solid #dbe3f0}.stat strong{font-size:clamp(36px,12vw,58px)}
  .client-wall{margin-top:32px}.client-wall span{flex:1 1 calc(50% - 8px);text-align:center;padding:11px 8px;font-size:10px}
