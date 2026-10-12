@@ -400,3 +400,41 @@ canvas{display:block}
 @media(prefers-reduced-motion:reduce){
   .reveal{opacity:1!important;visibility:visible!important;transform:none!important}
 }
+
+
+/* Visible QA-themed red-square grid used across the existing dashboard visual panels. */
+.qa-signal-squares{
+  position:absolute;z-index:4;inset:0;overflow:hidden;pointer-events:none;
+  contain:layout paint;
+}
+.qa-signal-square{
+  position:absolute;display:block;width:clamp(10px,1.1vw,17px);aspect-ratio:1;
+  border:1px solid rgba(255,89,84,.92);
+  background:linear-gradient(135deg,rgba(255,74,68,.34),rgba(255,74,68,.06));
+  box-shadow:0 0 18px rgba(255,66,58,.2),inset 0 0 9px rgba(255,100,90,.15);
+  opacity:.88;
+  transform:translateZ(0);
+  will-change:transform,opacity;
+}
+.signal-a{left:7%;top:20%}
+.signal-b{right:11%;top:27%}
+.signal-c{left:13%;bottom:23%}
+.signal-d{right:7%;bottom:18%}
+.qa-signal-square:after{
+  content:"";position:absolute;inset:3px;border:1px solid rgba(255,130,116,.5);
+}
+.qa-system-automation .signal-a{left:8%;top:31%}
+.qa-system-automation .signal-b{right:8%;top:36%}
+.qa-system-automation .signal-c{left:14%;bottom:26%}
+.qa-system-automation .signal-d{right:13%;bottom:29%}
+.qa-system-labs .signal-a{left:10%;top:25%}
+.qa-system-labs .signal-b{right:10%;top:29%}
+.qa-system-labs .signal-c{left:7%;bottom:30%}
+.qa-system-labs .signal-d{right:8%;bottom:26%}
+@media(max-width:700px){
+  .qa-signal-square{width:11px;box-shadow:0 0 11px rgba(255,66,58,.18)}
+  .qa-signal-square:after{inset:2px}
+}
+@media(prefers-reduced-motion:reduce){
+  .qa-signal-square{will-change:auto}
+}
