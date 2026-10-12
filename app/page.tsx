@@ -432,16 +432,16 @@ export default function Home() {
 
         gsap.to(".page-scroll-progress > span", {
           scaleX: 1, transformOrigin: "left center", ease: "none",
-          scrollTrigger: { trigger: root, start: "top top", end: "bottom bottom", scrub: 0.25, invalidateOnRefresh: true }
+          scrollTrigger: { trigger: root.current, start: "top top", end: "bottom bottom", scrub: 0.25, invalidateOnRefresh: true }
         });
 
         // Full-page QA motion system. Desktop gets richer depth and scroll-linked
         // sequencing; tablet/mobile uses lighter, shorter travel for smoothness.
         mm.add("(min-width: 901px)", () => {
-          gsap.utils.toArray<HTMLElement>(".service-card, .case-card, .industry-grid > div, .leader-grid .leader").forEach((card, i) => {
-            gsap.fromTo(card, { y: 42, rotateX: 3, autoAlpha: 0.55 }, {
-              y: 0, rotateX: 0, autoAlpha: 1, ease: "none",
-              scrollTrigger: { trigger: card, start: "top 94%", end: "top 62%", scrub: 0.55, invalidateOnRefresh: true }
+          gsap.utils.toArray<HTMLElement>(".service-icon, .case-media img, .industry-grid > div > *, .leader-grid .avatar, .process-icon").forEach((item) => {
+            gsap.fromTo(item, { y: 12, scale: 0.9, autoAlpha: 0.72 }, {
+              y: 0, scale: 1, autoAlpha: 1, ease: "none",
+              scrollTrigger: { trigger: item, start: "top 94%", end: "top 66%", scrub: 0.45, invalidateOnRefresh: true }
             });
           });
 
@@ -479,10 +479,10 @@ export default function Home() {
         mm.add("(max-width: 900px)", () => {
           // Mobile/tablet: avoid large parallax and rotation that can feel jumpy
           // on touch scroll. Keep the same QA story with compact staggered motion.
-          gsap.utils.toArray<HTMLElement>(".service-card, .case-card, .industry-grid > div, .leader-grid .leader, .process-step").forEach((card) => {
-            gsap.fromTo(card, { y: 20, autoAlpha: 0.65 }, {
-              y: 0, autoAlpha: 1, ease: "power1.out",
-              scrollTrigger: { trigger: card, start: "top 96%", end: "top 78%", scrub: 0.35, invalidateOnRefresh: true }
+          gsap.utils.toArray<HTMLElement>(".service-icon, .case-media img, .industry-grid > div > *, .leader-grid .avatar, .process-icon").forEach((item) => {
+            gsap.fromTo(item, { y: 8, scale: 0.94, autoAlpha: 0.8 }, {
+              y: 0, scale: 1, autoAlpha: 1, ease: "power1.out",
+              scrollTrigger: { trigger: item, start: "top 98%", end: "top 84%", scrub: 0.25, invalidateOnRefresh: true }
             });
           });
 
