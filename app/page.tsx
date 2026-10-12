@@ -203,61 +203,72 @@ export default function Home() {
         gsap.from(".hero-copy", { y:25, opacity:0, duration:.8, delay:.6 });
         gsap.from(".hero-actions", { y:25, opacity:0, duration:.8, delay:.75 });
 
-        gsap.utils.toArray<HTMLElement>(".reveal").forEach((el) => gsap.from(el, {
-          y:48, opacity:0, duration:.85, ease:"power3.out",
-          scrollTrigger:{ trigger:el, start:"top 88%", once:true }
-        }));
+        // Keep the page content visible by default; animate only opacity/transform in.
+        // The previous broad .reveal loop hid every section until its trigger fired,
+        // which could leave large blank areas on the production page.
+        gsap.set(".reveal", { clearProps: "opacity,visibility,transform" });
+        gsap.utils.toArray<HTMLElement>(".reveal").forEach((el) => {
+          gsap.fromTo(el,
+            { y: 22, autoAlpha: 0 },
+            { y: 0, autoAlpha: 1, duration: .65, ease: "power2.out",
+              clearProps: "all",
+              scrollTrigger: {
+                trigger: el,
+                start: "top 92%",
+                once: true,
+                onLeaveBack: () => gsap.set(el, { clearProps: "opacity,visibility,transform" })
+              }
+            }
+          );
+        });
 
-        gsap.utils.toArray<HTMLElement>(".case-card").forEach((el, i) => gsap.from(el, {
-          x: i % 2 ? 45 : -45, opacity:0, duration:.8, ease:"power3.out",
-          scrollTrigger:{ trigger:el, start:"top 88%", once:true }
-        }));
+        // Existing square-like QA indicators get a clear test-sequence reveal.
+        // Decorative visual tiles remain fully visible if ScrollTrigger fails.
+        const qaSignals = gsap.utils.toArray<HTMLElement>(
+          ".qa-core-icon, .qa-pipeline-icon, .qa-device-screen, .qa-release-title em, .qa-system-head b"
+        );
+        qaSignals.forEach((el, i) => {
+          const visual = el.closest(".qa-visual-system") || el;
+          gsap.fromTo(el,
+            { scale: .92, opacity: .78, rotate: i % 2 ? 2 : -2 },
+            {
+              scale: 1, opacity: 1, rotate: 0, duration: .45,
+              delay: (i % 4) * .045, ease: "power2.out",
+              clearProps: "transform,opacity",
+              scrollTrigger: {
+                trigger: visual,
+                start: "top 88%",
+                once: true,
+                onLeaveBack: () => gsap.set(el, { clearProps: "transform,opacity" })
+              }
+            }
+          );
+        });
+
+        gsap.utils.toArray<HTMLElement>(".case-card").forEach((el, i) => gsap.fromTo(el,
+          { x: i % 2 ? 18 : -18, autoAlpha: .75 },
+          { x: 0, autoAlpha: 1, duration: .55, ease: "power2.out", clearProps: "all",
+            scrollTrigger: { trigger: el, start: "top 92%", once: true } }
+        ));
 
         mm = gsap.matchMedia();
         mm.add("(min-width: 901px)", () => {
-          gsap.to(".orb", { y:-80, rotate:22, ease:"none", scrollTrigger:{ trigger:".hero", scrub:1 } });
+          gsap.to(".orb", {
+            y: -48, rotate: 12, ease: "none",
+            scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: .8 }
+          });
           gsap.utils.toArray<HTMLElement>(".parallax").forEach((el) => gsap.to(el, {
-            yPercent:-8, ease:"none", scrollTrigger:{ trigger:el, scrub:1 }
+            yPercent: -3, ease: "none",
+            scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 1 }
           }));
           gsap.utils.toArray<HTMLElement>(".qa-system-scan").forEach((el) => gsap.to(el, {
-            xPercent:28, ease:"none",
-            scrollTrigger:{ trigger:el.closest(".qa-visual-system") || el, start:"top bottom", end:"bottom top", scrub:1.2 }
+            xPercent: 18, ease: "none",
+            scrollTrigger: { trigger: el.closest(".qa-visual-system") || el, start: "top bottom", end: "bottom top", scrub: 1.3 }
           }));
-          gsap.utils.toArray<HTMLElement>(".qa-pipeline-node").forEach((el, i) => gsap.from(el, {
-            y:35, opacity:0, scale:.92, duration:.65, delay:i*.08, ease:"back.out(1.6)",
-            scrollTrigger:{ trigger:el.closest(".qa-visual-system") || el, start:"top 76%", once:true }
-          }));
-          gsap.utils.toArray<HTMLElement>(".qa-device").forEach((el, i) => gsap.from(el, {
-            y:35, rotateY:i % 2 ? -8 : 8, opacity:0, duration:.7, delay:i*.07, ease:"power3.out",
-            scrollTrigger:{ trigger:el.closest(".qa-visual-system") || el, start:"top 76%", once:true }
-          }));
-          // QA signal tiles: the square controls light up in a deliberate test-run sequence.
-          gsap.utils.toArray<HTMLElement>(".qa-core-icon, .qa-pipeline-icon, .qa-device-screen, .qa-release-title em, .qa-system-head b").forEach((el, i) => {
-            const visual = el.closest(".qa-visual-system") || el;
-            gsap.fromTo(el,
-              { scale:.86, rotate:i % 2 ? 3 : -3, opacity:.72, transformOrigin:"50% 50%" },
-              { scale:1, rotate:0, opacity:1, duration:.58, delay:(i % 4)*.055, ease:"back.out(1.45)",
-                scrollTrigger:{ trigger:visual, start:"top 78%", once:true } }
-            );
-          });
-          // Subtle scroll-linked precision pass across the QA grid; never pins the page.
           gsap.utils.toArray<HTMLElement>(".qa-system-grid").forEach((el) => gsap.to(el, {
-            backgroundPosition:"18px 18px", ease:"none",
-            scrollTrigger:{ trigger:el.closest(".qa-visual-system") || el, start:"top bottom", end:"bottom top", scrub:1.4 }
+            backgroundPosition: "14px 14px", ease: "none",
+            scrollTrigger: { trigger: el.closest(".qa-visual-system") || el, start: "top bottom", end: "bottom top", scrub: 1.2 }
           }));
-        });
-        mm.add("(max-width: 900px)", () => {
-          gsap.utils.toArray<HTMLElement>(".qa-pipeline-node, .qa-device").forEach((el, i) => gsap.from(el, {
-            y:18, opacity:0, duration:.5, delay:i*.04, ease:"power2.out",
-            scrollTrigger:{ trigger:el.closest(".qa-visual-system") || el, start:"top 82%", once:true }
-          }));
-          // Keep mobile motion short and inexpensive while retaining the QA sequence.
-          gsap.utils.toArray<HTMLElement>(".qa-core-icon, .qa-pipeline-icon, .qa-device-screen, .qa-release-title em, .qa-system-head b").forEach((el, i) => {
-            gsap.fromTo(el, { scale:.92, opacity:.78 }, {
-              scale:1, opacity:1, duration:.38, delay:(i % 4)*.035, ease:"power2.out",
-              scrollTrigger:{ trigger:el.closest(".qa-visual-system") || el, start:"top 84%", once:true }
-            });
-          });
         });
       }, root);
     } catch (error) {
