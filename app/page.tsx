@@ -97,6 +97,12 @@ function QAVisual3D({ variant }: { variant: "hero" | "automation" | "labs" }) {
   return (
     <div className={`qa-visual-system qa-system-${variant}`} aria-label={config.label}>
       <div className="qa-system-grid"/>
+      <div className="qa-signal-squares" aria-hidden="true">
+        <span className="qa-signal-square signal-a"/>
+        <span className="qa-signal-square signal-b"/>
+        <span className="qa-signal-square signal-c"/>
+        <span className="qa-signal-square signal-d"/>
+      </div>
       <div className="qa-system-scan"/>
       <div className="qa-system-head"><span><i/> AM / QUALITY ENGINEERING</span><b>{config.label}</b></div>
 
