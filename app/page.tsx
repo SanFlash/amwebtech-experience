@@ -348,6 +348,38 @@ export default function Home() {
           }
         });
 
+        // Global QA delivery visual: orbit tracks and region markers move with scroll.
+        gsap.utils.toArray<HTMLElement>(".global-visual-system").forEach((visual) => {
+          const orbits = gsap.utils.toArray<HTMLElement>(".global-orbit", visual);
+          if (orbits.length) {
+            gsap.fromTo(orbits, { rotation: -8, scale: 0.94, transformOrigin: "50% 50%" }, {
+              rotation: 8, scale: 1, ease: "none", stagger: 0.06,
+              scrollTrigger: { trigger: visual, start: "top bottom", end: "center center", scrub: 0.8, invalidateOnRefresh: true }
+            });
+          }
+          const regions = gsap.utils.toArray<HTMLElement>(".global-node", visual);
+          if (regions.length) {
+            gsap.fromTo(regions, { y: 22, autoAlpha: 0.35, scale: 0.85 }, {
+              y: 0, autoAlpha: 1, scale: 1, ease: "none", stagger: 0.1,
+              scrollTrigger: { trigger: visual, start: "top 88%", end: "center 52%", scrub: 0.7, invalidateOnRefresh: true }
+            });
+          }
+          const globalCore = visual.querySelector<HTMLElement>(".global-core");
+          if (globalCore) {
+            gsap.fromTo(globalCore, { scale: 0.82, autoAlpha: 0.5 }, {
+              scale: 1, autoAlpha: 1, ease: "none",
+              scrollTrigger: { trigger: visual, start: "top 88%", end: "center 52%", scrub: 0.7, invalidateOnRefresh: true }
+            });
+          }
+          const metrics = gsap.utils.toArray<HTMLElement>(".global-status > div", visual);
+          if (metrics.length) {
+            gsap.fromTo(metrics, { y: 18, autoAlpha: 0.35 }, {
+              y: 0, autoAlpha: 1, ease: "none", stagger: 0.08,
+              scrollTrigger: { trigger: visual, start: "top 78%", end: "bottom 60%", scrub: 0.6, invalidateOnRefresh: true }
+            });
+          }
+        });
+
         // Refresh after initial layout and late-loading assets; clean up both hooks.
         refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
         refreshOnLoad = () => ScrollTrigger.refresh();
