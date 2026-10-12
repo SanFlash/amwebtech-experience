@@ -393,3 +393,10 @@ canvas{display:block}
     will-change:auto;
   }
 }
+
+
+/* Runtime-safe reveal defaults: content must stay visible before the GSAP effect starts. */
+.reveal{opacity:1;visibility:visible}
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1!important;visibility:visible!important;transform:none!important}
+}
