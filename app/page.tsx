@@ -230,25 +230,34 @@ export default function Home() {
 
         // Existing square-like QA indicators get a clear test-sequence reveal.
         // Decorative visual tiles remain fully visible if ScrollTrigger fails.
-        const qaSignals = gsap.utils.toArray<HTMLElement>(
-          ".qa-core-icon, .qa-pipeline-icon, .qa-device-screen, .qa-release-title em, .qa-system-head b"
-        );
-        qaSignals.forEach((el, i) => {
-          const visual = el.closest(".qa-visual-system") || el;
+        // Animate the actual red QA squares added to each visual panel.
+        gsap.utils.toArray<HTMLElement>(".qa-signal-square").forEach((el, i) => {
+          const panel = el.closest(".qa-visual-system") || el;
           gsap.fromTo(el,
-            { scale: .92, opacity: .78, rotate: i % 2 ? 2 : -2 },
+            { autoAlpha: 0, scale: .55, rotate: i % 2 ? 14 : -14 },
             {
-              scale: 1, opacity: 1, rotate: 0, duration: .45,
-              delay: (i % 4) * .045, ease: "power2.out",
-              clearProps: "transform,opacity",
+              autoAlpha: .9, scale: 1, rotate: 0, duration: .52,
+              delay: (i % 4) * .07, ease: "power2.out",
+              clearProps: "transform,opacity,visibility",
               scrollTrigger: {
-                trigger: visual,
-                start: "top 88%",
+                trigger: panel,
+                start: "top 86%",
                 once: true,
-                onLeaveBack: () => gsap.set(el, { clearProps: "transform,opacity" })
+                onLeaveBack: () => gsap.set(el, { clearProps: "transform,opacity,visibility" })
               }
             }
           );
+          // Restrained scrub: the squares drift only a few pixels as their own panel passes.
+          gsap.to(el, {
+            y: i % 2 ? -9 : 9,
+            ease: "none",
+            scrollTrigger: {
+              trigger: panel,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1.4
+            }
+          });
         });
 
         gsap.utils.toArray<HTMLElement>(".case-card").forEach((el, i) => gsap.fromTo(el,
