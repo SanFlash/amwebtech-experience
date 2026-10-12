@@ -455,3 +455,64 @@ canvas{display:block}
 @media(prefers-reduced-motion:reduce){
   .qa-signal-square{animation:none!important;opacity:1!important}
 }
+
+
+/* Responsive GSAP polish: persistent scroll progress + QA tool icon tiles. */
+.page-scroll-progress{
+  position:fixed;inset:0 0 auto 0;height:3px;z-index:9999;
+  pointer-events:none;background:rgba(255,122,0,.10);
+}
+.page-scroll-progress>span{
+  display:block;width:100%;height:100%;transform:scaleX(0);
+  transform-origin:left center;
+  background:linear-gradient(90deg,#ff7a00 0%,#ff554d 48%,#20b9ff 100%);
+  box-shadow:0 0 12px rgba(255,122,0,.35);
+}
+.tech-wall .tech-chip{
+  position:relative;isolation:isolate;min-width:0;
+  display:flex;align-items:center;gap:12px;
+  transition:background-color .25s ease,border-color .25s ease,transform .25s ease;
+}
+.tech-wall .tech-chip:before{
+  content:"";position:absolute;inset:7px;z-index:-1;border-radius:10px;
+  background:linear-gradient(110deg,rgba(0,87,184,.075),rgba(255,122,0,.025));
+  opacity:0;transition:opacity .25s ease;
+}
+.tech-wall .tech-chip .tech-icon-badge{
+  width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;
+  border:1px solid rgba(0,112,214,.25);border-radius:10px;
+  color:#ff8a16;background:linear-gradient(145deg,rgba(0,87,184,.13),rgba(5,26,61,.04));
+  box-shadow:inset 0 0 18px rgba(0,112,214,.06);
+}
+.tech-wall .tech-chip b{font-size:inherit;line-height:1.3;font-weight:700}
+.tech-wall .tech-chip i{font-style:normal;flex:0 0 auto}
+@media(hover:hover) and (pointer:fine){
+  .tech-wall .tech-chip:hover{background:rgba(0,87,184,.045);border-color:rgba(0,112,214,.3)}
+  .tech-wall .tech-chip:hover:before{opacity:1}
+  .tech-wall .tech-chip:hover .tech-icon-badge{
+    color:#ff7a00;border-color:rgba(255,122,0,.6);
+    box-shadow:0 0 0 5px rgba(255,122,0,.055),0 0 24px rgba(255,122,0,.12);
+  }
+  .service-icon,.qa-core-icon,.qa-pipeline-icon{transition:transform .28s ease,box-shadow .28s ease}
+  .service-card:hover .service-icon{transform:translateY(-3px) rotate(-4deg)}
+  .lab-items a:hover svg{color:#ff8a16}
+}
+@media(max-width:900px){
+  .page-scroll-progress{height:2px}
+  .tech-wall{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tech-wall .tech-chip{gap:8px;padding:14px 10px}
+  .tech-wall .tech-chip .tech-icon-badge{width:32px;height:32px;flex-basis:32px;border-radius:8px}
+  .tech-wall .tech-chip .tech-icon-badge svg{width:16px;height:16px}
+  .tech-wall .tech-chip b{font-size:12px;overflow-wrap:anywhere}
+}
+@media(max-width:390px){
+  .tech-wall .tech-chip{gap:6px;padding:12px 7px}
+  .tech-wall .tech-chip i{font-size:8px}
+  .tech-wall .tech-chip .tech-icon-badge{width:28px;height:28px;flex-basis:28px}
+  .tech-wall .tech-chip b{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+  .page-scroll-progress{display:none}
+  .tech-wall .tech-chip,.tech-wall .tech-chip:before,.tech-wall .tech-chip .tech-icon-badge,
+  .service-icon,.qa-core-icon,.qa-pipeline-icon{transition:none!important}
+}
