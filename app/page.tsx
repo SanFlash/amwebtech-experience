@@ -298,6 +298,22 @@ export default function Home() {
             });
           }
 
+          const testRows = gsap.utils.toArray<HTMLElement>(".qa-test-list > div", panel);
+          if (testRows.length) {
+            gsap.fromTo(testRows, { x: 28, autoAlpha: 0.3 }, {
+              x: 0, autoAlpha: 1, ease: "none", stagger: 0.09,
+              scrollTrigger: { trigger: panel, start: "top 82%", end: "center 46%", scrub: 0.65, invalidateOnRefresh: true }
+            });
+          }
+
+          const deviceScreens = gsap.utils.toArray<HTMLElement>(".qa-device-screen", panel);
+          if (deviceScreens.length) {
+            gsap.fromTo(deviceScreens, { scaleY: 0.65, transformOrigin: "center bottom", autoAlpha: 0.4 }, {
+              scaleY: 1, autoAlpha: 1, ease: "none", stagger: 0.1,
+              scrollTrigger: { trigger: panel, start: "top 82%", end: "center 46%", scrub: 0.65, invalidateOnRefresh: true }
+            });
+          }
+
           const core = panel.querySelector<HTMLElement>(".qa-system-core");
           if (core) {
             gsap.fromTo(core, { y: 22, autoAlpha: 0.45, scale: 0.94 }, {
