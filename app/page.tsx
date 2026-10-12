@@ -430,6 +430,11 @@ export default function Home() {
           }));
         });
 
+        gsap.to(".page-scroll-progress > span", {
+          scaleX: 1, transformOrigin: "left center", ease: "none",
+          scrollTrigger: { trigger: root, start: "top top", end: "bottom bottom", scrub: 0.25, invalidateOnRefresh: true }
+        });
+
         // Full-page QA motion system. Desktop gets richer depth and scroll-linked
         // sequencing; tablet/mobile uses lighter, shorter travel for smoothness.
         mm.add("(min-width: 901px)", () => {
@@ -515,6 +520,7 @@ export default function Home() {
 
   return (
     <div ref={root} className="site">
+      <div className="page-scroll-progress" aria-hidden="true"><span /></div>
       <header className="nav">
         <a className="brand" href="#top" aria-label="AM Webtech home">
           <span className="brand-fallback" aria-hidden="true"><strong>AM</strong><b>WEBTECH</b></span>
@@ -624,7 +630,7 @@ export default function Home() {
 
         <section className="section capability-band">
           <div className="section-top reveal"><p className="eyebrow">MODERN TESTING STACK</p><h2>Tools that fit your <span>delivery ecosystem.</span></h2></div>
-          <div className="tech-wall reveal">{technologies.map(([x,Icon],i)=><span key={x}><i>{String(i+1).padStart(2,"0")}</i><Icon size={16}/>{x}</span>)}</div>
+          <div className="tech-wall reveal" aria-label="QA automation tools">{technologies.map(([x,Icon],i)=><span className="tech-chip" key={x} title={x} aria-label={x}><i>{String(i+1).padStart(2,"0")}</i><span className="tech-icon-badge"><Icon size={18} strokeWidth={1.8}/></span><b>{x}</b></span>)}</div>
         </section>
 
         <section id="cases" className="section cases-section">
