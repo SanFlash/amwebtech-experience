@@ -461,3 +461,19 @@ canvas{display:block}
 @media(prefers-reduced-motion:reduce){
   .qa-signal-square{animation:none;opacity:1}
 }
+
+
+/* Stronger visible cue for the GSAP scroll choreography. */
+.qa-signal-square{
+  width:clamp(18px,1.8vw,26px);
+  border:2px solid #ff554d;
+  background:linear-gradient(135deg,rgba(255,72,64,.5),rgba(255,72,64,.12));
+  opacity:1!important;
+  z-index:7;
+  box-shadow:0 0 0 5px rgba(255,74,68,.1),0 0 24px rgba(255,66,58,.38),inset 0 0 12px rgba(255,100,90,.25);
+}
+.qa-signal-square:after{inset:4px;border-color:rgba(255,180,168,.85)}
+@media(max-width:700px){.qa-signal-square{width:17px;border-width:1.5px}}
+@media(prefers-reduced-motion:reduce){
+  .qa-signal-square{animation:none!important;opacity:1!important}
+}
