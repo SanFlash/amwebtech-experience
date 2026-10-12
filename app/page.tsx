@@ -236,22 +236,23 @@ export default function Home() {
           const squares = gsap.utils.toArray<HTMLElement>(".qa-signal-square", panel);
           if (!squares.length) return;
 
-          // Reveal: one transform owner, visible fallback before trigger activation.
-          const reveal = gsap.timeline({
-            scrollTrigger: {
-              trigger: panel,
-              start: "top 80%",
-              once: true,
-              invalidateOnRefresh: true
-            }
-          });
-          reveal.fromTo(
+          // Scroll-linked QA signal choreography: squares assemble as the panel
+          // enters the viewport, then reverse naturally when the user scrolls back.
+          // This is deliberately scrubbed (not a one-time entrance) so the motion is
+          // visibly driven by scrolling and remains deterministic across re-entry.
+          gsap.fromTo(
             squares,
-            { autoAlpha: 0.4, scale: 0.85, y: 18 },
+            { autoAlpha: 0.22, scale: 0.42, y: 34, rotation: -38 },
             {
-              autoAlpha: 1, scale: 1, y: 0,
-              duration: 0.55, ease: "power2.out", stagger: 0.08,
-              clearProps: "opacity,visibility,transform"
+              autoAlpha: 1, scale: 1, y: 0, rotation: 0,
+              ease: "none", stagger: 0.1,
+              scrollTrigger: {
+                trigger: panel,
+                start: "top 92%",
+                end: "center 58%",
+                scrub: 0.65,
+                invalidateOnRefresh: true
+              }
             }
           );
 
