@@ -440,29 +440,6 @@ canvas{display:block}
 }
 
 
-/* Make the QA squares unmistakable; GSAP adds scroll-linked movement on top. */
-.qa-signal-squares{z-index:6}
-.qa-signal-square{
-  width:clamp(14px,1.45vw,21px);
-  border:1px solid #ff5a52;
-  background:rgba(255,74,68,.18);
-  opacity:1;
-  box-shadow:0 0 0 4px rgba(255,74,68,.08),0 0 22px rgba(255,74,68,.32),inset 0 0 10px rgba(255,100,90,.22);
-  animation:qaSignalPulse 2.8s ease-in-out infinite;
-}
-.qa-signal-square.signal-b{animation-delay:.45s}
-.qa-signal-square.signal-c{animation-delay:.9s}
-.qa-signal-square.signal-d{animation-delay:1.35s}
-@keyframes qaSignalPulse{
-  0%,100%{opacity:.78;box-shadow:0 0 0 3px rgba(255,74,68,.07),0 0 12px rgba(255,74,68,.2),inset 0 0 7px rgba(255,100,90,.14)}
-  50%{opacity:1;box-shadow:0 0 0 6px rgba(255,74,68,.12),0 0 24px rgba(255,74,68,.42),inset 0 0 12px rgba(255,100,90,.24)}
-}
-@media(max-width:700px){.qa-signal-square{width:14px}}
-@media(prefers-reduced-motion:reduce){
-  .qa-signal-square{animation:none;opacity:1}
-}
-
-
 /* Stronger visible cue for the GSAP scroll choreography. */
 .qa-signal-square{
   width:clamp(18px,1.8vw,26px);
