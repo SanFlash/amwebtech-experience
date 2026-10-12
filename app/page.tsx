@@ -179,6 +179,8 @@ export default function Home() {
     let ctx: gsap.Context | null = null;
     let lenis: Lenis | null = null;
     let mm: ReturnType<typeof gsap.matchMedia> | null = null;
+    let refreshFrame: number | null = null;
+    let refreshOnLoad: (() => void) | null = null;
 
     try {
       const reduceMotion = typeof window !== "undefined" &&
@@ -228,45 +230,78 @@ export default function Home() {
           );
         });
 
-        // High-visibility QA square choreography: reveal, scroll drift, and a restrained
-        // active pulse while the containing QA visual is in view.
-        gsap.utils.toArray<HTMLElement>(".qa-signal-square").forEach((el, i) => {
-          const panel = el.closest(".qa-visual-system") || el;
-          gsap.fromTo(el,
-            { autoAlpha: 1, scale: .35, rotate: i % 2 ? 22 : -22, y: i % 2 ? 22 : -22 },
+        // QA motion is owned by one scoped timeline per visual panel. The CSS base
+        // state remains visible if GSAP fails or reduced motion is requested.
+        gsap.utils.toArray<HTMLElement>(".qa-visual-system").forEach((panel) => {
+          const squares = gsap.utils.toArray<HTMLElement>(".qa-signal-square", panel);
+          if (!squares.length) return;
+
+          // Reveal: one transform owner, visible fallback before trigger activation.
+          const reveal = gsap.timeline({
+            scrollTrigger: {
+              trigger: panel,
+              start: "top 80%",
+              once: true,
+              invalidateOnRefresh: true
+            }
+          });
+          reveal.fromTo(
+            squares,
+            { autoAlpha: 0.4, scale: 0.85, y: 18 },
             {
-              autoAlpha: 1, scale: 1, rotate: 0, y: 0,
-              duration: .72, delay: (i % 4) * .1, ease: "back.out(1.7)",
-              immediateRender: false,
-              scrollTrigger: {
-                trigger: panel, start: "top 88%", once: true,
-                invalidateOnRefresh: true
-              }
+              autoAlpha: 1, scale: 1, y: 0,
+              duration: 0.55, ease: "power2.out", stagger: 0.08,
+              clearProps: "opacity,visibility,transform"
             }
           );
-          // Scrubbed motion makes the squares visibly react to the user's scroll.
-          gsap.to(el, {
-            y: i % 2 ? -26 : 26,
-            x: i % 2 ? 9 : -9,
-            rotate: i % 2 ? 8 : -8,
-            scale: 1.12,
-            ease: "none",
-            immediateRender: false,
+
+          // Illustrative test-case activation: glow only, no second transform tween
+          // and no infinite animation while the user is away from this panel.
+          const activation = gsap.timeline({
+            paused: true,
+            defaults: { ease: "sine.out" },
             scrollTrigger: {
-              trigger: panel, start: "top bottom", end: "bottom top",
-              scrub: .65, invalidateOnRefresh: true
+              trigger: panel,
+              start: "top 72%",
+              end: "bottom 24%",
+              toggleActions: "play pause resume reset",
+              invalidateOnRefresh: true
             }
           });
-          // A restrained pulse continues to signal the QA grid; context cleanup kills it.
-          gsap.to(el, {
-            boxShadow: "0 0 0 7px rgba(255,74,68,.14), 0 0 30px rgba(255,74,68,.5), inset 0 0 12px rgba(255,100,90,.28)",
-            duration: .8, repeat: -1, yoyo: true, ease: "sine.inOut",
-            delay: (i % 4) * .12
-          });
+          activation
+            .to(squares, {
+              boxShadow: "0 0 0 6px rgba(255,74,68,.14), 0 0 28px rgba(255,66,58,.48), inset 0 0 12px rgba(255,100,90,.28)",
+              duration: 0.22,
+              stagger: 0.15
+            })
+            .to(squares, {
+              boxShadow: "0 0 0 4px rgba(255,74,68,.08), 0 0 20px rgba(255,66,58,.28), inset 0 0 9px rgba(255,100,90,.18)",
+              duration: 0.28,
+              stagger: 0.15
+            });
+
+          // A single bounded scan travels through its own clipped illustration.
+          const scan = panel.querySelector<HTMLElement>(".qa-system-scan");
+          if (scan) {
+            gsap.fromTo(scan, { y: 0 }, {
+              y: () => Math.max(0, panel.clientHeight * 0.68),
+              ease: "none",
+              scrollTrigger: {
+                trigger: panel,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.6,
+                invalidateOnRefresh: true
+              }
+            });
+          }
         });
-        // Recalculate triggers after fonts/images settle and when responsive layout changes.
-        requestAnimationFrame(() => ScrollTrigger.refresh());
-        window.addEventListener("load", () => ScrollTrigger.refresh(), { once: true });
+
+        // Refresh after initial layout and late-loading assets; clean up both hooks.
+        refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+        refreshOnLoad = () => ScrollTrigger.refresh();
+        window.addEventListener("load", refreshOnLoad, { once: true });
+        window.addEventListener("resize", refreshOnLoad, { passive: true });
 
         gsap.utils.toArray<HTMLElement>(".case-card").forEach((el, i) => gsap.fromTo(el,
           { x: i % 2 ? 18 : -18, autoAlpha: .75 },
@@ -284,10 +319,6 @@ export default function Home() {
             yPercent: -3, ease: "none",
             scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 1 }
           }));
-          gsap.utils.toArray<HTMLElement>(".qa-system-scan").forEach((el) => gsap.to(el, {
-            xPercent: 18, ease: "none",
-            scrollTrigger: { trigger: el.closest(".qa-visual-system") || el, start: "top bottom", end: "bottom top", scrub: 1.3 }
-          }));
           gsap.utils.toArray<HTMLElement>(".qa-system-grid").forEach((el) => gsap.to(el, {
             backgroundPosition: "14px 14px", ease: "none",
             scrollTrigger: { trigger: el.closest(".qa-visual-system") || el, start: "top bottom", end: "bottom top", scrub: 1.2 }
@@ -302,6 +333,11 @@ export default function Home() {
       try { if (ctx) ctx.revert(); } catch (error) { console.warn("GSAP cleanup skipped:", error); }
       try { if (mm) mm.revert(); } catch (error) { console.warn("GSAP media cleanup skipped:", error); }
       try { if (lenis) lenis.destroy(); } catch (error) { console.warn("Lenis cleanup skipped:", error); }
+      if (refreshFrame !== null) cancelAnimationFrame(refreshFrame);
+      if (refreshOnLoad) {
+        window.removeEventListener("load", refreshOnLoad);
+        window.removeEventListener("resize", refreshOnLoad);
+      }
     };
   }, []);
 
