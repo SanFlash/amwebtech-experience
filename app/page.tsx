@@ -228,38 +228,45 @@ export default function Home() {
           );
         });
 
-        // QA squares stay visible even before their ScrollTrigger enters the viewport.
-        // immediateRender:false avoids setting their initial opacity to zero on page load.
+        // High-visibility QA square choreography: reveal, scroll drift, and a restrained
+        // active pulse while the containing QA visual is in view.
         gsap.utils.toArray<HTMLElement>(".qa-signal-square").forEach((el, i) => {
           const panel = el.closest(".qa-visual-system") || el;
           gsap.fromTo(el,
-            { scale: .62, rotate: i % 2 ? 10 : -10, y: i % 2 ? 10 : -10 },
+            { autoAlpha: 1, scale: .35, rotate: i % 2 ? 22 : -22, y: i % 2 ? 22 : -22 },
             {
-              scale: 1, rotate: 0, y: 0, duration: .58,
-              delay: (i % 4) * .07, ease: "power2.out",
+              autoAlpha: 1, scale: 1, rotate: 0, y: 0,
+              duration: .72, delay: (i % 4) * .1, ease: "back.out(1.7)",
               immediateRender: false,
               scrollTrigger: {
-                trigger: panel,
-                start: "top 92%",
-                once: true,
+                trigger: panel, start: "top 88%", once: true,
                 invalidateOnRefresh: true
               }
             }
           );
+          // Scrubbed motion makes the squares visibly react to the user's scroll.
           gsap.to(el, {
-            y: i % 2 ? -12 : 12,
-            rotate: i % 2 ? 3 : -3,
+            y: i % 2 ? -26 : 26,
+            x: i % 2 ? 9 : -9,
+            rotate: i % 2 ? 8 : -8,
+            scale: 1.12,
             ease: "none",
             immediateRender: false,
             scrollTrigger: {
-              trigger: panel,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1.2,
-              invalidateOnRefresh: true
+              trigger: panel, start: "top bottom", end: "bottom top",
+              scrub: .65, invalidateOnRefresh: true
             }
           });
+          // A restrained pulse continues to signal the QA grid; context cleanup kills it.
+          gsap.to(el, {
+            boxShadow: "0 0 0 7px rgba(255,74,68,.14), 0 0 30px rgba(255,74,68,.5), inset 0 0 12px rgba(255,100,90,.28)",
+            duration: .8, repeat: -1, yoyo: true, ease: "sine.inOut",
+            delay: (i % 4) * .12
+          });
         });
+        // Recalculate triggers after fonts/images settle and when responsive layout changes.
+        requestAnimationFrame(() => ScrollTrigger.refresh());
+        window.addEventListener("load", () => ScrollTrigger.refresh(), { once: true });
 
         gsap.utils.toArray<HTMLElement>(".case-card").forEach((el, i) => gsap.fromTo(el,
           { x: i % 2 ? 18 : -18, autoAlpha: .75 },
