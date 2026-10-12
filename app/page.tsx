@@ -256,6 +256,56 @@ export default function Home() {
             }
           );
 
+          // Animate the QA interface itself, not just the red signal squares.
+          // Each motion is scroll-linked so the visual explains a QA workflow.
+          const consoleCard = panel.querySelector<HTMLElement>(".qa-release-console");
+          if (consoleCard) {
+            gsap.fromTo(consoleCard,
+              { y: 38, scale: 0.94, autoAlpha: 0.55 },
+              { y: 0, scale: 1, autoAlpha: 1, ease: "none",
+                scrollTrigger: { trigger: panel, start: "top 88%", end: "center 48%", scrub: 0.7, invalidateOnRefresh: true } }
+            );
+          }
+
+          const progressFill = panel.querySelector<HTMLElement>(".qa-progress > span");
+          if (progressFill) {
+            gsap.fromTo(progressFill, { scaleX: 0, transformOrigin: "left center" }, {
+              scaleX: 1, ease: "none",
+              scrollTrigger: { trigger: panel, start: "top 82%", end: "center 48%", scrub: 0.65, invalidateOnRefresh: true }
+            });
+          }
+
+          const pipelineLine = panel.querySelector<HTMLElement>(".qa-pipeline-line");
+          if (pipelineLine) {
+            gsap.fromTo(pipelineLine, { scaleX: 0, transformOrigin: "left center" }, {
+              scaleX: 1, ease: "none",
+              scrollTrigger: { trigger: panel, start: "top 88%", end: "center 48%", scrub: 0.7, invalidateOnRefresh: true }
+            });
+          }
+          const pipelineNodes = gsap.utils.toArray<HTMLElement>(".qa-pipeline-node", panel);
+          if (pipelineNodes.length) {
+            gsap.fromTo(pipelineNodes, { y: 30, scale: 0.86, autoAlpha: 0.35 }, {
+              y: 0, scale: 1, autoAlpha: 1, ease: "none", stagger: 0.12,
+              scrollTrigger: { trigger: panel, start: "top 88%", end: "center 48%", scrub: 0.7, invalidateOnRefresh: true }
+            });
+          }
+
+          const devices = gsap.utils.toArray<HTMLElement>(".qa-device", panel);
+          if (devices.length) {
+            gsap.fromTo(devices, { y: 34, scaleY: 0.82, transformOrigin: "center bottom", autoAlpha: 0.35 }, {
+              y: 0, scaleY: 1, autoAlpha: 1, ease: "none", stagger: 0.1,
+              scrollTrigger: { trigger: panel, start: "top 88%", end: "center 48%", scrub: 0.7, invalidateOnRefresh: true }
+            });
+          }
+
+          const core = panel.querySelector<HTMLElement>(".qa-system-core");
+          if (core) {
+            gsap.fromTo(core, { y: 22, autoAlpha: 0.45, scale: 0.94 }, {
+              y: 0, autoAlpha: 1, scale: 1, ease: "none",
+              scrollTrigger: { trigger: panel, start: "top 84%", end: "center 48%", scrub: 0.65, invalidateOnRefresh: true }
+            });
+          }
+
           // Illustrative test-case activation: glow only, no second transform tween
           // and no infinite animation while the user is away from this panel.
           const activation = gsap.timeline({
