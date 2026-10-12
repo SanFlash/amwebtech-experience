@@ -233,6 +233,12 @@ export default function Home() {
         // QA motion is owned by one scoped timeline per visual panel. The CSS base
         // state remains visible if GSAP fails or reduced motion is requested.
         gsap.utils.toArray<HTMLElement>(".qa-visual-system").forEach((panel) => {
+          // Use the whole section as the scroll runway. Short panel-only ranges made
+          // the hero animation finish before visitors could notice it.
+          const scrollSection = panel.closest<HTMLElement>(".hero") || panel.closest<HTMLElement>("section") || panel;
+          const isHeroPanel = scrollSection.classList.contains("hero");
+          const scrollStart = isHeroPanel ? "top top" : "top bottom";
+          const scrollEnd = "bottom top";
           const squares = gsap.utils.toArray<HTMLElement>(".qa-signal-square", panel);
           if (!squares.length) return;
 
@@ -247,9 +253,9 @@ export default function Home() {
               autoAlpha: 1, scale: 1, y: 0, rotation: 0,
               ease: "none", stagger: 0.1,
               scrollTrigger: {
-                trigger: panel,
-                start: "top 92%",
-                end: "center 58%",
+                trigger: scrollSection,
+                start: scrollStart,
+                end: scrollEnd,
                 scrub: 0.65,
                 invalidateOnRefresh: true
               }
@@ -263,7 +269,7 @@ export default function Home() {
             gsap.fromTo(consoleCard,
               { y: 38, scale: 0.94, autoAlpha: 0.55 },
               { y: 0, scale: 1, autoAlpha: 1, ease: "none",
-                scrollTrigger: { trigger: panel, start: "top 88%", end: "center 48%", scrub: 0.7, invalidateOnRefresh: true } }
+                scrollTrigger: { trigger: scrollSection, start: scrollStart, end: scrollEnd, scrub: 0.7, invalidateOnRefresh: true } }
             );
           }
 
@@ -271,7 +277,7 @@ export default function Home() {
           if (progressFill) {
             gsap.fromTo(progressFill, { scaleX: 0, transformOrigin: "left center" }, {
               scaleX: 1, ease: "none",
-              scrollTrigger: { trigger: panel, start: "top 82%", end: "center 48%", scrub: 0.65, invalidateOnRefresh: true }
+              scrollTrigger: { trigger: scrollSection, start: scrollStart, end: scrollEnd, scrub: 0.65, invalidateOnRefresh: true }
             });
           }
 
@@ -279,14 +285,14 @@ export default function Home() {
           if (pipelineLine) {
             gsap.fromTo(pipelineLine, { scaleX: 0, transformOrigin: "left center" }, {
               scaleX: 1, ease: "none",
-              scrollTrigger: { trigger: panel, start: "top 88%", end: "center 48%", scrub: 0.7, invalidateOnRefresh: true }
+              scrollTrigger: { trigger: scrollSection, start: scrollStart, end: scrollEnd, scrub: 0.7, invalidateOnRefresh: true }
             });
           }
           const pipelineNodes = gsap.utils.toArray<HTMLElement>(".qa-pipeline-node", panel);
           if (pipelineNodes.length) {
             gsap.fromTo(pipelineNodes, { y: 30, scale: 0.86, autoAlpha: 0.35 }, {
               y: 0, scale: 1, autoAlpha: 1, ease: "none", stagger: 0.12,
-              scrollTrigger: { trigger: panel, start: "top 88%", end: "center 48%", scrub: 0.7, invalidateOnRefresh: true }
+              scrollTrigger: { trigger: scrollSection, start: scrollStart, end: scrollEnd, scrub: 0.7, invalidateOnRefresh: true }
             });
           }
 
@@ -294,7 +300,7 @@ export default function Home() {
           if (devices.length) {
             gsap.fromTo(devices, { y: 34, scaleY: 0.82, transformOrigin: "center bottom", autoAlpha: 0.35 }, {
               y: 0, scaleY: 1, autoAlpha: 1, ease: "none", stagger: 0.1,
-              scrollTrigger: { trigger: panel, start: "top 88%", end: "center 48%", scrub: 0.7, invalidateOnRefresh: true }
+              scrollTrigger: { trigger: scrollSection, start: scrollStart, end: scrollEnd, scrub: 0.7, invalidateOnRefresh: true }
             });
           }
 
@@ -302,7 +308,7 @@ export default function Home() {
           if (testRows.length) {
             gsap.fromTo(testRows, { x: 28, autoAlpha: 0.3 }, {
               x: 0, autoAlpha: 1, ease: "none", stagger: 0.09,
-              scrollTrigger: { trigger: panel, start: "top 82%", end: "center 46%", scrub: 0.65, invalidateOnRefresh: true }
+              scrollTrigger: { trigger: scrollSection, start: scrollStart, end: scrollEnd, scrub: 0.65, invalidateOnRefresh: true }
             });
           }
 
@@ -310,7 +316,7 @@ export default function Home() {
           if (deviceScreens.length) {
             gsap.fromTo(deviceScreens, { scaleY: 0.65, transformOrigin: "center bottom", autoAlpha: 0.4 }, {
               scaleY: 1, autoAlpha: 1, ease: "none", stagger: 0.1,
-              scrollTrigger: { trigger: panel, start: "top 82%", end: "center 46%", scrub: 0.65, invalidateOnRefresh: true }
+              scrollTrigger: { trigger: scrollSection, start: scrollStart, end: scrollEnd, scrub: 0.65, invalidateOnRefresh: true }
             });
           }
 
@@ -318,7 +324,7 @@ export default function Home() {
           if (core) {
             gsap.fromTo(core, { y: 22, autoAlpha: 0.45, scale: 0.94 }, {
               y: 0, autoAlpha: 1, scale: 1, ease: "none",
-              scrollTrigger: { trigger: panel, start: "top 84%", end: "center 48%", scrub: 0.65, invalidateOnRefresh: true }
+              scrollTrigger: { trigger: scrollSection, start: scrollStart, end: scrollEnd, scrub: 0.65, invalidateOnRefresh: true }
             });
           }
 
@@ -328,9 +334,9 @@ export default function Home() {
             paused: true,
             defaults: { ease: "sine.out" },
             scrollTrigger: {
-              trigger: panel,
-              start: "top 72%",
-              end: "bottom 24%",
+              trigger: scrollSection,
+              start: scrollStart,
+              end: scrollEnd,
               toggleActions: "play pause resume reset",
               invalidateOnRefresh: true
             }
@@ -354,9 +360,9 @@ export default function Home() {
               y: () => Math.max(0, panel.clientHeight * 0.68),
               ease: "none",
               scrollTrigger: {
-                trigger: panel,
-                start: "top bottom",
-                end: "bottom top",
+                trigger: scrollSection,
+                start: scrollStart,
+                end: scrollEnd,
                 scrub: 0.6,
                 invalidateOnRefresh: true
               }
