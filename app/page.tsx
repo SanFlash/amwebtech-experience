@@ -228,34 +228,35 @@ export default function Home() {
           );
         });
 
-        // Existing square-like QA indicators get a clear test-sequence reveal.
-        // Decorative visual tiles remain fully visible if ScrollTrigger fails.
-        // Animate the actual red QA squares added to each visual panel.
+        // QA squares stay visible even before their ScrollTrigger enters the viewport.
+        // immediateRender:false avoids setting their initial opacity to zero on page load.
         gsap.utils.toArray<HTMLElement>(".qa-signal-square").forEach((el, i) => {
           const panel = el.closest(".qa-visual-system") || el;
           gsap.fromTo(el,
-            { autoAlpha: 0, scale: .55, rotate: i % 2 ? 14 : -14 },
+            { scale: .62, rotate: i % 2 ? 10 : -10, y: i % 2 ? 10 : -10 },
             {
-              autoAlpha: .9, scale: 1, rotate: 0, duration: .52,
+              scale: 1, rotate: 0, y: 0, duration: .58,
               delay: (i % 4) * .07, ease: "power2.out",
-              clearProps: "transform,opacity,visibility",
+              immediateRender: false,
               scrollTrigger: {
                 trigger: panel,
-                start: "top 86%",
+                start: "top 92%",
                 once: true,
-                onLeaveBack: () => gsap.set(el, { clearProps: "transform,opacity,visibility" })
+                invalidateOnRefresh: true
               }
             }
           );
-          // Restrained scrub: the squares drift only a few pixels as their own panel passes.
           gsap.to(el, {
-            y: i % 2 ? -9 : 9,
+            y: i % 2 ? -12 : 12,
+            rotate: i % 2 ? 3 : -3,
             ease: "none",
+            immediateRender: false,
             scrollTrigger: {
               trigger: panel,
               start: "top bottom",
               end: "bottom top",
-              scrub: 1.4
+              scrub: 1.2,
+              invalidateOnRefresh: true
             }
           });
         });
