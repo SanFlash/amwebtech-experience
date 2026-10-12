@@ -429,6 +429,73 @@ export default function Home() {
             scrollTrigger: { trigger: el.closest(".qa-visual-system") || el, start: "top bottom", end: "bottom top", scrub: 1.2 }
           }));
         });
+
+        // Full-page QA motion system. Desktop gets richer depth and scroll-linked
+        // sequencing; tablet/mobile uses lighter, shorter travel for smoothness.
+        mm.add("(min-width: 901px)", () => {
+          gsap.utils.toArray<HTMLElement>(".service-card, .case-card, .industry-grid > div, .leader-grid .leader").forEach((card, i) => {
+            gsap.fromTo(card, { y: 42, rotateX: 3, autoAlpha: 0.55 }, {
+              y: 0, rotateX: 0, autoAlpha: 1, ease: "none",
+              scrollTrigger: { trigger: card, start: "top 94%", end: "top 62%", scrub: 0.55, invalidateOnRefresh: true }
+            });
+          });
+
+          gsap.utils.toArray<HTMLElement>(".tech-wall > span").forEach((chip, i) => {
+            const icon = chip.querySelector<SVGElement>("svg");
+            if (icon) gsap.fromTo(icon, { y: 8, scale: 0.65, rotate: -18 }, {
+              y: 0, scale: 1, rotate: 0, ease: "none",
+              scrollTrigger: { trigger: chip, start: "top 96%", end: "top 68%", scrub: 0.5 }
+            });
+          });
+
+          gsap.utils.toArray<HTMLElement>(".process-step").forEach((step, i) => {
+            gsap.fromTo(step, { y: 34, scale: 0.94 }, {
+              y: 0, scale: 1, ease: "none",
+              scrollTrigger: { trigger: step, start: "top 92%", end: "top 60%", scrub: 0.6 }
+            });
+          });
+
+          gsap.utils.toArray<HTMLElement>(".lab-items a, .global-points span, .check-list > div").forEach((item) => {
+            const icon = item.querySelector<SVGElement>("svg");
+            if (icon) gsap.fromTo(icon, { scale: 0.7, rotate: -12 }, {
+              scale: 1, rotate: 0, ease: "back.out(1.5)",
+              scrollTrigger: { trigger: item, start: "top 94%", once: true }
+            });
+          });
+
+          gsap.utils.toArray<HTMLElement>(".stats-grid > div, .intro-metrics > div, .global-status > div").forEach((metric) => {
+            gsap.fromTo(metric, { y: 24, autoAlpha: 0.45 }, {
+              y: 0, autoAlpha: 1, ease: "none",
+              scrollTrigger: { trigger: metric, start: "top 92%", end: "top 64%", scrub: 0.5 }
+            });
+          });
+        });
+
+        mm.add("(max-width: 900px)", () => {
+          // Mobile/tablet: avoid large parallax and rotation that can feel jumpy
+          // on touch scroll. Keep the same QA story with compact staggered motion.
+          gsap.utils.toArray<HTMLElement>(".service-card, .case-card, .industry-grid > div, .leader-grid .leader, .process-step").forEach((card) => {
+            gsap.fromTo(card, { y: 20, autoAlpha: 0.65 }, {
+              y: 0, autoAlpha: 1, ease: "power1.out",
+              scrollTrigger: { trigger: card, start: "top 96%", end: "top 78%", scrub: 0.35, invalidateOnRefresh: true }
+            });
+          });
+
+          gsap.utils.toArray<HTMLElement>(".tech-wall > span, .lab-items a, .global-points span, .check-list > div").forEach((item) => {
+            const icon = item.querySelector<SVGElement>("svg");
+            if (icon) gsap.fromTo(icon, { scale: 0.82, rotate: -8 }, {
+              scale: 1, rotate: 0, ease: "power1.out",
+              scrollTrigger: { trigger: item, start: "top 98%", end: "top 84%", scrub: 0.25 }
+            });
+          });
+
+          gsap.utils.toArray<HTMLElement>(".qa-signal-square").forEach((square) => {
+            gsap.fromTo(square, { scale: 0.72, autoAlpha: 0.55 }, {
+              scale: 1, autoAlpha: 1, ease: "none",
+              scrollTrigger: { trigger: square.closest("section") || square, start: "top bottom", end: "bottom top", scrub: 0.4 }
+            });
+          });
+        });
       }, root);
     } catch (error) {
       console.error("Homepage animation enhancement failed:", error);
