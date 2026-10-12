@@ -367,3 +367,29 @@ canvas{display:block}
     min-height:240px!important;
   }
 }
+
+
+/* QA signal-square motion styling for GSAP timelines. */
+.qa-core-icon,.qa-pipeline-icon,.qa-device-screen,.qa-release-title em,.qa-system-head b{
+  transform-origin:50% 50%;
+  backface-visibility:hidden;
+  will-change:transform,opacity;
+}
+.qa-core-icon,.qa-pipeline-icon{
+  transition:border-color .22s ease,box-shadow .22s ease,background-color .22s ease;
+}
+.qa-core-icon{box-shadow:0 0 0 1px rgba(255,122,0,.04),0 8px 24px rgba(0,0,0,.16)}
+.qa-pipeline-icon{box-shadow:0 0 0 6px rgba(5,26,61,.4),0 0 24px rgba(0,112,214,.15)}
+.qa-device-screen{transform:translateZ(0);will-change:transform,opacity}
+.qa-system-head b{border-radius:3px}
+@media(hover:hover) and (pointer:fine){
+  .qa-pipeline-node:hover .qa-pipeline-icon{
+    border-color:rgba(255,122,0,.65);
+    box-shadow:0 0 0 7px rgba(5,26,61,.48),0 0 30px rgba(255,122,0,.2);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .qa-core-icon,.qa-pipeline-icon,.qa-device-screen,.qa-release-title em,.qa-system-head b{
+    will-change:auto;
+  }
+}
